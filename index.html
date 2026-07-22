@@ -344,12 +344,12 @@
         .battle-buttons {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 8px;
         }
         .b-btn {
             flex: 1;
-            padding: 12px 0;
-            font-size: 18px;
+            padding: 10px 0;
+            font-size: 15px;
             font-weight: bold;
             border: 3px solid #000;
             border-radius: 6px;
@@ -359,6 +359,7 @@
         #btnAttack { background-color: #ff4d4d; color: #000; }
         #btnRun { background-color: #baffc9; color: #000; }
         #btnSelfDestrc { background-color: #d1b3ff; color: #000; }
+        #btnPass { background-color: #ffffba; color: #000; }
         .b-btn:hover { filter: brightness(0.9); }
 
         .controls {
@@ -445,6 +446,7 @@
                         <button id="btnAttack" class="b-btn">attack</button>
                         <button id="btnRun" class="b-btn">run</button>
                         <button id="btnSelfDestrc" class="b-btn">self-destrc</button>
+                        <button id="btnPass" class="b-btn">pass</button>
                     </div>
                 </div>
             </div>
@@ -509,6 +511,7 @@
         const btnAttack = document.getElementById('btnAttack');
         const btnRun = document.getElementById('btnRun');
         const btnSelfDestrc = document.getElementById('btnSelfDestrc');
+        const btnPass = document.getElementById('btnPass');
         const whiteHealthFill = document.getElementById('whiteHealthFill');
         const whiteHealthText = document.getElementById('whiteHealthText');
         const blackHealthFill = document.getElementById('blackHealthFill');
@@ -895,7 +898,6 @@
         btnAttack.addEventListener('click', () => {
             if (!pendingBattle) return;
             
-            // Deal random damage to opponent and counter damage back
             const damageDealt = Math.floor(Math.random() * 20) + 15;
             const damageTaken = Math.floor(Math.random() * 20) + 10;
 
@@ -909,13 +911,10 @@
 
             updateHealthBars();
 
-            // Check if battle ends due to health depletion
             if (whiteHp <= 0 || blackHp <= 0) {
                 if (whiteHp <= 0 && blackHp > 0) {
-                    // White pawn dies, attacker (black) wins square
                     board[pendingBattle.fromR][pendingBattle.fromC] = '';
                 } else {
-                    // Black pawn dies or mutual destruction, white wins square
                     board[pendingBattle.toR][pendingBattle.toC] = pendingBattle.movingPiece;
                     board[pendingBattle.fromR][pendingBattle.fromC] = '';
                 }
@@ -924,8 +923,6 @@
                 return;
             }
 
-            // Normal instant attack resolution if desired, or let them click attack multiple times. 
-            // Here we instantly capture after an attack exchange or keep it open. Let's make attack resolve the capture:
             board[pendingBattle.toR][pendingBattle.toC] = pendingBattle.movingPiece;
             board[pendingBattle.fromR][pendingBattle.fromC] = '';
             if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
@@ -946,6 +943,11 @@
             board[pendingBattle.toR][pendingBattle.toC] = '';
             if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
             setTimeout(endBattle, 400);
+        });
+
+        btnPass.addEventListener('click', () => {
+            if (!pendingBattle) return;
+            endBattle();
         });
 
         buyKnifeBtn.addEventListener('click', () => {
