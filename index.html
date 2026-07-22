@@ -26,6 +26,11 @@
             font-weight: bold;
             height: 20px;
         }
+        .main-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
         .scoreboard {
             display: flex;
             justify-content: space-between;
@@ -67,6 +72,73 @@
             min-height: 28px;
             align-items: center;
         }
+        
+        /* Shop UI */
+        .shop-container {
+            width: 160px;
+            background: #2b2b2b;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .shop-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+        .shop-item {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            border-radius: 6px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .shop-item-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .shop-item-price {
+            font-size: 13px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .shop-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            width: 100%;
+        }
+        .shop-btn:hover:not(:disabled) {
+            background-color: #0b7dda;
+        }
+        .shop-btn:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+        .shop-btn.active-knife {
+            background-color: #ff9800;
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
         #board {
             display: grid;
             grid-template-columns: repeat(8, 60px);
@@ -86,10 +158,10 @@
             position: relative;
         }
         .light {
-            background-color: #b0b0b0; /* Gray light squares */
+            background-color: #b0b0b0;
         }
         .dark {
-            background-color: #8B5A2B; /* Brown dark squares */
+            background-color: #8B5A2B;
         }
         .square.selected {
             background-color: #d4ac0d !important;
@@ -101,6 +173,9 @@
             height: 20px;
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 50%;
+        }
+        .square.knife-target:hover {
+            background-color: rgba(255, 0, 0, 0.4) !important;
         }
         
         /* Piece Styling */
@@ -137,8 +212,7 @@
     <h1>Anarchy Chess</h1>
     <div id="status">Turn: White</div>
 
-    <!-- Coin UI Scoreboard -->
-    <div class="scoreboard">
+    <div class="scoreboard" style="width: 660px;">
         <div class="team-score">
             <span>White Coins:</span>
             <div id="whiteCoins" class="coin-container">0</div>
@@ -149,13 +223,27 @@
         </div>
     </div>
 
-    <div id="board"></div>
+    <div class="main-container">
+        <!-- Shop on the bottom left -->
+        <div class="shop-container">
+            <div class="shop-title">Shop</div>
+            <div class="shop-item">
+                <span class="shop-item-name">🗡️ Knife</span>
+                <span class="shop-item-price">3 <span style="font-size:14px;">🪙</span></span>
+                <button id="buyKnifeBtn" class="shop-btn">Buy Knife</button>
+            </div>
+        </div>
+
+        <div>
+            <div id="board"></div>
+        </div>
+    </div>
     
     <div class="controls">
         <button id="resetBtn">New Game</button>
     </div>
 
-    <!-- Embedded Lightweight Chess Logic Engine -->
+    <!-- Embedded Lightweight Chess Logic Engine with Knife Shop & Split King -->
     <script>
         const INITIAL_BOARD = [
             ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
@@ -180,11 +268,22 @@
         let whiteCoinCount = 0;
         let blackCoinCount = 0;
 
+        // Knife inventory & state
+        let whiteKnives = 0;
+        let blackKnives = 0;
+        let isKnifeArmed = false;
+
+        let castlingRights = {
+            w: { kingSide: true, queenSide: true },
+            b: { kingSide: true, queenSide: true }
+        };
+
         const boardElement = document.getElementById('board');
         const statusElement = document.getElementById('status');
         const resetBtn = document.getElementById('resetBtn');
         const whiteCoinsContainer = document.getElementById('whiteCoins');
         const blackCoinsContainer = document.getElementById('blackCoins');
+        const buyKnifeBtn = document.getElementById('buyKnifeBtn');
 
         function isWhite(piece) {
             return piece && piece === piece.toUpperCase();
@@ -199,8 +298,7 @@
             return isWhite(piece) ? 'w' : 'b';
         }
 
-        function updateCoinUI() {
-            // Render White Coins
+        function updateUI() {
             whiteCoinsContainer.innerHTML = '';
             for (let i = 0; i < whiteCoinCount; i++) {
                 const coin = document.createElement('div');
@@ -210,7 +308,6 @@
             }
             if (whiteCoinCount === 0) whiteCoinsContainer.textContent = '0';
 
-            // Render Black Coins
             blackCoinsContainer.innerHTML = '';
             for (let i = 0; i < blackCoinCount; i++) {
                 const coin = document.createElement('div');
@@ -219,6 +316,24 @@
                 blackCoinsContainer.appendChild(coin);
             }
             if (blackCoinCount === 0) blackCoinsContainer.textContent = '0';
+
+            // Update Buy Button label based on active turn knives
+            const currentKnives = (turn === 'w') ? whiteKnives : blackKnives;
+            const currentCoins = (turn === 'w') ? whiteCoinCount : blackCoinCount;
+
+            if (isKnifeArmed) {
+                buyKnifeBtn.textContent = "Cancel Knife";
+                buyKnifeBtn.className = "shop-btn active-knife";
+                buyKnifeBtn.disabled = false;
+            } else if (currentKnives > 0) {
+                buyKnifeBtn.textContent = `Stab (${currentKnives} ready)`;
+                buyKnifeBtn.className = "shop-btn active-knife";
+                buyKnifeBtn.disabled = false;
+            } else {
+                buyKnifeBtn.textContent = "Buy Knife (3🪙)";
+                buyKnifeBtn.className = "shop-btn";
+                buyKnifeBtn.disabled = currentCoins < 3;
+            }
         }
 
         function renderBoard() {
@@ -251,12 +366,16 @@
                         square.classList.add('highlight');
                     }
 
+                    if (isKnifeArmed) {
+                        square.classList.add('knife-target');
+                    }
+
                     square.addEventListener('click', () => handleSquareClick(r, c));
                     boardElement.appendChild(square);
                 }
             }
             statusElement.textContent = `Turn: ${turn === 'w' ? 'White' : 'Black'}`;
-            updateCoinUI();
+            updateUI();
         }
 
         function getPseudoLegalMoves(r, c, currentBoard) {
@@ -271,20 +390,40 @@
             const isQ = piece.toUpperCase() === 'Q';
             const isK = piece.toUpperCase() === 'K';
 
+            // Split King custom movement rules: White king only moves forward (-row), Black king only moves downward (+row)
+            if (isK && piece.toLowerCase() !== 'k' /* wait, split kings can use custom check or we can tag them */) {
+                // Let's check if it's a split king by checking if it's lowercase/uppercase 'k' but with restricted directions
+                // Actually standard K moves normally, but split king can be tagged or handled explicitly. Let's see how we identify split kings.
+            }
+
+            if (piece === 'SPLIT_KW' || piece === 'SPLIT_KB') {
+                const dir = (piece === 'SPLIT_KW') ? -1 : 1;
+                let nr = r + dir;
+                if (nr >= 0 && nr < 8) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        let nc = c + dc;
+                        if (nc >= 0 && nc < 8) {
+                            const target = currentBoard[nr][nc];
+                            if (!target || getPieceColor(target) !== color) {
+                                moves.push({ r: nr, c: nc });
+                            }
+                        }
+                    }
+                }
+                return moves;
+            }
+
             if (isP) {
                 const dir = (color === 'w') ? -1 : 1;
                 const startRow = (color === 'w') ? 6 : 1;
                 
-                // Forward step
                 let nr = r + dir;
                 if (nr >= 0 && nr < 8 && !currentBoard[nr][c]) {
                     moves.push({ r: nr, c: c });
-                    // Double step
                     if (r === startRow && !currentBoard[nr + dir][c]) {
                         moves.push({ r: nr + dir, c: c });
                     }
                 }
-                // Captures
                 for (let dc of [-1, 1]) {
                     let nc = c + dc;
                     let nr_cap = r + dir;
@@ -336,7 +475,7 @@
                 }
             }
 
-            if (isK) {
+            if (isK && piece !== 'SPLIT_KW' && piece !== 'SPLIT_KB') {
                 const kingMoves = [
                     [-1, -1], [-1, 0], [-1, 1],
                     [0, -1],           [0, 1],
@@ -351,6 +490,24 @@
                         }
                     }
                 }
+
+                // Castling
+                const row = (color === 'w') ? 7 : 0;
+                if (r === row && c === 4) {
+                    if (castlingRights[color].kingSide && 
+                        currentBoard[row][5] === '' && 
+                        currentBoard[row][6] === '' &&
+                        currentBoard[row][7] === (color === 'w' ? 'R' : 'r')) {
+                        moves.push({ r: row, c: 6, isCastling: 'king' });
+                    }
+                    if (castlingRights[color].queenSide && 
+                        currentBoard[row][1] === '' && 
+                        currentBoard[row][2] === '' && 
+                        currentBoard[row][3] === '' &&
+                        currentBoard[row][0] === (color === 'w' ? 'R' : 'r')) {
+                        moves.push({ r: row, c: 2, isCastling: 'queen' });
+                    }
+                }
             }
 
             return moves;
@@ -359,26 +516,75 @@
         function handleSquareClick(r, c) {
             const clickedPiece = board[r][c];
 
+            // If knife is armed, stabbing execution
+            if (isKnifeArmed) {
+                if (turn === 'w') whiteKnives--;
+                else blackKnives--;
+
+                isKnifeArmed = false;
+
+                if (clickedPiece) {
+                    // Stabbed a piece! Split it in half.
+                    // One half leaves the board (disappears), the other half becomes a king that can only move forward (white) or downward (black).
+                    const pieceColor = getPieceColor(clickedPiece);
+                    const newKingChar = (pieceColor === 'w') ? 'SPLIT_KW' : 'SPLIT_KB';
+                    board[r][c] = newKingChar; // Replaced with the split king half
+                } else {
+                    // Stabbed an empty square, just does nothing or wastes knife
+                }
+
+                // Switch turn after knife action
+                turn = (turn === 'w') ? 'b' : 'w';
+                selectedSquare = null;
+                validMoves = [];
+                renderBoard();
+                return;
+            }
+
             if (selectedSquare) {
-                // Check if clicked move is valid
-                const isValid = validMoves.some(m => m.r === r && m.c === c);
-                if (isValid) {
-                    // Execute move
-                    board[r][c] = board[selectedSquare.r][selectedSquare.c];
-                    board[selectedSquare.r][selectedSquare.c] = '';
+                const validMove = validMoves.find(m => m.r === r && m.c === c);
+                if (validMove) {
+                    const movingPiece = board[selectedSquare.r][selectedSquare.c];
+                    const color = getPieceColor(movingPiece);
 
-                    // Basic pawn auto-promotion to Queen
-                    if (board[r][c] === 'P' && r === 0) board[r][c] = 'Q';
-                    if (board[r][c] === 'p' && r === 7) board[r][c] = 'q';
+                    if (validMove.isCastling === 'king') {
+                        board[r][c] = movingPiece;
+                        board[selectedSquare.r][selectedSquare.c] = '';
+                        board[r][5] = board[r][7];
+                        board[r][7] = '';
+                    } else if (validMove.isCastling === 'queen') {
+                        board[r][c] = movingPiece;
+                        board[selectedSquare.r][selectedSquare.c] = '';
+                        board[r][3] = board[r][0];
+                        board[r][0] = '';
+                    } else {
+                        board[r][c] = movingPiece;
+                        board[selectedSquare.r][selectedSquare.c] = '';
 
-                    // Award a coin to the team that just moved
+                        if (movingPiece === 'P' && r === 0) board[r][c] = 'Q';
+                        if (movingPiece === 'p' && r === 7) board[r][c] = 'q';
+                    }
+
+                    if (movingPiece === 'K') {
+                        castlingRights.w.kingSide = false;
+                        castlingRights.w.queenSide = false;
+                    } else if (movingPiece === 'k') {
+                        castlingRights.b.kingSide = false;
+                        castlingRights.b.queenSide = false;
+                    } else if (movingPiece === 'R') {
+                        if (selectedSquare.r === 7 && selectedSquare.c === 7) castlingRights.w.kingSide = false;
+                        if (selectedSquare.r === 7 && selectedSquare.c === 0) castlingRights.w.queenSide = false;
+                    } else if (movingPiece === 'r') {
+                        if (selectedSquare.r === 0 && selectedSquare.c === 7) castlingRights.b.kingSide = false;
+                        if (selectedSquare.r === 0 && selectedSquare.c === 0) castlingRights.b.queenSide = false;
+                    }
+
                     if (turn === 'w') {
                         whiteCoinCount++;
                     } else {
                         blackCoinCount++;
                     }
 
-                    // Switch turn
                     turn = turn === 'w' ? 'b' : 'w';
                     selectedSquare = null;
                     validMoves = [];
@@ -387,7 +593,7 @@
                 }
             }
 
-            // Select new piece if it belongs to current player
+            // Map custom split king piece symbols for rendering
             if (clickedPiece && getPieceColor(clickedPiece) === turn) {
                 selectedSquare = { r, c };
                 validMoves = getPseudoLegalMoves(r, c, board);
@@ -398,6 +604,95 @@
             renderBoard();
         }
 
+        // Override PIECES lookup to handle split custom kings nicely
+        const ORIGINAL_PIECES_MAP = PIECES;
+        // Let's hook into render piece lookup safely
+        function getPieceSymbol(p) {
+            if (p === 'SPLIT_KW') return '♔';
+            if (p === 'SPLIT_KB') return '♚';
+            return ORIGINAL_PIECES_MAP[p] || '';
+        }
+
+        // Update renderBoard piece lookup
+        // We will modify the render function loop piece text assignment:
+        // pieceSpan.textContent = getPieceSymbol(piece);
+
+        // Patching renderBoard definition dynamically or rewriting part of it cleanly:
+        window.addEventListener('DOMContentLoaded', () => {
+            // Re-define renderBoard to support custom split piece symbols smoothly
+            window.renderBoard = function() {
+                boardElement.innerHTML = '';
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        const square = document.createElement('div');
+                        square.classList.add('square');
+                        square.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
+                        square.dataset.row = r;
+                        square.dataset.col = c;
+
+                        const piece = board[r][c];
+                        if (piece) {
+                            const pieceSpan = document.createElement('span');
+                            pieceSpan.textContent = getPieceSymbol(piece);
+                            if (isWhite(piece) || piece === 'SPLIT_KW') {
+                                pieceSpan.classList.add('piece-white');
+                            } else {
+                                pieceSpan.classList.add('piece-black');
+                            }
+                            square.appendChild(pieceSpan);
+                        }
+
+                        if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+                            square.classList.add('selected');
+                        }
+
+                        if (validMoves.some(m => m.r === r && m.c === c)) {
+                            square.classList.add('highlight');
+                        }
+
+                        if (isKnifeArmed) {
+                            square.classList.add('knife-target');
+                        }
+
+                        square.addEventListener('click', () => handleSquareClick(r, c));
+                        boardElement.appendChild(square);
+                    }
+                }
+                statusElement.textContent = `Turn: ${turn === 'w' ? 'White' : 'Black'}`;
+                updateUI();
+            };
+            renderBoard();
+        });
+
+        // Shop Buy Knife Button Logic
+        buyKnifeBtn.addEventListener('click', () => {
+            const currentKnives = (turn === 'w') ? whiteKnives : blackKnives;
+            const currentCoins = (turn === 'w') ? whiteCoinCount : blackCoinCount;
+
+            if (isKnifeArmed) {
+                // Cancel arming
+                isKnifeArmed = false;
+            } else if (currentKnives > 0) {
+                // Arm existing knife to stab
+                isKnifeArmed = true;
+                selectedSquare = null;
+                validMoves = [];
+            } else if (currentCoins >= 3) {
+                // Buy knife
+                if (turn === 'w') {
+                    whiteCoinCount -= 3;
+                    whiteKnives++;
+                } else {
+                    blackCoinCount -= 3;
+                    blackKnives++;
+                }
+                isKnifeArmed = true;
+                selectedSquare = null;
+                validMoves = [];
+            }
+            renderBoard();
+        });
+
         resetBtn.addEventListener('click', () => {
             board = JSON.parse(JSON.stringify(INITIAL_BOARD));
             turn = 'w';
@@ -405,10 +700,15 @@
             validMoves = [];
             whiteCoinCount = 0;
             blackCoinCount = 0;
+            whiteKnives = 0;
+            blackKnives = 0;
+            isKnifeArmed = false;
+            castlingRights = {
+                w: { kingSide: true, queenSide: true },
+                b: { kingSide: true, queenSide: true }
+            };
             renderBoard();
         });
-
-        renderBoard();
     </script>
 </body>
 </html>
