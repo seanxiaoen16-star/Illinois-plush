@@ -61,6 +61,17 @@
             background-color: rgba(0, 0, 0, 0.3);
             border-radius: 50%;
         }
+        
+        /* Piece Styling: White pieces colored white, black pieces colored black with outlines for visibility */
+        .piece-white {
+            color: #ffffff;
+            text-shadow: 1px 1px 2px #000000, -1px -1px 2px #000000;
+        }
+        .piece-black {
+            color: #111111;
+            text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
+        }
+
         .controls {
             margin-top: 15px;
             display: flex;
@@ -142,7 +153,14 @@
 
                     const piece = board[r][c];
                     if (piece) {
-                        square.textContent = PIECES[piece];
+                        const pieceSpan = document.createElement('span');
+                        pieceSpan.textContent = PIECES[piece];
+                        if (isWhite(piece)) {
+                            pieceSpan.classList.add('piece-white');
+                        } else {
+                            pieceSpan.classList.add('piece-black');
+                        }
+                        square.appendChild(pieceSpan);
                     }
 
                     if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
