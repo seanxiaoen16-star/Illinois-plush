@@ -444,7 +444,7 @@
         };
 
         let currentPage = 0;
-        let pendingBattle = null; // Stores info when pawn vs pawn battle triggers
+        let pendingBattle = null;
 
         const boardElement = document.getElementById('board');
         const statusElement = document.getElementById('status');
@@ -524,6 +524,15 @@
                     <img src="image_1abf49.png" alt="Rule 1 Illustration">
                 `;
                 pageIndicator.textContent = "Page 1";
+                prevPageBtn.disabled = false;
+                nextPageBtn.disabled = false;
+            } else if (currentPage === 2) {
+                bookDisplay.className = "book book-page";
+                bookDisplay.innerHTML = `
+                    <span>you can also battle pieces</span>
+                    <img src="image_1b2bed.png" alt="Rule 2 Illustration">
+                `;
+                pageIndicator.textContent = "Page 2";
                 prevPageBtn.disabled = false;
                 nextPageBtn.disabled = true;
             }
@@ -733,7 +742,6 @@
                     const movingPiece = board[selectedSquare.r][selectedSquare.c];
                     const color = getPieceColor(movingPiece);
 
-                    // Check if Pawn captures Pawn to trigger battle system
                     if ((movingPiece === 'P' || movingPiece === 'p') && clickedPiece && (clickedPiece === 'P' || clickedPiece === 'p') && getPieceColor(clickedPiece) !== color) {
                         pendingBattle = {
                             fromR: selectedSquare.r,
@@ -821,10 +829,8 @@
             renderBoard();
         }
 
-        // Battle Action Listeners
         btnAttack.addEventListener('click', () => {
             if (!pendingBattle) return;
-            // Attack insta-kills the other pawn (captures normally)
             board[pendingBattle.toR][pendingBattle.toC] = pendingBattle.movingPiece;
             board[pendingBattle.fromR][pendingBattle.fromC] = '';
             if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
@@ -833,15 +839,13 @@
 
         btnRun.addEventListener('click', () => {
             if (!pendingBattle) return;
-            // Run goes back to normal without moving piece or capturing
             endBattle();
         });
 
         btnSelfDestrc.addEventListener('click', () => {
             if (!pendingBattle) return;
-            // Self-destruct destroys the pawn and acts as if captured (removes both or clears destination)
             board[pendingBattle.fromR][pendingBattle.fromC] = '';
-            board[pendingBattle.toR][pendingBattle.toC] = ''; // Target pawn destroyed too
+            board[pendingBattle.toR][pendingBattle.toC] = '';
             if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
             endBattle();
         });
@@ -879,7 +883,7 @@
         });
 
         nextPageBtn.addEventListener('click', () => {
-            if (currentPage < 1) {
+            if (currentPage < 2) {
                 currentPage++;
                 renderBoard();
             }
