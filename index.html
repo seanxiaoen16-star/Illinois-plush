@@ -408,6 +408,11 @@
                     <span class="shop-item-price">3 <span style="font-size:14px;">🪙</span></span>
                     <button id="buyKnifeBtn" class="shop-btn">Buy Knife</button>
                 </div>
+                <div class="shop-item">
+                    <span class="shop-item-name">💊 Pills</span>
+                    <span class="shop-item-price">5 <span style="font-size:14px;">🪙</span></span>
+                    <button id="buyPillsBtn" class="shop-btn">Buy Pills</button>
+                </div>
             </div>
 
             <!-- Rulebook -->
@@ -485,6 +490,11 @@
         let blackKnives = 0;
         let isKnifeArmed = false;
 
+        let whiteKingMoves = 0;
+        let blackKingMoves = 0;
+        let whitePillsCount = 0;
+        let blackPillsCount = 0;
+
         let whiteHp = 100;
         let blackHp = 100;
 
@@ -502,6 +512,7 @@
         const whiteCoinsContainer = document.getElementById('whiteCoins');
         const blackCoinsContainer = document.getElementById('blackCoins');
         const buyKnifeBtn = document.getElementById('buyKnifeBtn');
+        const buyPillsBtn = document.getElementById('buyPillsBtn');
         const bookDisplay = document.getElementById('bookDisplay');
         const prevPageBtn = document.getElementById('prevPageBtn');
         const nextPageBtn = document.getElementById('nextPageBtn');
@@ -551,6 +562,7 @@
 
             const currentKnives = (turn === 'w') ? whiteKnives : blackKnives;
             const currentCoins = (turn === 'w') ? whiteCoinCount : blackCoinCount;
+            const currentPills = (turn === 'w') ? whitePillsCount : blackPillsCount;
 
             if (isKnifeArmed) {
                 buyKnifeBtn.textContent = "Cancel Knife";
@@ -564,6 +576,16 @@
                 buyKnifeBtn.textContent = "Buy Knife (3🪙)";
                 buyKnifeBtn.className = "shop-btn";
                 buyKnifeBtn.disabled = currentCoins < 3;
+            }
+
+            if (currentPills > 0) {
+                buyPillsBtn.textContent = `Pills Ready (${currentPills})`;
+                buyPillsBtn.disabled = true;
+                buyPillsBtn.className = "shop-btn active-knife";
+            } else {
+                buyPillsBtn.textContent = "Buy Pills (5🪙)";
+                buyPillsBtn.disabled = currentCoins < 5;
+                buyPillsBtn.className = "shop-btn";
             }
 
             if (currentPage === 0) {
@@ -588,6 +610,14 @@
                     <img src="image_1b2bed.png" alt="Rule 2 Illustration">
                 `;
                 pageIndicator.textContent = "Page 2";
+                prevPageBtn.disabled = false;
+                nextPageBtn.disabled = false;
+            } else if (currentPage === 3) {
+                bookDisplay.className = "book book-page";
+                bookDisplay.innerHTML = `
+                    <span>you can buy pills to stop your king from sickness after moving it for 5 times</span>
+                `;
+                pageIndicator.textContent = "Page 3";
                 prevPageBtn.disabled = false;
                 nextPageBtn.disabled = true;
             }
@@ -854,6 +884,34 @@
                 if (movingPiece === 'p' && toR === 7) board[toR][toC] = 'q';
             }
 
+            if (movingPiece === 'K' || movingPiece === 'k') {
+                if (color === 'w') {
+                    whiteKingMoves++;
+                    if (whiteKingMoves >= 5) {
+                        if (whitePillsCount > 0) {
+                            whitePillsCount--;
+                            whiteKingMoves = 0;
+                        } else {
+                            alert("White's King got a sickness from moving 5 times and lost!");
+                            resetGame();
+                            return;
+                        }
+                    }
+                } else {
+                    blackKingMoves++;
+                    if (blackKingMoves >= 5) {
+                        if (blackPillsCount > 0) {
+                            blackPillsCount--;
+                            blackKingMoves = 0;
+                        } else {
+                            alert("Black's King got a sickness from moving 5 times and lost!");
+                            resetGame();
+                            return;
+                        }
+                    }
+                }
+            }
+
             if (movingPiece === 'K') {
                 castlingRights.w.kingSide = false;
                 castlingRights.w.queenSide = false;
@@ -975,6 +1033,22 @@
             renderBoard();
         });
 
+        buyPillsBtn.addEventListener('click', () => {
+            const currentCoins = (turn === 'w') ? whiteCoinCount : blackCoinCount;
+            const currentPills = (turn === 'w') ? whitePillsCount : blackPillsCount;
+
+            if (currentCoins >= 5 && currentPills === 0) {
+                if (turn === 'w') {
+                    whiteCoinCount -= 5;
+                    whitePillsCount++;
+                } else {
+                    blackCoinCount -= 5;
+                    blackPillsCount++;
+                }
+                renderBoard();
+            }
+        });
+
         prevPageBtn.addEventListener('click', () => {
             if (currentPage > 0) {
                 currentPage--;
@@ -983,13 +1057,13 @@
         });
 
         nextPageBtn.addEventListener('click', () => {
-            if (currentPage < 2) {
+            if (currentPage < 3) {
                 currentPage++;
                 renderBoard();
             }
         });
 
-        resetBtn.addEventListener('click', () => {
+        function resetGame() {
             board = JSON.parse(JSON.stringify(INITIAL_BOARD));
             turn = 'w';
             selectedSquare = null;
@@ -999,6 +1073,10 @@
             whiteKnives = 0;
             blackKnives = 0;
             isKnifeArmed = false;
+            whiteKingMoves = 0;
+            blackKingMoves = 0;
+            whitePillsCount = 0;
+            blackPillsCount = 0;
             currentPage = 0;
             pendingBattle = null;
             whiteHp = 100;
@@ -1009,7 +1087,9 @@
                 b: { kingSide: true, queenSide: true }
             };
             renderBoard();
-        });
+        }
+
+        resetBtn.addEventListener('click', resetGame);
 
         renderBoard();
     </script>
