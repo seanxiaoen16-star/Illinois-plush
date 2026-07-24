@@ -266,10 +266,10 @@
             text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
         }
 
-        /* Custom SVG Pawn Styling */
+        /* Custom SVG Pawn Styling (Stack of 3 circles with wide base) */
         .custom-pawn {
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             display: inline-block;
         }
 
@@ -299,13 +299,11 @@
             position: absolute;
             bottom: 10px;
             left: 40px;
-            font-size: 80px;
         }
         .battle-pawn-black {
             position: absolute;
             top: 10px;
             right: 40px;
-            font-size: 80px;
         }
         .battle-pawn-white svg, .battle-pawn-black svg {
             width: 70px;
@@ -454,7 +452,7 @@
                         <div id="whiteHealthFill" class="health-bar-fill"></div>
                         <div id="whiteHealthText" class="health-text">100 / 100</div>
                     </div>
-                    <div id="battleWhitePawn" class="battle-pawn-white"></div>
+                    <div id="battleWhitePawn" class="battle-pawn-middle battle-pawn-white"></div>
                 </div>
                 <div>
                     <div id="battleTeamLabel" class="battle-info">[white / black pawn]</div>
@@ -494,10 +492,10 @@
             const fillColor = isWhitePiece ? '#ffffff' : '#111111';
             const strokeColor = isWhitePiece ? '#000000' : '#ffffff';
             return `<svg class="custom-pawn" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 10 C 38 10, 38 30, 50 30 C 62 30, 62 10, 50 10 Z 
-                         M40 28 C 25 28, 25 55, 40 55 C 55 55, 55 28, 40 28 Z
-                         M25 53 C 10 53, 10 90, 90 90 C 90 90, 90 53, 75 53 Z" 
-                      fill="${fillColor}" stroke="${strokeColor}" stroke-width="5" stroke-linejoin="round"/>
+                <path d="M50 8 C 41 8, 41 24, 50 24 C 59 24, 59 8, 50 8 Z 
+                         M50 22 C 37 22, 37 45, 50 45 C 63 45, 63 22, 50 22 Z 
+                         M50 43 C 26 43, 26 92, 74 92 C 74 92, 74 43, 50 43 Z" 
+                      fill="${fillColor}" stroke="${strokeColor}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
             </svg>`;
         }
 
