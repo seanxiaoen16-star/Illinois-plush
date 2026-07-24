@@ -266,17 +266,10 @@
             text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
         }
 
-        /* Custom SVG Pawn Styling */
+        /* Custom SVG Pawn Styling (Stack of 3 circles with wide base) */
         .custom-pawn {
             width: 42px;
             height: 42px;
-            display: inline-block;
-        }
-
-        /* Custom SVG Knight Styling */
-        .custom-knight {
-            width: 48px;
-            height: 48px;
             display: inline-block;
         }
 
@@ -491,8 +484,8 @@
         ];
 
         const PIECES = {
-            'R': '♖', 'B': '♗', 'Q': '♕', 'K': '♔',
-            'r': '♜', 'b': '♝', 'q': '♛', 'k': '♚'
+            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔',
+            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚'
         };
 
         function getPawnSVG(isWhitePiece) {
@@ -504,30 +497,6 @@
                          M50 43 C 26 43, 26 92, 74 92 C 74 92, 74 43, 50 43 Z" 
                       fill="${fillColor}" stroke="${strokeColor}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
             </svg>`;
-        }
-
-        function getKnightSVG(isWhitePiece) {
-            if (isWhitePiece) {
-                // First picture: White knight (from image_d95f14.png)
-                return `<svg class="custom-knight" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 270 20 C 240 20, 240 70, 260 90 C 240 100, 230 110, 230 130 C 230 150, 245 160, 260 160 C 270 240, 290 320, 310 400 C 250 430, 160 470, 110 540 C 70 590, 60 630, 80 670 C 95 700, 130 730, 175 725 C 170 745, 160 760, 195 760 C 220 760, 220 735, 205 715 C 230 710, 240 700, 255 690 C 310 740, 380 790, 430 840 C 440 850, 445 920, 445 960 L 890 960 C 890 940, 895 700, 895 500 C 895 280, 800 50, 520 50 C 420 50, 340 30, 270 20 Z" 
-                          fill="#ffffff" stroke="#000000" stroke-width="36" stroke-linejoin="round" stroke-linecap="round"/>
-                    <ellipse cx="270" cy="270" rx="45" ry="75" transform="rotate(-25 270 270)" fill="#000000"/>
-                    <circle cx="140" cy="590" r="32" fill="#000000"/>
-                    <path d="M 195 675 C 205 660, 230 655, 235 680 C 240 705, 215 720, 195 705 Z" fill="#000000"/>
-                    <path d="M 525 320 C 510 340, 500 370, 510 410 C 515 440, 530 460, 545 450 C 535 420, 535 360, 525 320 Z" fill="#000000"/>
-                </svg>`;
-            } else {
-                // Second picture: Black knight (from image_d95f58.png)
-                return `<svg class="custom-knight" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 270 70 C 240 70, 240 120, 260 140 C 240 150, 230 160, 230 180 C 230 200, 245 210, 260 210 C 270 290, 290 370, 310 450 C 250 480, 160 520, 110 590 C 70 640, 60 680, 80 720 C 95 750, 130 780, 175 775 C 170 795, 160 810, 195 810 C 220 810, 220 785, 205 765 C 230 760, 240 750, 255 740 C 310 790, 380 840, 430 890 C 440 900, 445 950, 445 980 L 890 980 C 890 960, 895 720, 895 520 C 895 300, 800 100, 520 100 C 480 100, 525 170, 540 230 C 560 300, 560 450, 560 600 C 560 700, 550 850, 550 960 L 850 960 C 850 800, 850 500, 850 350 C 850 200, 750 130, 545 130 C 420 130, 340 80, 270 70 Z" 
-                          fill="#111111" stroke="#ffffff" stroke-width="24" stroke-linejoin="round" stroke-linecap="round"/>
-                    <path d="M 525 170 C 510 180, 500 210, 510 250 C 520 280, 545 350, 550 450 C 555 520, 540 680, 540 880 L 900 880 C 900 700, 900 400, 870 250 C 830 150, 720 130, 525 170 Z" fill="#ffffff"/>
-                    <ellipse cx="270" cy="320" rx="45" ry="75" transform="rotate(-25 270 320)" fill="#ffffff"/>
-                    <circle cx="140" cy="640" r="32" fill="#ffffff"/>
-                    <path d="M 195 725 C 205 710, 230 705, 235 730 C 240 755, 215 770, 195 755 Z" fill="#ffffff"/>
-                </svg>`;
-            }
         }
 
         let board = JSON.parse(JSON.stringify(INITIAL_BOARD));
@@ -651,6 +620,7 @@
                 bookDisplay.className = "book book-page";
                 bookDisplay.innerHTML = `
                     <span>you may buy a knife to kill a piece on the board.</span>
+                    <img src="image_1abf49.png" alt="Rule 1 Illustration">
                 `;
                 pageIndicator.textContent = "Page 1";
                 prevPageBtn.disabled = false;
@@ -659,6 +629,7 @@
                 bookDisplay.className = "book book-page";
                 bookDisplay.innerHTML = `
                     <span>you can also battle pieces</span>
+                    <img src="image_1b2bed.png" alt="Rule 2 Illustration">
                 `;
                 pageIndicator.textContent = "Page 2";
                 prevPageBtn.disabled = false;
@@ -687,8 +658,6 @@
             if (p === 'SPLIT_KB') return '♚';
             if (p === 'P') return getPawnSVG(true);
             if (p === 'p') return getPawnSVG(false);
-            if (p === 'N') return getKnightSVG(true);
-            if (p === 'n') return getKnightSVG(false);
             return PIECES[p] || '';
         }
 
@@ -704,7 +673,7 @@
 
                     const piece = board[r][c];
                     if (piece) {
-                        if (piece === 'P' || piece === 'p' || piece === 'N' || piece === 'n') {
+                        if (piece === 'P' || piece === 'p') {
                             square.innerHTML = getPieceSymbol(piece);
                         } else {
                             const pieceSpan = document.createElement('span');
