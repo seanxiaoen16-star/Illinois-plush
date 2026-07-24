@@ -266,13 +266,6 @@
             text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
         }
 
-        /* Custom SVG Pawn Styling (Stack of 3 circles with wide base) */
-        .custom-pawn {
-            width: 42px;
-            height: 42px;
-            display: inline-block;
-        }
-
         /* Battle Screen Overlay */
         #battleScreen {
             display: none;
@@ -299,15 +292,13 @@
             position: absolute;
             bottom: 10px;
             left: 40px;
+            font-size: 80px;
         }
         .battle-pawn-black {
             position: absolute;
             top: 10px;
             right: 40px;
-        }
-        .battle-pawn-white svg, .battle-pawn-black svg {
-            width: 70px;
-            height: 70px;
+            font-size: 80px;
         }
         
         /* Health Bar Styles */
@@ -445,14 +436,14 @@
                         <div id="blackHealthFill" class="health-bar-fill"></div>
                         <div id="blackHealthText" class="health-text">100 / 100</div>
                     </div>
-                    <div id="battleBlackPawn" class="battle-pawn-black"></div>
+                    <div class="battle-pawn-black piece-black">♟</div>
 
                     <!-- White Pawn & Health Bar -->
                     <div id="whiteHealthContainer" class="health-bar-container">
                         <div id="whiteHealthFill" class="health-bar-fill"></div>
                         <div id="whiteHealthText" class="health-text">100 / 100</div>
                     </div>
-                    <div id="battleWhitePawn" class="battle-pawn-middle battle-pawn-white"></div>
+                    <div class="battle-pawn-white piece-white">♟</div>
                 </div>
                 <div>
                     <div id="battleTeamLabel" class="battle-info">[white / black pawn]</div>
@@ -484,20 +475,9 @@
         ];
 
         const PIECES = {
-            'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔',
-            'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚'
+            'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔',
+            'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚'
         };
-
-        function getPawnSVG(isWhitePiece) {
-            const fillColor = isWhitePiece ? '#ffffff' : '#111111';
-            const strokeColor = isWhitePiece ? '#000000' : '#ffffff';
-            return `<svg class="custom-pawn" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 8 C 41 8, 41 24, 50 24 C 59 24, 59 8, 50 8 Z 
-                         M50 22 C 37 22, 37 45, 50 45 C 63 45, 63 22, 50 22 Z 
-                         M50 43 C 26 43, 26 92, 74 92 C 74 92, 74 43, 50 43 Z" 
-                      fill="${fillColor}" stroke="${strokeColor}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-            </svg>`;
-        }
 
         let board = JSON.parse(JSON.stringify(INITIAL_BOARD));
         let turn = 'w';
@@ -547,8 +527,6 @@
         const whiteHealthText = document.getElementById('whiteHealthText');
         const blackHealthFill = document.getElementById('blackHealthFill');
         const blackHealthText = document.getElementById('blackHealthText');
-        const battleWhitePawn = document.getElementById('battleWhitePawn');
-        const battleBlackPawn = document.getElementById('battleBlackPawn');
 
         function isWhite(piece) {
             return piece && piece === piece.toUpperCase();
@@ -656,8 +634,6 @@
         function getPieceSymbol(p) {
             if (p === 'SPLIT_KW') return '♔';
             if (p === 'SPLIT_KB') return '♚';
-            if (p === 'P') return getPawnSVG(true);
-            if (p === 'p') return getPawnSVG(false);
             return PIECES[p] || '';
         }
 
@@ -673,18 +649,14 @@
 
                     const piece = board[r][c];
                     if (piece) {
-                        if (piece === 'P' || piece === 'p') {
-                            square.innerHTML = getPieceSymbol(piece);
+                        const pieceSpan = document.createElement('span');
+                        pieceSpan.textContent = getPieceSymbol(piece);
+                        if (isWhite(piece) || piece === 'SPLIT_KW') {
+                            pieceSpan.classList.add('piece-white');
                         } else {
-                            const pieceSpan = document.createElement('span');
-                            pieceSpan.textContent = getPieceSymbol(piece);
-                            if (isWhite(piece) || piece === 'SPLIT_KW') {
-                                pieceSpan.classList.add('piece-white');
-                            } else {
-                                pieceSpan.classList.add('piece-black');
-                            }
-                            square.appendChild(pieceSpan);
+                            pieceSpan.classList.add('piece-black');
                         }
+                        square.appendChild(pieceSpan);
                     }
 
                     if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
@@ -971,8 +943,6 @@
             blackHp = 100;
             updateHealthBars();
             battleTeamLabel.textContent = (activeColor === 'w') ? '[white pawn]' : '[black pawn]';
-            battleWhitePawn.innerHTML = getPawnSVG(true);
-            battleBlackPawn.innerHTML = getPawnSVG(false);
             battleScreen.style.display = 'flex';
         }
 
