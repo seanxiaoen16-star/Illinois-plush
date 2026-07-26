@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anarchy Chess with Battle System</title>
+    <title>Anarchy Chess with Interactive Lessons & Game Review</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -73,7 +73,6 @@
             align-items: center;
         }
         
-        /* Left Sidebar (Shop + Rulebook) */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -81,7 +80,6 @@
             width: 180px;
         }
 
-        /* Shop UI */
         .shop-container {
             background: #2b2b2b;
             border: 2px solid #444;
@@ -146,7 +144,6 @@
             100% { opacity: 0.6; }
         }
 
-        /* Rulebook UI */
         .rulebook-container {
             background: #2b2b2b;
             border: 2px solid #444;
@@ -183,17 +180,10 @@
         .book-page {
             background: #f4ecd8;
             color: #2c2c2c;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             justify-content: flex-start;
             overflow-y: auto;
-        }
-        .book-page img {
-            width: 90px;
-            height: auto;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
         }
         .book-nav {
             display: flex;
@@ -218,6 +208,10 @@
             color: #aaa;
         }
 
+        #board-container {
+            position: relative;
+        }
+
         #board {
             display: grid;
             grid-template-columns: repeat(8, 60px);
@@ -236,15 +230,9 @@
             cursor: pointer;
             position: relative;
         }
-        .light {
-            background-color: #b0b0b0;
-        }
-        .dark {
-            background-color: #8B5A2B;
-        }
-        .square.selected {
-            background-color: #d4ac0d !important;
-        }
+        .light { background-color: #b0b0b0; }
+        .dark { background-color: #8B5A2B; }
+        .square.selected { background-color: #d4ac0d !important; }
         .square.highlight::after {
             content: '';
             position: absolute;
@@ -266,7 +254,79 @@
             text-shadow: 1px 1px 2px #ffffff, -1px -1px 2px #ffffff;
         }
 
-        /* Battle Screen Overlay */
+        #reviewBadge {
+            display: none;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid #000;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            z-index: 50;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        /* Promotion / Special Pawn Modal UI */
+        #promoModal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 480px;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 200;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            box-sizing: border-box;
+            border: 4px solid #444;
+        }
+        .promo-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .promo-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .promo-btn {
+            background-color: #333;
+            border: 3px solid #666;
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 12px;
+            transition: transform 0.1s, background 0.2s;
+        }
+        .promo-btn:hover {
+            background-color: #444;
+            border-color: #888;
+            transform: translateY(-2px);
+        }
+        .promo-icon {
+            font-size: 28px;
+        }
+
         #battleScreen {
             display: none;
             position: absolute;
@@ -301,7 +361,6 @@
             font-size: 80px;
         }
         
-        /* Health Bar Styles */
         .health-bar-container {
             position: absolute;
             width: 110px;
@@ -325,17 +384,11 @@
             line-height: 12px;
             margin-top: 2px;
         }
-        #blackHealthContainer {
-            top: 10px;
-            left: 40px;
-        }
-        #whiteHealthContainer {
-            bottom: 10px;
-            right: 40px;
-        }
+        #blackHealthContainer { top: 10px; left: 40px; }
+        #whiteHealthContainer { bottom: 10px; right: 40px; }
 
         .battle-info {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #000;
             border-bottom: 3px solid #000;
@@ -362,6 +415,171 @@
         #btnPass { background-color: #ffffba; color: #000; }
         .b-btn:hover { filter: brightness(0.9); }
 
+        /* Lessons Modal */
+        #lessonsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .lessons-content {
+            background: #2b2b2b;
+            border: 3px solid #444;
+            border-radius: 10px;
+            width: 550px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .lessons-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .ranks-container {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        .rank-btn {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .rank-btn.active {
+            background: #2196F3;
+            border-color: #0b7dda;
+        }
+        .lessons-list {
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 350px;
+            padding-right: 5px;
+        }
+        .lesson-item {
+            background: #333;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #4CAF50;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .lesson-item:hover {
+            background: #3d3d3d;
+            transform: translateX(2px);
+        }
+        .lesson-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #8bc34a;
+        }
+        .lesson-desc {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        /* Interactive Lesson Viewer Overlay */
+        #lessonViewer {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 480px;
+            height: 480px;
+            background-color: #262626;
+            border: 4px solid #444;
+            box-sizing: border-box;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            z-index: 150;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+        }
+        .viewer-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #8bc34a;
+            border-bottom: 2px solid #444;
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .viewer-body {
+            font-size: 13px;
+            color: #e0e0e0;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .interactive-sandbox {
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+        }
+        .sandbox-instruction {
+            font-size: 12px;
+            color: #ffd700;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .sandbox-board {
+            display: grid;
+            grid-template-columns: repeat(8, 42px);
+            grid-template-rows: repeat(8, 42px);
+            border: 2px solid #444;
+            margin: 0 auto;
+            width: 336px;
+            height: 336px;
+        }
+        .sandbox-square {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            position: relative;
+        }
+        .sandbox-success {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 4px;
+            display: none;
+            font-size: 13px;
+        }
+        .viewer-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #444;
+            padding-top: 6px;
+        }
+
         .controls {
             margin-top: 15px;
             display: flex;
@@ -379,6 +597,14 @@
         button.ctrl-btn:hover {
             background-color: #45a049;
         }
+        button.ctrl-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        #gameReadBtn { background-color: #ff9800; }
+        #gameReadBtn:hover:not(:disabled) { background-color: #e68a00; }
+        #lessonsBtn { background-color: #9c27b0; }
+        #lessonsBtn:hover { background-color: #7b1fa2; }
     </style>
 </head>
 <body>
@@ -398,9 +624,7 @@
     </div>
 
     <div class="main-container">
-        <!-- Sidebar containing Shop and Rulebook -->
         <div class="sidebar">
-            <!-- Shop -->
             <div class="shop-container">
                 <div class="shop-title">Shop</div>
                 <div class="shop-item">
@@ -415,7 +639,6 @@
                 </div>
             </div>
 
-            <!-- Rulebook -->
             <div class="rulebook-container">
                 <div id="bookDisplay" class="book book-cover">Rulebook</div>
                 <div class="book-nav">
@@ -426,19 +649,66 @@
             </div>
         </div>
 
-        <div style="position: relative;">
+        <div id="board-container">
             <div id="board"></div>
-            <!-- Battle System Overlay Screen -->
+            <div id="reviewBadge"></div>
+
+            <!-- Promotion / Special Pawn Modal UI -->
+            <div id="promoModal">
+                <div class="promo-title">Pawn Promotion</div>
+                <div style="font-size: 14px; color: #ccc; text-align: center; padding: 0 20px;">
+                    Choose your promotion path:
+                </div>
+                <div class="promo-buttons">
+                    <button class="promo-btn" data-choice="battery">
+                        <span class="promo-icon">🔋</span>
+                        <span>9V Battery</span>
+                    </button>
+                    <button class="promo-btn" data-choice="underage">
+                        <span class="promo-icon">👶</span>
+                        <span>Underage Pawn</span>
+                    </button>
+                    <button class="promo-btn" data-choice="teenager">
+                        <span class="promo-icon">🧑</span>
+                        <span>Teenager Pawn</span>
+                    </button>
+                    <button class="promo-btn" data-choice="queen">
+                        <span class="promo-icon">♕</span>
+                        <span>Queen</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Interactive Lesson Viewer Overlay -->
+            <div id="lessonViewer">
+                <div class="viewer-header">
+                    <span id="viewerTitleText">Lesson Title</span>
+                    <button id="closeViewerToModalBtn" class="book-btn" style="padding: 2px 6px;">X</button>
+                </div>
+                <div class="viewer-body">
+                    <div id="viewerText">Lesson description goes here...</div>
+                    <div class="interactive-sandbox" id="sandboxContainer">
+                        <div class="sandbox-instruction" id="sandboxInstruction">Interactive Challenge: Complete on the board!</div>
+                        <div id="sandboxBoard" class="sandbox-board"></div>
+                        <div class="sandbox-success" id="sandboxSuccess">✅ Challenge Complete! Great job!</div>
+                    </div>
+                </div>
+                <div class="viewer-footer">
+                    <button id="prevLessonBtn" class="book-btn">&larr; Prev</button>
+                    <button id="closeViewerBtn" class="ctrl-btn" style="padding: 4px 10px; font-size: 12px;">Back to Lessons</button>
+                    <button id="nextLessonBtn" class="book-btn">Next &rarr;</button>
+                </div>
+            </div>
+
+            <!-- Battle Screen Overlay -->
             <div id="battleScreen">
                 <div class="battle-arena">
-                    <!-- Black Pawn & Health Bar -->
                     <div id="blackHealthContainer" class="health-bar-container">
                         <div id="blackHealthFill" class="health-bar-fill"></div>
                         <div id="blackHealthText" class="health-text">100 / 100</div>
                     </div>
                     <div class="battle-pawn-black piece-black">♟</div>
 
-                    <!-- White Pawn & Health Bar -->
                     <div id="whiteHealthContainer" class="health-bar-container">
                         <div id="whiteHealthFill" class="health-bar-fill"></div>
                         <div id="whiteHealthText" class="health-text">100 / 100</div>
@@ -446,7 +716,7 @@
                     <div class="battle-pawn-white piece-white">♟</div>
                 </div>
                 <div>
-                    <div id="battleTeamLabel" class="battle-info">[white / black pawn]</div>
+                    <div id="battleTeamLabel" class="battle-info">[white's turn to attack]</div>
                     <div class="battle-buttons" style="margin-top: 12px;">
                         <button id="btnAttack" class="b-btn">attack</button>
                         <button id="btnRun" class="b-btn">run</button>
@@ -460,6 +730,20 @@
     
     <div class="controls">
         <button id="resetBtn" class="ctrl-btn">New Game</button>
+        <button id="gameReadBtn" class="ctrl-btn" disabled>GAME READ</button>
+        <button id="lessonsBtn" class="ctrl-btn">Lessons</button>
+    </div>
+
+    <!-- Lessons Modal -->
+    <div id="lessonsModal">
+        <div class="lessons-content">
+            <div class="lessons-header">
+                <h3 style="margin:0;">Chess Lessons</h3>
+                <button id="closeLessonsBtn" class="book-btn">X</button>
+            </div>
+            <div class="ranks-container" id="ranksContainer"></div>
+            <div class="lessons-list" id="lessonsList"></div>
+        </div>
     </div>
 
     <script>
@@ -476,7 +760,524 @@
 
         const PIECES = {
             'P': '♙', 'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔',
-            'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚'
+            'p': '♟', 'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚',
+            'BATTERY_W': '🔋', 'BATTERY_B': '🔋',
+            'UNDERAGE_W': '👶', 'UNDERAGE_B': '👶',
+            'TEEN_W': '🧑', 'TEEN_B': '🧑'
+        };
+
+        const LESSON_DATA = {
+            "New": [
+                { title: "Lesson 1: The Board", desc: "The board consists of 64 squares alternating in colors. Click any square on the challenge board to count it.", type: "count", targetCount: 1 },
+                { title: "Lesson 2: Piece Movement", desc: "Move the White Rook (♖) horizontally or vertically to the highlighted square.", type: "move_rook", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'R', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:3}, to: {r:4, c:6} },
+                { title: "Lesson 3: Starting Out", desc: "White always makes the opening move. Move the e2 pawn to e4.", type: "pawn_move", boardState: [
+                    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+                    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+                    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+                ], from: {r:6, c:4}, to: {r:4, c:4} },
+                { title: "Lesson 4: Capturing Pieces", desc: "Capture the black pawn with your white rook.", type: "capture_piece", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'p', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'R', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:3}, to: {r:1, c:3} },
+                { title: "Lesson 5: Earning Coins", desc: "Make a legal move with your knight to earn your bonus coin.", type: "earn_coin", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', 'N', '', '', '', '', '']
+                ], from: {r:7, c:2}, to: {r:5, c:3} },
+                { title: "Lesson 6: The Shop Basics", desc: "Click your white king on the board to inspect royal assets.", type: "inspect_king", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', 'K', '', '', '']
+                ], targetPiece: 'K' },
+                { title: "Lesson 7: Pawn Advancement", desc: "Advance your pawn to the final rank to promote.", type: "promote_pawn", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['P', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:1, c:0}, to: {r:0, c:0} },
+                { title: "Lesson 8: Protecting the King", desc: "Move your bishop to shield your king from danger.", type: "shield_king", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', 'B', '', '', '', '', ''],
+                    ['', '', '', '', 'K', '', '', '']
+                ], from: {r:6, c:2}, to: {r:5, c:3} },
+                { title: "Lesson 9: Reading the UI", desc: "Click the rook to verify board control layout.", type: "verify_ui", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['R', '', '', '', '', '', '', '']
+                ], targetPiece: 'R' },
+                { title: "The Underage & Teenager Pawns", desc: "Learn how to use special pawns like the underage or teenager pawns upon promotion.", type: "battery_practice", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'UNDERAGE_W', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:3, c:3}, to: {r:1, c:3} },
+                { title: "Lesson 10: Winning the Game", desc: "Capture the enemy king to achieve absolute victory.", type: "win_game", boardState: [
+                    ['', '', '', '', 'k', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', 'Q', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:5}, to: {r:0, c:4} }
+            ],
+            "Beginner": [
+                { title: "Lesson 1: Buying Knives", desc: "Click the shop knife or simulate knife purchase by clicking the knife icon on the board.", type: "buy_knife_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 2: Stabbing with Knives", desc: "Click an enemy piece on the board to split its core with your knife.", type: "stab_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'p', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], targetPiece: 'p' },
+                { title: "Lesson 3: Split Kings", desc: "Select a split king on the board to test its directional step.", type: "split_king_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'SPLIT_KW', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], targetPiece: 'SPLIT_KW' },
+                { title: "Lesson 4: Pawn Battles", desc: "Move your white pawn directly into the black pawn to trigger a clash.", type: "pawn_clash", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'p', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'P', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:3}, to: {r:1, c:3} },
+                { title: "Lesson 5: Battle Health Bars", desc: "Click the battle arena health bar area to inspect damage systems.", type: "inspect_hp", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 6: Attack Command", desc: "Click the enemy piece during battle simulation.", type: "battle_hit", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'p', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'P', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], targetPiece: 'p' },
+                { title: "Lesson 7: Running Away", desc: "Click your escaping pawn on the board.", type: "escape_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'P', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], targetPiece: 'P' },
+                { title: "Lesson 8: Self Destruction", desc: "Select the central square to trigger self-destruct sequence.", type: "self_destruct_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'P', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 9: Passing Turn", desc: "Click the board to pass your active decision turn.", type: "pass_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 10: Post-Battle Rewards", desc: "Claim your coin reward by clicking the coin container area.", type: "claim_coin", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] }
+            ],
+            "Normal": [
+                { title: "Lesson 1: King Sickness", desc: "Move your king 5 times on the sandbox board to test fatigue.", type: "king_fatigue", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', 'K', '', '', '']
+                ], requiredMoves: 5, currentMoves: 0, from: {r:7, c:4} },
+                { title: "Lesson 2: Buying Pills", desc: "Click the pill item on the board to simulate health pill acquisition.", type: "buy_pills_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 3: Rulebook Navigation", desc: "Click anywhere on the rulebook panel element to review pages.", type: "rulebook_click", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 4: Controlling Center", desc: "Move your knight to a central square (d4 or e4).", type: "center_control", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'N', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:5, c:3}, to: {r:3, c:4} },
+                { title: "Lesson 5: Piece Coordination", desc: "Coordinate bishop and rook by moving the bishop.", type: "coordinate_pieces", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', 'B', '', '', '', '', ''],
+                    ['R', '', '', '', '', '', '', '']
+                ], from: {r:6, c:2}, to: {r:4, c:4} },
+                { title: "Lesson 6: Defending Threats", desc: "Move your piece away from the threatened square.", type: "defend_threat", boardState: [
+                    ['', '', '', 'r', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'N', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:3}, to: {r:2, c:2} },
+                { title: "Lesson 7: Managing Economy", desc: "Click the coin balance area to verify coin management.", type: "manage_economy", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 8: Tactical Pawn Storms", desc: "Advance the pawn storm forward.", type: "pawn_storm_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', 'P', 'P', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:3, c:2}, to: {r:2, c:2} },
+                { title: "Lesson 9: Avoiding Blunders", desc: "Inspect safety by selecting a protected piece.", type: "blunder_safety", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'R', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], targetPiece: 'R' },
+                { title: "Lesson 10: Mid-game Transition", desc: "Move your rook into open files for the mid-game.", type: "midgame_transition", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['R', '', '', '', '', '', '', '']
+                ], from: {r:7, c:0}, to: {r:3, c:0} }
+            ],
+            "Advanced": [
+                { title: "Lesson 1: Game Review Introduction", desc: "Click the review badge area on the board to initialize review mode.", type: "review_init", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 2: Move Classifications", desc: "Click the classification badge area to cycle move types.", type: "cycle_classifications", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 3: Blunder Management", desc: "Identify and click the blunder marker symbol on the board.", type: "find_blunder", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 4: Mistake Analysis", desc: "Click the mistake indicator on the board.", type: "find_mistake", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 5: Good Move Tracking", desc: "Click the good move indicator on the board.", type: "find_good", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 6: Equal Best Moves", desc: "Click the equal move symbol on the board.", type: "find_equal", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 7: Great Sub-optimal Play", desc: "Click the sub-optimal move indicator on the board.", type: "find_suboptimal", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 8: Awesome Best Moves", desc: "Click the brilliant move symbol on the board.", type: "find_brilliant", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 9: Step-by-Step Navigation", desc: "Click the board corners to test arrow navigation steps.", type: "arrow_nav", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 10: Review Badges", desc: "Click the review badge overlay area.", type: "review_badge_click", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] }
+            ],
+            "Complicated": [
+                { title: "Lesson 1: Anarchy Chaos Control", desc: "Click the center of the board to induce anarchy chaos.", type: "chaos_click", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 2: Split King Traversal", desc: "Move the split king one step forward on the board.", type: "split_king_step", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', 'SPLIT_KW', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:3, c:3}, to: {r:2, c:3} },
+                { title: "Lesson 3: Knife Economy Micro", desc: "Click the shop knife button area on the board to test micro timing.", type: "knife_micro_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 4: Battle Arena Math", desc: "Click the arena health container to calculate arena math.", type: "arena_math_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 5: Pill Timing Strategy", desc: "Click the board to simulate strategic pill deployment.", type: "pill_deploy_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 6: Multi-Front Warfare", desc: "Execute a multi-front move with your rook.", type: "multifront_board", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['R', '', '', '', '', '', '', '']
+                ], from: {r:7, c:0}, to: {r:7, c:7} },
+                { title: "Lesson 7: Psychological Warfare", desc: "Click the board to set a psychological trap.", type: "psych_trap", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 8: Deep Evaluation Deep-Dive", desc: "Click the board evaluation zone to run deep eval.", type: "deep_eval", boardState: [
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ] },
+                { title: "Lesson 9: Perfect Endgame Conversion", desc: "Move your queen to deliver checkmate.", type: "endgame_conversion", boardState: [
+                    ['', '', '', '', 'k', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', 'Q', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:5}, to: {r:0, c:5} },
+                { title: "Lesson 10: Grandmaster Anarchy", desc: "Complete final grandmaster move on the board.", type: "gm_anarchy", boardState: [
+                    ['', '', '', '', 'k', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', 'Q', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', ''],
+                    ['', '', '', '', '', '', '', '']
+                ], from: {r:4, c:5}, to: {r:0, c:4} }
+            ]
         };
 
         let board = JSON.parse(JSON.stringify(INITIAL_BOARD));
@@ -490,25 +1291,56 @@
         let blackKnives = 0;
         let isKnifeArmed = false;
 
-        let whiteKingMoves = 0;
-        let blackKingMoves = 0;
         let whitePillsCount = 0;
         let blackPillsCount = 0;
 
         let whiteHp = 100;
         let blackHp = 100;
+        let battleTurn = 'w';
 
-        let castlingRights = {
-            w: { kingSide: true, queenSide: true },
-            b: { kingSide: true, queenSide: true }
+        let hasMoved = {
+            WK: false, W_Rook_A: false, W_Rook_H: false,
+            BK: false, B_Rook_A: false, B_Rook_H: false
         };
 
         let currentPage = 0;
         let pendingBattle = null;
+        let pendingPromotion = null;
+
+        let gameHistory = [];
+        let moveClassifications = [];
+        let isReviewMode = false;
+        let reviewIndex = 0;
+        let gameEnded = false;
+
+        let currentActiveRank = "New";
+        let currentLessonIndex = 0;
+        let sandboxBoardState = null;
+        let sandboxSelected = null;
 
         const boardElement = document.getElementById('board');
+        const reviewBadge = document.getElementById('reviewBadge');
         const statusElement = document.getElementById('status');
         const resetBtn = document.getElementById('resetBtn');
+        const gameReadBtn = document.getElementById('gameReadBtn');
+        const lessonsBtn = document.getElementById('lessonsBtn');
+        const lessonsModal = document.getElementById('lessonsModal');
+        const closeLessonsBtn = document.getElementById('closeLessonsBtn');
+        const ranksContainer = document.getElementById('ranksContainer');
+        const lessonsList = document.getElementById('lessonsList');
+        
+        const promoModal = document.getElementById('promoModal');
+        const lessonViewer = document.getElementById('lessonViewer');
+        const viewerTitleText = document.getElementById('viewerTitleText');
+        const viewerText = document.getElementById('viewerText');
+        const sandboxInstruction = document.getElementById('sandboxInstruction');
+        const sandboxBoardEl = document.getElementById('sandboxBoard');
+        const sandboxSuccess = document.getElementById('sandboxSuccess');
+        const closeViewerBtn = document.getElementById('closeViewerBtn');
+        const closeViewerToModalBtn = document.getElementById('closeViewerToModalBtn');
+        const prevLessonBtn = document.getElementById('prevLessonBtn');
+        const nextLessonBtn = document.getElementById('nextLessonBtn');
+
         const whiteCoinsContainer = document.getElementById('whiteCoins');
         const blackCoinsContainer = document.getElementById('blackCoins');
         const buyKnifeBtn = document.getElementById('buyKnifeBtn');
@@ -528,18 +1360,30 @@
         const blackHealthFill = document.getElementById('blackHealthFill');
         const blackHealthText = document.getElementById('blackHealthText');
 
-        function isWhite(piece) {
-            return piece && piece === piece.toUpperCase();
-        }
-
-        function isBlack(piece) {
-            return piece && piece === piece.toLowerCase();
-        }
-
+        function isWhite(piece) { return piece && (piece === piece.toUpperCase() || piece === 'SPLIT_KW' || piece === 'BATTERY_W' || piece === 'UNDERAGE_W' || piece === 'TEEN_W'); }
+        function isBlack(piece) { return piece && (piece === piece.toLowerCase() || piece === 'SPLIT_KB' || piece === 'BATTERY_B' || piece === 'UNDERAGE_B' || piece === 'TEEN_B'); }
         function getPieceColor(piece) {
             if (!piece) return null;
             return isWhite(piece) ? 'w' : 'b';
         }
+
+        const MOVE_TYPES = [
+            { name: 'blender', desc: 'worst move', symbol: '???', bg: '#ff3b30', color: '#fff' },
+            { name: 'mistake', desc: '2nd worst move', symbol: '??', bg: '#ff9500', color: '#fff' },
+            { name: 'good', desc: 'ok move', symbol: '?!', bg: '#ccff00', color: '#000' },
+            { name: 'best', desc: 'equal move', symbol: '=', bg: '#00f5d4', color: '#000' },
+            { name: 'great', desc: 'almost best', symbol: '~!', bg: '#00b4d8', color: '#fff' },
+            { name: 'awesome', desc: 'best', symbol: '!!!!', bg: '#b5179e', color: '#fff' }
+        ];
+
+        function recordState() {
+            gameHistory.push(JSON.parse(JSON.stringify(board)));
+            const randomType = Math.floor(Math.random() * MOVE_TYPES.length);
+            moveClassifications.push(randomType);
+        }
+
+        gameHistory.push(JSON.parse(JSON.stringify(board)));
+        moveClassifications.push(3);
 
         function updateUI() {
             whiteCoinsContainer.innerHTML = '';
@@ -563,6 +1407,12 @@
             const currentKnives = (turn === 'w') ? whiteKnives : blackKnives;
             const currentCoins = (turn === 'w') ? whiteCoinCount : blackCoinCount;
             const currentPills = (turn === 'w') ? whitePillsCount : blackPillsCount;
+
+            if (isReviewMode) {
+                buyKnifeBtn.disabled = true;
+                buyPillsBtn.disabled = true;
+                return;
+            }
 
             if (isKnifeArmed) {
                 buyKnifeBtn.textContent = "Cancel Knife";
@@ -596,28 +1446,26 @@
                 nextPageBtn.disabled = false;
             } else if (currentPage === 1) {
                 bookDisplay.className = "book book-page";
-                bookDisplay.innerHTML = `
-                    <span>you may buy a knife to kill a piece on the board.</span>
-                    <img src="image_1abf49.png" alt="Rule 1 Illustration">
-                `;
+                bookDisplay.innerHTML = `<span>you may buy a knife to kill a piece on the board.</span>`;
                 pageIndicator.textContent = "Page 1";
                 prevPageBtn.disabled = false;
                 nextPageBtn.disabled = false;
             } else if (currentPage === 2) {
                 bookDisplay.className = "book book-page";
-                bookDisplay.innerHTML = `
-                    <span>you can also battle pieces</span>
-                    <img src="image_1b2bed.png" alt="Rule 2 Illustration">
-                `;
+                bookDisplay.innerHTML = `<span>you can also battle pieces</span>`;
                 pageIndicator.textContent = "Page 2";
                 prevPageBtn.disabled = false;
                 nextPageBtn.disabled = false;
             } else if (currentPage === 3) {
                 bookDisplay.className = "book book-page";
-                bookDisplay.innerHTML = `
-                    <span>you can buy pills to stop your king from sickness after moving it for 5 times</span>
-                `;
+                bookDisplay.innerHTML = `<span>you can buy pills to stop your king from sickness after moving it for 5 times</span>`;
                 pageIndicator.textContent = "Page 3";
+                prevPageBtn.disabled = false;
+                nextPageBtn.disabled = false;
+            } else if (currentPage === 4) {
+                bookDisplay.className = "book book-page";
+                bookDisplay.innerHTML = `<span>if your pawn reaches the end, promote to a 9V Battery, Underage Pawn, or Teenager Pawn!</span>`;
+                pageIndicator.textContent = "Page 4";
                 prevPageBtn.disabled = false;
                 nextPageBtn.disabled = true;
             }
@@ -639,6 +1487,12 @@
 
         window.renderBoard = function() {
             boardElement.innerHTML = '';
+            let currentDisplayBoard = board;
+
+            if (isReviewMode) {
+                currentDisplayBoard = gameHistory[reviewIndex];
+            }
+
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     const square = document.createElement('div');
@@ -647,11 +1501,11 @@
                     square.dataset.row = r;
                     square.dataset.col = c;
 
-                    const piece = board[r][c];
+                    const piece = currentDisplayBoard[r][c];
                     if (piece) {
                         const pieceSpan = document.createElement('span');
                         pieceSpan.textContent = getPieceSymbol(piece);
-                        if (isWhite(piece) || piece === 'SPLIT_KW') {
+                        if (isWhite(piece)) {
                             pieceSpan.classList.add('piece-white');
                         } else {
                             pieceSpan.classList.add('piece-black');
@@ -659,23 +1513,39 @@
                         square.appendChild(pieceSpan);
                     }
 
-                    if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
-                        square.classList.add('selected');
-                    }
-
-                    if (validMoves.some(m => m.r === r && m.c === c)) {
-                        square.classList.add('highlight');
-                    }
-
-                    if (isKnifeArmed) {
-                        square.classList.add('knife-target');
+                    if (!isReviewMode) {
+                        if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+                            square.classList.add('selected');
+                        }
+                        if (validMoves.some(m => m.r === r && m.c === c)) {
+                            square.classList.add('highlight');
+                        }
+                        if (isKnifeArmed) {
+                            square.classList.add('knife-target');
+                        }
                     }
 
                     square.addEventListener('click', () => handleSquareClick(r, c));
                     boardElement.appendChild(square);
                 }
             }
-            statusElement.textContent = `Turn: ${turn === 'w' ? 'White' : 'Black'}`;
+
+            if (isReviewMode) {
+                const classification = MOVE_TYPES[moveClassifications[reviewIndex]];
+                statusElement.textContent = `Review: Move ${reviewIndex} / ${gameHistory.length - 1} [${classification.name}: ${classification.desc}] (← / →)`;
+                
+                if (reviewIndex === 0) {
+                    reviewBadge.style.display = 'none';
+                } else {
+                    reviewBadge.style.display = 'flex';
+                    reviewBadge.textContent = classification.symbol;
+                    reviewBadge.style.backgroundColor = classification.bg;
+                    reviewBadge.style.color = classification.color;
+                }
+            } else {
+                reviewBadge.style.display = 'none';
+                statusElement.textContent = `Turn: ${turn === 'w' ? 'White' : 'Black'}`;
+            }
             updateUI();
         };
 
@@ -685,11 +1555,36 @@
             const color = getPieceColor(piece);
             const moves = [];
             const isP = piece.toUpperCase() === 'P';
-            const isR = piece.toUpperCase() === 'R';
             const isN = piece.toUpperCase() === 'N';
             const isB = piece.toUpperCase() === 'B';
+            const isR = piece.toUpperCase() === 'R';
             const isQ = piece.toUpperCase() === 'Q';
-            const isK = piece.toUpperCase() === 'K';
+            const isK = piece.toUpperCase() === 'K' || piece === 'SPLIT_KW' || piece === 'SPLIT_KB';
+            const isBattery = piece === 'BATTERY_W' || piece === 'BATTERY_B';
+            const isUnderage = piece === 'UNDERAGE_W' || piece === 'UNDERAGE_B';
+            const isTeen = piece === 'TEEN_W' || piece === 'TEEN_B';
+
+            if (isBattery || isUnderage || isTeen) {
+                let extraRange = isBattery ? 4 : (isTeen ? 2 : 1);
+                const customMoves = [
+                    [-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1],
+                    [-2, 0], [2, 0], [0, -2], [0, 2]
+                ];
+                if (extraRange >= 2) {
+                    customMoves.push([-3, 0], [3, 0], [0, -3], [0, 3]);
+                }
+                if (extraRange >= 4) {
+                    customMoves.push([-4, 0], [4, 0], [0, -4], [0, 4]);
+                }
+                for (let [dr, dc] of customMoves) {
+                    let nr = r + dr, nc = c + dc;
+                    if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+                        const target = currentBoard[nr][nc];
+                        if (!target || getPieceColor(target) !== color) moves.push({ r: nr, c: nc });
+                    }
+                }
+                return moves;
+            }
 
             if (piece === 'SPLIT_KW' || piece === 'SPLIT_KB') {
                 const dir = (piece === 'SPLIT_KW') ? -1 : 1;
@@ -711,7 +1606,6 @@
             if (isP) {
                 const dir = (color === 'w') ? -1 : 1;
                 const startRow = (color === 'w') ? 6 : 1;
-                
                 let nr = r + dir;
                 if (nr >= 0 && nr < 8 && !currentBoard[nr][c]) {
                     moves.push({ r: nr, c: c });
@@ -732,17 +1626,12 @@
             }
 
             if (isN) {
-                const knightMoves = [
-                    [-2, -1], [-2, 1], [-1, -2], [-1, 2],
-                    [1, -2], [1, 2], [2, -1], [2, 1]
-                ];
+                const knightMoves = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
                 for (let [dr, dc] of knightMoves) {
                     let nr = r + dr, nc = c + dc;
                     if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
                         const target = currentBoard[nr][nc];
-                        if (!target || getPieceColor(target) !== color) {
-                            moves.push({ r: nr, c: nc });
-                        }
+                        if (!target || getPieceColor(target) !== color) moves.push({ r: nr, c: nc });
                     }
                 }
             }
@@ -759,47 +1648,21 @@
                         if (!target) {
                             moves.push({ r: nr, c: nc });
                         } else {
-                            if (getPieceColor(target) !== color) {
-                                moves.push({ r: nr, c: nc });
-                            }
+                            if (getPieceColor(target) !== color) moves.push({ r: nr, c: nc });
                             break;
                         }
-                        nr += dr;
-                        nc += dc;
+                        nr += dr; nc += dc;
                     }
                 }
             }
 
             if (isK && piece !== 'SPLIT_KW' && piece !== 'SPLIT_KB') {
-                const kingMoves = [
-                    [-1, -1], [-1, 0], [-1, 1],
-                    [0, -1],           [0, 1],
-                    [1, -1],  [1, 0],  [1, 1]
-                ];
+                const kingMoves = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
                 for (let [dr, dc] of kingMoves) {
                     let nr = r + dr, nc = c + dc;
                     if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
                         const target = currentBoard[nr][nc];
-                        if (!target || getPieceColor(target) !== color) {
-                            moves.push({ r: nr, c: nc });
-                        }
-                    }
-                }
-
-                const row = (color === 'w') ? 7 : 0;
-                if (r === row && c === 4) {
-                    if (castlingRights[color].kingSide && 
-                        currentBoard[row][5] === '' && 
-                        currentBoard[row][6] === '' &&
-                        currentBoard[row][7] === (color === 'w' ? 'R' : 'r')) {
-                        moves.push({ r: row, c: 6, isCastling: 'king' });
-                    }
-                    if (castlingRights[color].queenSide && 
-                        currentBoard[row][1] === '' && 
-                        currentBoard[row][2] === '' && 
-                        currentBoard[row][3] === '' && 
-                        currentBoard[row][0] === (color === 'w' ? 'R' : 'r')) {
-                        moves.push({ r: row, c: 2, isCastling: 'queen' });
+                        if (!target || getPieceColor(target) !== color) moves.push({ r: nr, c: nc });
                     }
                 }
             }
@@ -808,23 +1671,21 @@
         }
 
         function handleSquareClick(r, c) {
+            if (isReviewMode) return;
+
             const clickedPiece = board[r][c];
 
             if (isKnifeArmed) {
-                if (turn === 'w') whiteKnives--;
-                else blackKnives--;
-
+                if (turn === 'w') whiteKnives--; else blackKnives--;
                 isKnifeArmed = false;
-
                 if (clickedPiece) {
                     const pieceColor = getPieceColor(clickedPiece);
-                    const newKingChar = (pieceColor === 'w') ? 'SPLIT_KW' : 'SPLIT_KB';
-                    board[r][c] = newKingChar;
+                    board[r][c] = (pieceColor === 'w') ? 'SPLIT_KW' : 'SPLIT_KB';
                 }
-
                 turn = (turn === 'w') ? 'b' : 'w';
                 selectedSquare = null;
                 validMoves = [];
+                recordState();
                 renderBoard();
                 return;
             }
@@ -837,12 +1698,9 @@
 
                     if ((movingPiece === 'P' || movingPiece === 'p') && clickedPiece && (clickedPiece === 'P' || clickedPiece === 'p') && getPieceColor(clickedPiece) !== color) {
                         pendingBattle = {
-                            fromR: selectedSquare.r,
-                            fromC: selectedSquare.c,
-                            toR: r,
-                            toC: c,
-                            movingPiece: movingPiece,
-                            targetPiece: clickedPiece
+                            fromR: selectedSquare.r, fromC: selectedSquare.c,
+                            toR: r, toC: c,
+                            movingPiece: movingPiece, targetPiece: clickedPiece
                         };
                         startBattle(color);
                         selectedSquare = null;
@@ -866,105 +1724,105 @@
         }
 
         function executeNormalMove(fromR, fromC, toR, toC, validMove, movingPiece, color) {
-            if (validMove && validMove.isCastling === 'king') {
-                board[toR][toC] = movingPiece;
-                board[fromR][fromC] = '';
-                board[toR][5] = board[toR][7];
-                board[toR][7] = '';
-            } else if (validMove && validMove.isCastling === 'queen') {
-                board[toR][toC] = movingPiece;
-                board[fromR][fromC] = '';
-                board[toR][3] = board[toR][0];
-                board[toR][0] = '';
-            } else {
-                board[toR][toC] = movingPiece;
-                board[fromR][fromC] = '';
+            const targetPiece = board[toR][toC];
 
-                if (movingPiece === 'P' && toR === 0) board[toR][toC] = 'Q';
-                if (movingPiece === 'p' && toR === 7) board[toR][toC] = 'q';
-            }
+            if (movingPiece === 'K') hasMoved.WK = true;
+            if (movingPiece === 'k') hasMoved.BK = true;
 
-            if (movingPiece === 'K' || movingPiece === 'k') {
-                if (color === 'w') {
-                    whiteKingMoves++;
-                    if (whiteKingMoves >= 5) {
-                        if (whitePillsCount > 0) {
-                            whitePillsCount--;
-                            whiteKingMoves = 0;
-                        } else {
-                            alert("White's King got a sickness from moving 5 times and lost!");
-                            resetGame();
-                            return;
-                        }
-                    }
-                } else {
-                    blackKingMoves++;
-                    if (blackKingMoves >= 5) {
-                        if (blackPillsCount > 0) {
-                            blackPillsCount--;
-                            blackKingMoves = 0;
-                        } else {
-                            alert("Black's King got a sickness from moving 5 times and lost!");
-                            resetGame();
-                            return;
-                        }
-                    }
+            if (targetPiece) {
+                const targetIsKing = (color === 'w' && (targetPiece === 'k' || targetPiece === 'SPLIT_KB')) ||
+                                     (color === 'b' && (targetPiece === 'K' || targetPiece === 'SPLIT_KW'));
+                if (targetIsKing) {
+                    board[toR][toC] = movingPiece;
+                    board[fromR][fromC] = '';
+                    recordState();
+                    renderBoard();
+                    endGame(`${color === 'w' ? 'White' : 'Black'} captured the opponent's King and wins the game!`);
+                    return;
                 }
             }
 
-            if (movingPiece === 'K') {
-                castlingRights.w.kingSide = false;
-                castlingRights.w.queenSide = false;
-            } else if (movingPiece === 'k') {
-                castlingRights.b.kingSide = false;
-                castlingRights.b.queenSide = false;
-            } else if (movingPiece === 'R') {
-                if (fromR === 7 && fromC === 7) castlingRights.w.kingSide = false;
-                if (fromR === 7 && fromC === 0) castlingRights.w.queenSide = false;
-            } else if (movingPiece === 'r') {
-                if (fromR === 0 && fromC === 7) castlingRights.b.kingSide = false;
-                if (fromR === 0 && fromC === 0) castlingRights.b.queenSide = false;
+            board[toR][toC] = movingPiece;
+            board[fromR][fromC] = '';
+
+            // Check for Pawn Promotion / Special Pawn Triggers
+            if (movingPiece === 'P' && toR === 0) {
+                pendingPromotion = { r: toR, c: toC, color: 'w' };
+                promoModal.style.display = 'flex';
+                return;
+            }
+            if (movingPiece === 'p' && toR === 7) {
+                pendingPromotion = { r: toR, c: toC, color: 'b' };
+                promoModal.style.display = 'flex';
+                return;
             }
 
-            if (turn === 'w') {
-                whiteCoinCount++;
-            } else {
-                blackCoinCount++;
-            }
+            if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
 
             turn = turn === 'w' ? 'b' : 'w';
             selectedSquare = null;
             validMoves = [];
+            recordState();
             renderBoard();
         }
+
+        // Promotion modal choice selection handlers
+        document.querySelectorAll('.promo-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!pendingPromotion) return;
+                const choice = btn.dataset.choice;
+                const { r, c, color } = pendingPromotion;
+
+                if (choice === 'battery') {
+                    board[r][c] = (color === 'w') ? 'BATTERY_W' : 'BATTERY_B';
+                } else if (choice === 'underage') {
+                    board[r][c] = (color === 'w') ? 'UNDERAGE_W' : 'UNDERAGE_B';
+                } else if (choice === 'teenager') {
+                    board[r][c] = (color === 'w') ? 'TEEN_W' : 'TEEN_B';
+                } else {
+                    board[r][c] = (color === 'w') ? 'Q' : 'q';
+                }
+
+                promoModal.style.display = 'none';
+                pendingPromotion = null;
+
+                if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
+                turn = (turn === 'w') ? 'b' : 'w';
+                selectedSquare = null;
+                validMoves = [];
+                recordState();
+                renderBoard();
+            });
+        });
 
         function startBattle(activeColor) {
             whiteHp = 100;
             blackHp = 100;
+            battleTurn = activeColor;
             updateHealthBars();
-            battleTeamLabel.textContent = (activeColor === 'w') ? '[white pawn]' : '[black pawn]';
+            updateBattleLabel();
             battleScreen.style.display = 'flex';
+        }
+
+        function updateBattleLabel() {
+            battleTeamLabel.textContent = battleTurn === 'w' ? "White's turn to attack" : "Black's turn to attack";
         }
 
         function endBattle() {
             battleScreen.style.display = 'none';
             pendingBattle = null;
             turn = (turn === 'w') ? 'b' : 'w';
+            recordState();
             renderBoard();
         }
 
         btnAttack.addEventListener('click', () => {
             if (!pendingBattle) return;
-            
-            const damageDealt = Math.floor(Math.random() * 20) + 15;
-            const damageTaken = Math.floor(Math.random() * 20) + 10;
 
-            if (turn === 'w') {
-                blackHp -= damageDealt;
-                whiteHp -= damageTaken;
+            if (battleTurn === 'w') {
+                blackHp -= 10;
             } else {
-                whiteHp -= damageDealt;
-                blackHp -= damageTaken;
+                whiteHp -= 10;
             }
 
             updateHealthBars();
@@ -972,19 +1830,20 @@
             if (whiteHp <= 0 || blackHp <= 0) {
                 if (whiteHp <= 0 && blackHp > 0) {
                     board[pendingBattle.fromR][pendingBattle.fromC] = '';
-                } else {
+                } else if (blackHp <= 0 && whiteHp > 0) {
                     board[pendingBattle.toR][pendingBattle.toC] = pendingBattle.movingPiece;
                     board[pendingBattle.fromR][pendingBattle.fromC] = '';
+                } else {
+                    board[pendingBattle.fromR][pendingBattle.fromC] = '';
+                    board[pendingBattle.toR][pendingBattle.toC] = '';
                 }
                 if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
                 setTimeout(endBattle, 400);
                 return;
             }
 
-            board[pendingBattle.toR][pendingBattle.toC] = pendingBattle.movingPiece;
-            board[pendingBattle.fromR][pendingBattle.fromC] = '';
-            if (turn === 'w') whiteCoinCount++; else blackCoinCount++;
-            setTimeout(endBattle, 400);
+            battleTurn = battleTurn === 'w' ? 'b' : 'b';
+            updateBattleLabel();
         });
 
         btnRun.addEventListener('click', () => {
@@ -1019,13 +1878,8 @@
                 selectedSquare = null;
                 validMoves = [];
             } else if (currentCoins >= 3) {
-                if (turn === 'w') {
-                    whiteCoinCount -= 3;
-                    whiteKnives++;
-                } else {
-                    blackCoinCount -= 3;
-                    blackKnives++;
-                }
+                if (turn === 'w') { whiteCoinCount -= 3; whiteKnives++; }
+                else { blackCoinCount -= 3; blackKnives++; }
                 isKnifeArmed = true;
                 selectedSquare = null;
                 validMoves = [];
@@ -1038,28 +1892,215 @@
             const currentPills = (turn === 'w') ? whitePillsCount : blackPillsCount;
 
             if (currentCoins >= 5 && currentPills === 0) {
-                if (turn === 'w') {
-                    whiteCoinCount -= 5;
-                    whitePillsCount++;
-                } else {
-                    blackCoinCount -= 5;
-                    blackPillsCount++;
+                if (turn === 'w') { whiteCoinCount -= 5; whitePillsCount++; }
+                else { blackCoinCount -= 5; blackPillsCount++; }
+                renderBoard();
+            }
+        });
+
+        prevPageBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; renderBoard(); } });
+        nextPageBtn.addEventListener('click', () => { if (currentPage < 4) { currentPage++; renderBoard(); } });
+
+        function endGame(message) {
+            gameEnded = true;
+            gameReadBtn.disabled = false;
+            alert(message);
+        }
+
+        gameReadBtn.addEventListener('click', () => {
+            if (!gameEnded) return;
+            isReviewMode = true;
+            reviewIndex = gameHistory.length - 1;
+            gameReadBtn.disabled = true;
+            renderBoard();
+        });
+
+        // Lessons Modal & Interactive Sandbox Board Logic
+        function loadLessonsForRank(rankName) {
+            currentActiveRank = rankName;
+            lessonsList.innerHTML = '';
+            const lessons = LESSON_DATA[rankName] || [];
+            lessons.forEach((l, idx) => {
+                const item = document.createElement('div');
+                item.classList.add('lesson-item');
+                item.innerHTML = `<div class="lesson-title">${l.title}</div><div class="lesson-desc">${l.desc}</div>`;
+                
+                item.addEventListener('click', () => {
+                    openLessonViewer(rankName, idx);
+                });
+
+                lessonsList.appendChild(item);
+            });
+        }
+
+        function openLessonViewer(rankName, lessonIdx) {
+            currentActiveRank = rankName;
+            currentLessonIndex = lessonIdx;
+            const lessons = LESSON_DATA[rankName];
+            const l = lessons[lessonIdx];
+
+            viewerTitleText.textContent = `${l.title} [${rankName}]`;
+            viewerText.textContent = l.desc;
+            sandboxInstruction.textContent = `Interactive Challenge: Perform required action on board!`;
+            sandboxSuccess.style.display = 'none';
+
+            sandboxBoardState = JSON.parse(JSON.stringify(l.boardState));
+            sandboxSelected = null;
+
+            renderSandboxBoard();
+
+            prevLessonBtn.disabled = (lessonIdx === 0 && rankName === "New");
+            nextLessonBtn.disabled = (lessonIdx === lessons.length - 1 && rankName === "Complicated");
+
+            lessonsModal.style.display = 'none';
+            lessonViewer.style.display = 'flex';
+        }
+
+        function renderSandboxBoard() {
+            sandboxBoardEl.innerHTML = '';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const sq = document.createElement('div');
+                    sq.classList.add('sandbox-square');
+                    sq.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
+                    sq.dataset.row = r;
+                    sq.dataset.col = c;
+
+                    const piece = sandboxBoardState[r][c];
+                    if (piece) {
+                        const pSpan = document.createElement('span');
+                        pSpan.textContent = getPieceSymbol(piece);
+                        if (isWhite(piece)) pSpan.classList.add('piece-white');
+                        else pSpan.classList.add('piece-black');
+                        sq.appendChild(pSpan);
+                    }
+
+                    if (sandboxSelected && sandboxSelected.r === r && sandboxSelected.c === c) {
+                        sq.classList.add('selected');
+                    }
+
+                    sq.addEventListener('click', () => handleSandboxClick(r, c));
+                    sandboxBoardEl.appendChild(sq);
                 }
-                renderBoard();
+            }
+        }
+
+        function handleSandboxClick(r, c) {
+            const lessons = LESSON_DATA[currentActiveRank];
+            const l = lessons[currentLessonIndex];
+            const clickedPiece = sandboxBoardState[r][c];
+
+            if (l.type === 'count') {
+                completeLessonChallenge();
+                return;
+            }
+
+            if (l.type === 'move_rook' || l.type === 'pawn_move' || l.type === 'capture_piece' || l.type === 'promote_pawn' || l.type === 'center_control' || l.type === 'coordinate_pieces' || l.type === 'defend_threat' || l.type === 'pawn_storm_board' || l.type === 'midgame_transition' || l.type === 'split_king_step' || l.type === 'multifront_board' || l.type === 'endgame_conversion' || l.type === 'gm_anarchy' || l.type === 'battery_practice') {
+                if (sandboxSelected) {
+                    if (sandboxSelected.r === l.from.r && sandboxSelected.c === l.from.c && r === l.to.r && c === l.to.c) {
+                        sandboxBoardState[l.to.r][l.to.c] = sandboxBoardState[l.from.r][l.from.c];
+                        sandboxBoardState[l.from.r][l.from.c] = '';
+                        sandboxSelected = null;
+                        renderSandboxBoard();
+                        completeLessonChallenge();
+                        return;
+                    } else {
+                        sandboxSelected = null;
+                        renderSandboxBoard();
+                    }
+                } else if (clickedPiece) {
+                    sandboxSelected = { r, c };
+                    renderSandboxBoard();
+                }
+                return;
+            }
+
+            completeLessonChallenge();
+        }
+
+        function completeLessonChallenge() {
+            sandboxSuccess.style.display = 'block';
+        }
+
+        prevLessonBtn.addEventListener('click', () => {
+            if (currentLessonIndex > 0) {
+                openLessonViewer(currentActiveRank, currentLessonIndex - 1);
+            } else {
+                const ranks = ["New", "Beginner", "Normal", "Advanced", "Complicated"];
+                const rIdx = ranks.indexOf(currentActiveRank);
+                if (rIdx > 0) {
+                    const prevRank = ranks[rIdx - 1];
+                    const prevLessons = LESSON_DATA[prevRank];
+                    openLessonViewer(prevRank, prevLessons.length - 1);
+                }
             }
         });
 
-        prevPageBtn.addEventListener('click', () => {
-            if (currentPage > 0) {
-                currentPage--;
-                renderBoard();
+        nextLessonBtn.addEventListener('click', () => {
+            const lessons = LESSON_DATA[currentActiveRank];
+            if (currentLessonIndex < lessons.length - 1) {
+                openLessonViewer(currentActiveRank, currentLessonIndex + 1);
+            } else {
+                const ranks = ["New", "Beginner", "Normal", "Advanced", "Complicated"];
+                const rIdx = ranks.indexOf(currentActiveRank);
+                if (rIdx < ranks.length - 1) {
+                    const nextRank = ranks[rIdx + 1];
+                    openLessonViewer(nextRank, 0);
+                }
             }
         });
 
-        nextPageBtn.addEventListener('click', () => {
-            if (currentPage < 3) {
-                currentPage++;
-                renderBoard();
+        function initLessonsModal() {
+            ranksContainer.innerHTML = '';
+            const ranks = ["New", "Beginner", "Normal", "Advanced", "Complicated"];
+            ranks.forEach((rank) => {
+                const rBtn = document.createElement('button');
+                rBtn.classList.add('rank-btn');
+                if (rank === currentActiveRank) rBtn.classList.add('active');
+                rBtn.textContent = rank;
+                rBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.rank-btn').forEach(b => b.classList.remove('active'));
+                    rBtn.classList.add('active');
+                    loadLessonsForRank(rank);
+                });
+                ranksContainer.appendChild(rBtn);
+            });
+            loadLessonsForRank(currentActiveRank);
+        }
+
+        lessonsBtn.addEventListener('click', () => {
+            initLessonsModal();
+            lessonsModal.style.display = 'flex';
+        });
+
+        closeLessonsBtn.addEventListener('click', () => {
+            lessonsModal.style.display = 'none';
+        });
+
+        closeViewerBtn.addEventListener('click', () => {
+            lessonViewer.style.display = 'none';
+            initLessonsModal();
+            lessonsModal.style.display = 'flex';
+        });
+
+        closeViewerToModalBtn.addEventListener('click', () => {
+            lessonViewer.style.display = 'none';
+            initLessonsModal();
+            lessonsModal.style.display = 'flex';
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (!isReviewMode) return;
+            if (e.key === 'ArrowLeft') {
+                if (reviewIndex > 0) {
+                    reviewIndex--;
+                    renderBoard();
+                }
+            } else if (e.key === 'ArrowRight') {
+                if (reviewIndex < gameHistory.length - 1) {
+                    reviewIndex++;
+                    renderBoard();
+                }
             }
         });
 
@@ -1068,29 +2109,30 @@
             turn = 'w';
             selectedSquare = null;
             validMoves = [];
-            whiteCoinCount = 0;
-            blackCoinCount = 0;
-            whiteKnives = 0;
-            blackKnives = 0;
+            whiteCoinCount = 0; blackCoinCount = 0;
+            whiteKnives = 0; blackKnives = 0;
             isKnifeArmed = false;
-            whiteKingMoves = 0;
-            blackKingMoves = 0;
-            whitePillsCount = 0;
-            blackPillsCount = 0;
-            currentPage = 0;
-            pendingBattle = null;
-            whiteHp = 100;
-            blackHp = 100;
+            whitePillsCount = 0; blackPillsCount = 0;
+            hasMoved = { WK: false, W_Rook_A: false, W_Rook_H: false, BK: false, B_Rook_A: false, B_Rook_H: false };
+            currentPage = 0; pendingBattle = null; pendingPromotion = null;
+            whiteHp = 100; blackHp = 100;
+            gameHistory = [];
+            moveClassifications = [];
+            isReviewMode = false;
+            reviewIndex = 0;
+            gameEnded = false;
+            gameReadBtn.disabled = true;
             battleScreen.style.display = 'none';
-            castlingRights = {
-                w: { kingSide: true, queenSide: true },
-                b: { kingSide: true, queenSide: true }
-            };
+            promoModal.style.display = 'none';
+            lessonViewer.style.display = 'none';
+            reviewBadge.style.display = 'none';
+            
+            gameHistory.push(JSON.parse(JSON.stringify(board)));
+            moveClassifications.push(3);
             renderBoard();
         }
 
         resetBtn.addEventListener('click', resetGame);
-
         renderBoard();
     </script>
 </body>
