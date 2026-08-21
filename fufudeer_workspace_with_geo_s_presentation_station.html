@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FufuDeer - Workspace & Presentation Station</title>
+    <title>FufuDeer - Workspace & Presentation Station with BeffAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,6 +17,7 @@
 </head>
 <body class="bg-slate-50 h-full flex flex-col text-slate-800 overflow-hidden">
 
+    <!-- Loading Screen Overlay -->
     <div id="loading-screen" class="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
         <div class="relative w-36 h-36 mb-8 animate-bounce">
             <div class="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse"></div>
@@ -29,10 +30,9 @@
             <div class="absolute -top-2 -right-2 text-amber-400 animate-spin text-lg">✨</div>
             <div class="absolute -bottom-2 -left-2 text-emerald-400 animate-ping text-sm">⭐</div>
         </div>
-
         <div class="text-center space-y-3 max-w-md px-4">
             <h2 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">FufuDeer Flight Control</h2>
-            <p id="loading-status" class="text-slate-300 text-sm font-medium">Preparing takeoff sequence for happy plane...</p>
+            <p id="loading-status" class="text-slate-300 text-sm font-medium">Reintegrating BeffAI assistant core and launching workspace...</p>
             <div class="w-64 h-2 bg-slate-800 rounded-full mx-auto overflow-hidden border border-slate-700 shadow-inner mt-4">
                 <div id="loading-progress" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-0 transition-all duration-300 rounded-full"></div>
             </div>
@@ -40,6 +40,7 @@
         </div>
     </div>
 
+    <!-- Header -->
     <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs z-10">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="returnToHub()">
             <div class="w-11 h-11 bg-[#7c4a2d] rounded-2xl flex items-center justify-center text-white shadow-md shadow-amber-900/20 overflow-hidden relative border border-[#633a22]">
@@ -86,6 +87,28 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- BeffAI Card -->
+                    <div class="bg-white rounded-2xl p-6 border border-amber-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden ring-2 ring-amber-500/20">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 to-yellow-400"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-amber-500/30 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 bg-amber-50 text-amber-700 rounded-md">AI Assistant</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">BeffAI</h3>
+                            <p class="text-slate-500 text-sm mt-1">Your intelligent companion for brainstorming, coding advice, and creative guidance.</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-amber-600 font-medium"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Active</span>
+                            <button onclick="openBeffAI()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium text-sm rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer">
+                                <span>Chat</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Inkflow Card -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
@@ -106,7 +129,7 @@
                         </div>
                     </div>
 
-                    <!-- Geo's Presentation Station Card -->
+                    <!-- Geo's Presentation Card -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-purple-600 to-pink-600"></div>
                         <div>
@@ -205,7 +228,7 @@
                                 <span class="text-xs font-semibold px-2 py-1 bg-cyan-50 text-cyan-700 rounded-md">Education</span>
                             </div>
                             <h3 class="text-lg font-bold text-slate-900">ILearn</h3>
-                            <p class="text-slate-500 text-sm mt-1">Interactive learning platform with fun lessons and quizzes in Math and English.</p>
+                            <p class="text-slate-500 text-sm mt-1">Interactive learning platform with fun lessons, quizzes, and the 20-question "Test Me!" adaptive saga.</p>
                         </div>
                         <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                             <span class="text-xs text-slate-400 font-medium">Interactive</span>
@@ -215,28 +238,51 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- BeffAI Card -->
-                    <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
-                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-500 to-rose-500"></div>
-                        <div>
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-pink-500/30 group-hover:scale-105 transition-transform">
-                                    <i class="fa-solid fa-robot"></i>
-                                </div>
-                                <span class="text-xs font-semibold px-2 py-1 bg-pink-50 text-pink-700 rounded-md">Plushie AI</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900">BeffAI</h3>
-                            <p class="text-slate-500 text-sm mt-1">Your cuddly plushie assistant who chats back using cozy plushie lingo (pello, bello)!</p>
+        <!-- BeffAI Chat View -->
+        <div id="beffai-view" class="hidden flex-1 flex flex-col bg-slate-900 text-white overflow-hidden">
+            <div class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shadow-md">
+                <div class="flex items-center space-x-3">
+                    <button onclick="returnToHub()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold shadow-md">
+                            <i class="fa-solid fa-robot"></i>
                         </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-xs text-slate-400 font-medium">Fluffy Assistant</span>
-                            <button onclick="openBeffAI()" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm rounded-xl shadow-md shadow-pink-600/20 hover:shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer">
-                                <span>Chat with Beff</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </button>
+                        <div>
+                            <h2 class="font-bold text-white text-base">BeffAI Assistant</h2>
+                            <p class="text-xs text-amber-400 font-medium">Always online & ready to assist</p>
                         </div>
                     </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="clearBeffAIChat()" class="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Clear Chat</span>
+                    </button>
+                </div>
+            </div>
+            <div id="beffai-chat-container" class="flex-1 overflow-y-auto p-6 space-y-4 max-w-4xl mx-auto w-full">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold shrink-0 shadow-md">
+                        <i class="fa-solid fa-robot text-xs"></i>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl rounded-tl-xs max-w-xl text-sm leading-relaxed text-slate-200">
+                        Hello! I am <strong>BeffAI</strong>, your integrated FufuDeer assistant. How can I help you brainstorm, code, or build something amazing today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-800 border-t border-slate-700">
+                <div class="max-w-4xl mx-auto flex gap-3">
+                    <input type="text" id="beffai-input" onkeydown="if(event.key==='Enter') sendBeffAIMessage()" placeholder="Ask BeffAI anything..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500">
+                    <button onclick="sendBeffAIMessage()" class="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-amber-500/20 cursor-pointer flex items-center space-x-2">
+                        <span>Send</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -273,7 +319,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="bg-slate-50 px-4 py-2 flex flex-wrap items-center gap-2 overflow-x-auto text-sm text-slate-700">
                     <select id="fontFamily" onchange="formatDoc('fontName', this.value)" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-500">
                         <option value="Inter">Inter</option>
@@ -282,7 +327,6 @@
                         <option value="Courier New">Courier New</option>
                         <option value="Georgia">Georgia</option>
                     </select>
-
                     <select id="fontSize" onchange="formatDoc('fontSize', this.value)" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-blue-500">
                         <option value="1">Small</option>
                         <option value="3" selected>Normal</option>
@@ -291,48 +335,35 @@
                         <option value="6">Heading 2</option>
                         <option value="7">Heading 1</option>
                     </select>
-
                     <div class="h-5 w-px bg-slate-300 mx-1"></div>
-
                     <button onclick="formatDoc('bold')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Bold"><i class="fa-solid fa-bold"></i></button>
                     <button onclick="formatDoc('italic')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Italic"><i class="fa-solid fa-italic"></i></button>
                     <button onclick="formatDoc('underline')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Underline"><i class="fa-solid fa-underline"></i></button>
                     <button onclick="formatDoc('strikeThrough')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Strikethrough"><i class="fa-solid fa-strikethrough"></i></button>
-
                     <div class="h-5 w-px bg-slate-300 mx-1"></div>
-
-                    <div class="flex items-center space-x-1">
-                        <label title="Text Color" class="cursor-pointer p-1 hover:bg-slate-200 rounded-md flex items-center space-x-1 text-xs">
-                            <i class="fa-solid fa-font text-slate-700"></i>
-                            <input type="color" onchange="formatDoc('foreColor', this.value)" value="#0f172a" class="w-4 h-4 cursor-pointer border-0 bg-transparent">
-                        </label>
-                        <label title="Highlight Color" class="cursor-pointer p-1 hover:bg-slate-200 rounded-md flex items-center space-x-1 text-xs">
-                            <i class="fa-solid fa-highlighter text-amber-600"></i>
-                            <input type="color" onchange="formatDoc('hiliteColor', this.value)" value="#fef08a" class="w-4 h-4 cursor-pointer border-0 bg-transparent">
-                        </label>
-                    </div>
-
+                    <label title="Text Color" class="cursor-pointer p-1 hover:bg-slate-200 rounded-md flex items-center space-x-1 text-xs">
+                        <i class="fa-solid fa-font text-slate-700"></i>
+                        <input type="color" onchange="formatDoc('foreColor', this.value)" value="#0f172a" class="w-4 h-4 cursor-pointer border-0 bg-transparent">
+                    </label>
+                    <label title="Highlight Color" class="cursor-pointer p-1 hover:bg-slate-200 rounded-md flex items-center space-x-1 text-xs">
+                        <i class="fa-solid fa-highlighter text-amber-600"></i>
+                        <input type="color" onchange="formatDoc('hiliteColor', this.value)" value="#fef08a" class="w-4 h-4 cursor-pointer border-0 bg-transparent">
+                    </label>
                     <div class="h-5 w-px bg-slate-300 mx-1"></div>
-
                     <button onclick="formatDoc('justifyLeft')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
                     <button onclick="formatDoc('justifyCenter')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
                     <button onclick="formatDoc('justifyRight')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
                     <button onclick="formatDoc('justifyFull')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Justify"><i class="fa-solid fa-align-justify"></i></button>
-
                     <div class="h-5 w-px bg-slate-300 mx-1"></div>
-
                     <button onclick="formatDoc('insertUnorderedList')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Bullet List"><i class="fa-solid fa-list-ul"></i></button>
                     <button onclick="formatDoc('insertOrderedList')" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
-
                     <div class="h-5 w-px bg-slate-300 mx-1"></div>
-
                     <button onclick="insertLink()" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Insert Link"><i class="fa-solid fa-link"></i></button>
                     <button onclick="insertImage()" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Insert Image"><i class="fa-solid fa-image"></i></button>
                     <button onclick="insertTable()" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Insert Table"><i class="fa-solid fa-table"></i></button>
                     <button onclick="insertHorizontalRule()" class="p-1.5 hover:bg-slate-200 rounded-md transition-colors cursor-pointer" title="Horizontal Line"><i class="fa-solid fa-ruler-horizontal"></i></button>
                 </div>
             </div>
-
             <div class="flex-1 overflow-y-auto p-6 flex justify-center bg-slate-200/70 transition-colors" id="editor-page-wrapper">
                 <div id="page-container" class="w-full max-w-[850px] min-h-[1100px] bg-white shadow-xl rounded-sm p-16 flex flex-col focus:outline-none my-2 border border-slate-300 transition-colors">
                     <div id="editor-canvas" contenteditable="true" class="flex-1 focus:outline-none prose max-w-none text-slate-800 leading-relaxed">
@@ -343,7 +374,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="bg-white border-t border-slate-200 px-6 py-1.5 flex items-center justify-between text-xs text-slate-500">
                 <div class="flex items-center space-x-4">
                     <span id="word-count">Words: 24</span>
@@ -384,14 +414,12 @@
                             <option value="minimal" class="bg-slate-900">Clean Minimal</option>
                         </select>
                     </div>
-
                     <button onclick="startSlideShow()" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-purple-600/30 transition-all flex items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-play"></i>
                         <span>Present Slideshow</span>
                     </button>
                 </div>
             </div>
-
             <div class="flex-1 flex overflow-hidden">
                 <div class="w-64 bg-slate-800/80 border-r border-slate-700 flex flex-col">
                     <div class="p-4 border-b border-slate-700 flex items-center justify-between">
@@ -403,18 +431,15 @@
                     </div>
                     <div id="slide-thumbnails-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
                 </div>
-
                 <div class="flex-1 bg-slate-950 p-8 flex flex-col items-center justify-center overflow-y-auto relative">
                     <div id="active-slide-card" class="w-full max-w-4xl aspect-[16/9] bg-gradient-to-br from-purple-900/40 to-slate-900 border border-purple-500/30 rounded-2xl shadow-2xl p-12 flex flex-col justify-between relative transition-all duration-300">
                         <div>
                             <span class="text-xs font-bold px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30 mb-4 inline-block" id="current-slide-number-tag">Slide 1</span>
                             <input type="text" id="slide-heading-input" oninput="updateCurrentSlideData()" placeholder="Slide Title..." class="w-full text-3xl md:text-4xl font-bold bg-transparent border-b border-purple-500/20 focus:border-purple-400 focus:outline-none text-white pb-2 placeholder-slate-600">
                         </div>
-
                         <div class="flex-1 my-6">
-                            <textarea id="slide-body-input" oninput="updateCurrentSlideData()" placeholder="Type slide bullet points, notes, or explanations here... Use new lines for items." class="w-full h-full bg-slate-900/50 border border-slate-800 rounded-xl p-5 text-slate-200 text-lg focus:outline-none focus:border-purple-500 resize-none leading-relaxed font-sans placeholder-slate-600"></textarea>
+                            <textarea id="slide-body-input" oninput="updateCurrentSlideData()" placeholder="Type slide bullet points, notes, or explanations here..." class="w-full h-full bg-slate-900/50 border border-slate-800 rounded-xl p-5 text-slate-200 text-lg focus:outline-none focus:border-purple-500 resize-none leading-relaxed font-sans placeholder-slate-600"></textarea>
                         </div>
-
                         <div class="flex items-center justify-between pt-4 border-t border-slate-800/80 text-xs text-slate-400">
                             <span>Geo's Presentation Station • FufuDeer Cloud</span>
                             <div class="flex items-center space-x-2">
@@ -458,7 +483,7 @@
             </div>
         </div>
 
-        <!-- GraphiteArea Drawing App View -->
+        <!-- GraphiteArea Drawing View -->
         <div id="graphite-view" class="hidden flex-1 flex flex-col bg-slate-900 text-white overflow-hidden">
             <div class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shadow-md">
                 <div class="flex items-center space-x-3">
@@ -501,7 +526,7 @@
             </div>
         </div>
 
-        <!-- DeerPlanner Planner View -->
+        <!-- DeerPlanner View -->
         <div id="planner-view" class="hidden flex-1 flex flex-col bg-slate-100 overflow-hidden">
             <div class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs">
                 <div class="flex items-center space-x-3">
@@ -534,7 +559,7 @@
             </div>
         </div>
 
-        <!-- ILearn Interactive Learning View -->
+        <!-- ILearn Academy View -->
         <div id="ilearn-view" class="hidden flex-1 flex flex-col bg-slate-50 overflow-hidden">
             <div class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs">
                 <div class="flex items-center space-x-3">
@@ -547,34 +572,15 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <button onclick="openILearnVideoModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 flex items-center space-x-1.5 transition-all cursor-pointer">
-                        <i class="fa-solid fa-play text-[10px]"></i>
-                        <span>Video Lesson</span>
+                    <button onclick="startTestMeSaga()" class="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center space-x-1.5 cursor-pointer animate-pulse">
+                        <i class="fa-solid fa-fire"></i>
+                        <span>Test Me! (20-Q Saga)</span>
                     </button>
-                    <div class="relative">
-                        <button onclick="toggleILearnTopicMenu()" id="ilearn-topic-btn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 flex items-center space-x-1.5 transition-all cursor-pointer">
-                            <i class="fa-solid fa-list-check text-[10px]"></i>
-                            <span>Select Topic</span>
-                        </button>
-                        <div id="ilearn-topic-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-2 space-y-1">
-                            <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Mathematics</div>
-                            <button onclick="selectSpecificTopic('math', 0)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">1. Multiplication Tables</button>
-                            <button onclick="selectSpecificTopic('math', 1)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">2. Algebraic Equations</button>
-                            <button onclick="selectSpecificTopic('math', 2)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">3. Area Measurement</button>
-                            <button onclick="selectSpecificTopic('math', 3)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">4. Square Roots</button>
-                            <div class="border-t border-slate-100 my-1"></div>
-                            <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">English & Grammar</div>
-                            <button onclick="selectSpecificTopic('english', 0)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">1. Parts of Speech</button>
-                            <button onclick="selectSpecificTopic('english', 1)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">2. Spelling & Vocabulary</button>
-                            <button onclick="selectSpecificTopic('english', 2)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">3. Synonyms & Meanings</button>
-                            <button onclick="selectSpecificTopic('english', 3)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">4. Action Verbs</button>
-                        </div>
-                    </div>
                     <span id="ilearn-score-badge" class="px-3 py-1 bg-cyan-50 text-cyan-700 text-xs font-bold rounded-lg border border-cyan-200">Score: 0 XP</span>
                 </div>
             </div>
             <div class="flex-1 overflow-y-auto p-6 lg:p-10 max-w-4xl mx-auto w-full space-y-8">
-                <div class="flex space-x-4">
+                <div id="ilearn-standard-tabs" class="flex space-x-4">
                     <button onclick="switchILearnSubject('math')" id="ilearn-tab-math" class="px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-square-root-variable"></i>
                         <span>Mathematics</span>
@@ -585,7 +591,12 @@
                     </button>
                 </div>
 
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6 relative overflow-hidden">
+                    <div id="saga-adaptive-notice" class="hidden bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-medium flex items-center justify-between">
+                        <span><i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-amber-600"></i>Adaptive Saga Active: Tailoring next questions based on your performance!</span>
+                        <span id="saga-tier-badge" class="font-bold uppercase">Standard Tier</span>
+                    </div>
+
                     <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                         <span id="ilearn-category-label" class="text-xs font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">Math Lesson</span>
                         <span id="ilearn-progress-label" class="text-xs font-mono text-slate-400">Question 1 of 4</span>
@@ -598,60 +609,7 @@
 
                     <div id="ilearn-options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
 
-                    <div id="ilearn-feedback-box" class="hidden p-5 rounded-2xl text-sm mt-4 space-y-3"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BeffAI Plushie Assistant View -->
-        <div id="beffai-view" class="hidden flex-1 flex flex-col bg-pink-50/50 overflow-hidden">
-            <div class="bg-white border-b border-pink-100 px-6 py-3 flex items-center justify-between shadow-xs">
-                <div class="flex items-center space-x-3">
-                    <button onclick="returnToHub()" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </button>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white font-bold text-base shadow-md shadow-pink-500/20">
-                            <i class="fa-solid fa-robot"></i>
-                        </div>
-                        <div>
-                            <h2 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-                                <span>BeffAI</span>
-                                <span class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full font-semibold">Fluffy Assistant ✨</span>
-                            </h2>
-                            <p class="text-xs text-slate-400">Your cozy plushie buddy for warm hugs and chats</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="clearBeffChat()" class="px-3 py-1.5 text-xs font-medium bg-white hover:bg-pink-50 text-pink-700 rounded-xl border border-pink-200 transition-colors flex items-center space-x-1.5 cursor-pointer">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        <span>New Chat</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Chat Messages Container -->
-            <div id="beff-chat-container" class="flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full space-y-6">
-                <!-- Initial Welcome Bubble -->
-                <div class="flex items-start space-x-3">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
-                        <p><strong>Pello!</strong> I am BeffAI, your cuddly plushie helper! 🧸✨ How can I help you today? Do you want a cozy hug or a fluffy chat before saying bello?</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chat Input Area -->
-            <div class="bg-white border-t border-pink-100 p-4 shadow-sm">
-                <div class="max-w-4xl mx-auto flex gap-3 items-center">
-                    <input type="text" id="beff-input" onkeydown="handleBeffKey(event)" placeholder="Type a message to BeffAI (e.g. hello, how are you?)..." class="flex-1 bg-pink-50/50 border border-pink-200 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-pink-500 text-slate-800 placeholder-slate-400 shadow-inner">
-                    <button onclick="sendToBeffAI()" class="px-6 py-3.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold text-sm rounded-2xl shadow-md shadow-pink-600/30 transition-all flex items-center space-x-2 cursor-pointer">
-                        <span>Send</span>
-                        <i class="fa-solid fa-paper-plane text-xs"></i>
-                    </button>
+                    <div id="ilearn-feedback-box" class="hidden p-4 rounded-2xl text-sm font-medium mt-4"></div>
                 </div>
             </div>
         </div>
@@ -666,11 +624,9 @@
                 <span>Exit Slideshow (Esc)</span>
             </button>
         </div>
-
         <div class="flex-1 flex items-center justify-center max-w-5xl mx-auto w-full">
             <div id="slideshow-card-content" class="w-full aspect-[16/9] bg-gradient-to-br from-purple-900 to-slate-900 rounded-3xl p-16 shadow-2xl flex flex-col justify-between border border-purple-500/30"></div>
         </div>
-
         <div class="flex items-center justify-center space-x-6">
             <button onclick="prevSlideShow()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl font-medium text-sm transition-colors flex items-center space-x-2 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -690,34 +646,23 @@
         <span id="toast-message">Action completed successfully!</span>
     </div>
 
-    <!-- ILearn Video Modal Player Simulation -->
-    <div id="ilearn-video-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-6">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full p-6 text-white shadow-2xl space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <div class="flex items-center space-x-2">
-                    <div class="w-3 h-3 bg-rose-500 rounded-full animate-pulse"></div>
-                    <h3 id="ilearn-video-title" class="font-bold text-base">Video Lesson: Multiplication Tables & Core Concepts</h3>
-                </div>
-                <button onclick="closeILearnVideoModal()" class="p-2 text-slate-400 hover:text-white rounded-xl transition-colors cursor-pointer">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <div class="w-full aspect-video bg-black rounded-2xl border border-slate-800 overflow-hidden relative shadow-inner">
-                <iframe id="ilearn-youtube-iframe" class="w-full h-full border-0" src="" title="Educational Video Lesson" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <div class="flex items-center justify-between text-xs text-slate-400">
-                <span id="ilearn-video-subtitle">Instructor Walkthrough - Animated Interactive Lesson</span>
-                <span class="font-mono text-rose-400 font-semibold">ILearn Academy HD</span>
-            </div>
-            <p id="ilearn-video-desc" class="text-xs text-slate-400 leading-relaxed">
-                Watch this concise video breakdown to strengthen your core understanding before attempting the quiz question!
-            </p>
-        </div>
-    </div>
-
     <script>
+        // Switch views
+        function openBeffAI() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('editor-view').classList.add('hidden');
+            document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
+            document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
+            document.getElementById('geo-presentation-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.remove('hidden');
+            document.getElementById('beffai-input').focus();
+        }
+
         function openInkflow() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
@@ -730,6 +675,7 @@
 
         function openGeoPresentation() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
@@ -742,6 +688,7 @@
 
         function openCafeNotes() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
@@ -753,6 +700,7 @@
 
         function openGraphiteArea() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
@@ -764,6 +712,7 @@
 
         function openDeerPlanner() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
@@ -775,151 +724,149 @@
 
         function openILearn() {
             document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
-            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('ilearn-view').classList.remove('hidden');
             initILearn();
         }
 
-        function openBeffAI() {
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('editor-view').classList.add('hidden');
-            document.getElementById('notes-view').classList.add('hidden');
-            document.getElementById('graphite-view').classList.add('hidden');
-            document.getElementById('planner-view').classList.add('hidden');
-            document.getElementById('geo-presentation-view').classList.add('hidden');
-            document.getElementById('ilearn-view').classList.add('hidden');
-            document.getElementById('beffai-view').classList.remove('hidden');
-            document.getElementById('beff-input').focus();
-        }
-
         function returnToHub() {
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
             document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
             document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
-            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
         }
 
+        // BeffAI Chat Logic
+        function sendBeffAIMessage() {
+            const input = document.getElementById('beffai-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const container = document.getElementById('beffai-chat-container');
+
+            // User Bubble
+            const userBubble = document.createElement('div');
+            userBubble.className = 'flex items-start justify-end space-x-3';
+            userBubble.innerHTML = `
+                <div class="bg-amber-600 text-white p-4 rounded-2xl rounded-tr-xs max-w-xl text-sm leading-relaxed shadow-md">
+                    ${escapeHTML(text)}
+                </div>
+                <div class="w-8 h-8 rounded-xl bg-slate-700 flex items-center justify-center text-white font-bold shrink-0">
+                    <i class="fa-solid fa-user text-xs"></i>
+                </div>
+            `;
+            container.appendChild(userBubble);
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // BeffAI Response Generation
+            setTimeout(() => {
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'flex items-start space-x-3';
+                
+                let reply = "That's a fascinating thought! As BeffAI, I recommend checking out our ILearn or Inkflow apps to organize this further.";
+                const lower = text.toLowerCase();
+                if (lower.includes('hello') || lower.includes('hi')) {
+                    reply = "Hello there! Ready to build something wonderful with FufuDeer today?";
+                } else if (lower.includes('code') || lower.includes('programming')) {
+                    reply = "Coding is my specialty! Make sure to test your code in our GraphiteArea or format notes in Inkflow.";
+                } else if (lower.includes('help')) {
+                    reply = "I'm here to help! You can explore Inkflow, Geo's Presentations, GraphiteArea, DeerPlanner, or ILearn right from the FufuDeer hub.";
+                }
+
+                aiBubble.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold shrink-0 shadow-md">
+                        <i class="fa-solid fa-robot text-xs"></i>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl rounded-tl-xs max-w-xl text-sm leading-relaxed text-slate-200">
+                        ${reply}
+                    </div>
+                `;
+                container.appendChild(aiBubble);
+                container.scrollTop = container.scrollHeight;
+            }, 600);
+        }
+
+        function clearBeffAIChat() {
+            document.getElementById('beffai-chat-container').innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold shrink-0 shadow-md">
+                        <i class="fa-solid fa-robot text-xs"></i>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl rounded-tl-xs max-w-xl text-sm leading-relaxed text-slate-200">
+                        Chat cleared! How else can BeffAI assist you?
+                    </div>
+                </div>
+            `;
+            showToast("BeffAI chat cleared");
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // ILearn Learning App & 20-Question Adaptive Saga Logic
         let ilearnSubject = 'math';
         let ilearnIndex = 0;
         let ilearnScore = 0;
+        let isTestSagaActive = false;
+        let sagaUserAnswers = [];
+        let sagaCurrentQuestions = [];
+        let adaptiveDifficultyLevel = 'medium';
+        let consecutiveCorrectCount = 0;
+        let consecutiveIncorrectCount = 0;
 
         const ilearnData = {
             math: [
-                { 
-                    q: "What is 7 multiplied by 8?", 
-                    desc: "Multiplication tables fundamental test", 
-                    options: ["54", "56", "64", "49"], 
-                    correct: 1,
-                    explanation: "To find 7 × 8, you can think of it as adding the number 7 together eight times (7 + 7 + 7 + 7 + 7 + 7 + 7 + 7 = 56) or counting by 8 seven times (8, 16, 24, 32, 40, 48, 56). Therefore, the correct product is 56."
-                },
-                { 
-                    q: "Solve for x: 3x + 5 = 20", 
-                    desc: "Algebraic linear equations", 
-                    options: ["x = 5", "x = 3", "x = 7", "x = 4"], 
-                    correct: 0,
-                    explanation: "Step 1: Subtract 5 from both sides of the equation to isolate the term with x: 3x + 5 - 5 = 20 - 5, which gives 3x = 15. Step 2: Divide both sides by 3 to find x: x = 15 / 3 = 5."
-                },
-                { 
-                    q: "What is the area of a rectangle with length 10cm and width 5cm?", 
-                    desc: "Geometry measurement", 
-                    options: ["15 cm²", "50 cm²", "30 cm²", "100 cm²"], 
-                    correct: 1,
-                    explanation: "The formula for the area of a rectangle is Area = Length × Width. By multiplying the length (10 cm) by the width (5 cm), we get 10 × 5 = 50 cm². Area is always expressed in square units."
-                },
-                { 
-                    q: "What is the square root of 144?", 
-                    desc: "Exponents & Roots", 
-                    options: ["10", "11", "12", "14"], 
-                    correct: 2,
-                    explanation: "The square root of a number is a value that, when multiplied by itself, gives the original number. Since 12 × 12 = 144, the square root of 144 is 12."
-                }
+                { q: "What is 7 multiplied by 8?", desc: "Multiplication tables fundamental test", options: ["54", "56", "64", "49"], correct: 1 },
+                { q: "Solve for x: 3x + 5 = 20", desc: "Algebraic linear equations", options: ["x = 5", "x = 3", "x = 7", "x = 4"], correct: 0 },
+                { q: "What is the area of a rectangle with length 10cm and width 5cm?", desc: "Geometry measurement", options: ["15 cm²", "50 cm²", "30 cm²", "100 cm²"], correct: 1 },
+                { q: "What is the square root of 144?", desc: "Exponents & Roots", options: ["10", "11", "12", "14"], correct: 2 }
             ],
             english: [
-                { 
-                    q: "Which of the following is a noun?", 
-                    desc: "Parts of speech identification", 
-                    options: ["Quickly", "Elephant", "Running", "Beautiful"], 
-                    correct: 1,
-                    explanation: "A noun is a word representing a person, place, thing, or idea. 'Elephant' is a physical animal (a noun). 'Quickly' is an adverb, 'Running' is a verb in participle form, and 'Beautiful' is an adjective."
-                },
-                { 
-                    q: "Choose the correct spelling:", 
-                    desc: "Spelling and vocabulary", 
-                    options: ["Necessary", "Neccessary", "Necessaury", "Nessessary"], 
-                    correct: 0,
-                    explanation: "The correct spelling is 'Necessary'. A helpful mnemonic to remember is that a shirt has 'One Collar (C) and Two Sleeves (S)' -> N-E-C-E-S-S-A-R-Y."
-                },
-                { 
-                    q: "What is a synonym for 'Benevolent'?", 
-                    desc: "Advanced vocabulary", 
-                    options: ["Hostile", "Kind", "Greedy", "Swift"], 
-                    correct: 1,
-                    explanation: "'Benevolent' means well meaning and kindly. Therefore, its synonym is 'Kind'. 'Hostile' is an antonym (unfriendly), 'Greedy' means selfishly desiring more, and 'Swift' means fast."
-                },
-                { 
-                    q: "Identify the verb in this sentence: 'The swift deer bounded across the meadow.'", 
-                    desc: "Sentence structure analysis", 
-                    options: ["swift", "deer", "bounded", "meadow"], 
-                    correct: 2,
-                    explanation: "A verb is an action word or state of being. In this sentence, 'bounded' is the action that the deer performed, making it the verb. 'Swift' is an adjective describing the deer, 'deer' is the noun, and 'meadow' is the noun destination."
-                }
+                { q: "Which of the following is a noun?", desc: "Parts of speech identification", options: ["Quickly", "Elephant", "Running", "Beautiful"], correct: 1 },
+                { q: "Choose the correct spelling:", desc: "Spelling and vocabulary", options: ["Necessary", "Neccessary", "Necessaury", "Nessessary"], correct: 0 },
+                { q: "What is a synonym for 'Benevolent'?", desc: "Advanced vocabulary", options: ["Hostile", "Kind", "Greedy", "Swift"], correct: 1 },
+                { q: "Identify the verb in this sentence: 'The swift deer bounded across the meadow.'", desc: "Sentence structure analysis", options: ["swift", "deer", "bounded", "meadow"], correct: 2 }
             ]
         };
 
-        function toggleILearnTopicMenu() {
-            const dropdown = document.getElementById('ilearn-topic-dropdown');
-            dropdown.classList.toggle('hidden');
-        }
-
-        function selectSpecificTopic(subject, index) {
-            ilearnSubject = subject;
-            ilearnIndex = index;
-            document.getElementById('ilearn-topic-dropdown').classList.add('hidden');
-            
-            const mathBtn = document.getElementById('ilearn-tab-math');
-            const engBtn = document.getElementById('ilearn-tab-english');
-            if (subject === 'math') {
-                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
-                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
-            } else {
-                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
-                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
-            }
-            renderILearnQuestion();
-            showToast(`Jumped to ${subject.toUpperCase()} topic #${index + 1}`);
-        }
-
-        function openILearnVideoModal() {
-            const currentItem = ilearnData[ilearnSubject][ilearnIndex];
-            document.getElementById('ilearn-video-title').innerText = `Video Lesson: ${currentItem.q}`;
-            document.getElementById('ilearn-video-subtitle').innerText = `${ilearnSubject.toUpperCase()} Academy - Topic #${ilearnIndex + 1}`;
-            document.getElementById('ilearn-video-desc').innerText = `Detailed walkthrough for: "${currentItem.desc}". ${currentItem.explanation}`;
-            
-            const iframe = document.getElementById('ilearn-youtube-iframe');
-            if (ilearnSubject === 'math') {
-                iframe.src = "https://www.youtube-nocookie.com/embed/hj68ZXmiwZg?autoplay=1";
-            } else {
-                iframe.src = "https://www.youtube-nocookie.com/embed/NisInHsSK8A?autoplay=1";
-            }
-
-            document.getElementById('ilearn-video-modal').classList.remove('hidden');
-        }
-
-        function closeILearnVideoModal() {
-            document.getElementById('ilearn-video-modal').classList.add('hidden');
-            document.getElementById('ilearn-youtube-iframe').src = "";
-        }
+        const sagaQuestionPool = [
+            { q: "What is 12 squared (12²)?", desc: "Exponents", options: ["124", "144", "132", "156"], correct: 1, difficulty: "medium" },
+            { q: "Simplify: 3(x + 4) - 2", desc: "Algebra simplification", options: ["3x + 10", "3x + 6", "3x + 12", "3x + 2"], correct: 0, difficulty: "medium" },
+            { q: "What is 15% of 200?", desc: "Percentages", options: ["25", "30", "35", "20"], correct: 1, difficulty: "easy" },
+            { q: "Solve for y: 5y - 10 = 25", desc: "Algebraic equations", options: ["y = 5", "y = 6", "y = 7", "y = 8"], correct: 2, difficulty: "medium" },
+            { q: "What is the slope of the line passing through (1, 2) and (3, 6)?", desc: "Coordinate Geometry", options: ["1", "2", "3", "4"], correct: 1, difficulty: "hard" },
+            { q: "What is the next prime number after 17?", desc: "Number Theory", options: ["19", "21", "23", "25"], correct: 0, difficulty: "easy" },
+            { q: "What is 3/4 expressed as a decimal?", desc: "Fractions & Decimals", options: ["0.65", "0.70", "0.75", "0.80"], correct: 2, difficulty: "easy" },
+            { q: "Find the perimeter of a square with side length 9cm.", desc: "Geometry", options: ["18cm", "36cm", "81cm", "27cm"], correct: 1, difficulty: "easy" },
+            { q: "If f(x) = x² - 4, what is f(5)?", desc: "Functions", options: ["21", "25", "16", "29"], correct: 0, difficulty: "medium" },
+            { q: "What is the sum of interior angles in a triangle?", desc: "Geometry Theorems", options: ["90°", "180°", "270°", "360°"], correct: 1, difficulty: "easy" },
+            { q: "Evaluate: 2⁴ ÷ 2²", desc: "Exponents Rules", options: ["2", "4", "8", "16"], correct: 1, difficulty: "medium" },
+            { q: "Solve the inequality: 2x + 4 > 12", desc: "Inequalities", options: ["x > 2", "x > 4", "x < 4", "x > 8"], correct: 1, difficulty: "hard" },
+            { q: "What is the volume of a cube with edge length 3cm?", desc: "3D Geometry", options: ["9 cm³", "18 cm³", "27 cm³", "54 cm³"], correct: 2, difficulty: "medium" },
+            { q: "Simplify the ratio 24:36 to its simplest form.", desc: "Ratios", options: ["2:3", "3:4", "4:5", "1:2"], correct: 0, difficulty: "easy" },
+            { q: "What is the median of the dataset: 4, 1, 7, 9, 3?", desc: "Statistics", options: ["4", "7", "3", "5"], correct: 0, difficulty: "medium" },
+            { q: "What is the probability of rolling an even number on a standard 6-sided die?", desc: "Probability", options: ["1/3", "1/2", "1/4", "2/3"], correct: 1, difficulty: "easy" },
+            { q: "If the radius of a circle is 7cm, what is its circumference?", desc: "Circles", options: ["22cm", "44cm", "154cm", "88cm"], correct: 1, difficulty: "hard" },
+            { q: "What is the product of all roots of equation x² - 9 = 0?", desc: "Advanced Algebra", options: ["9", "-9", "3", "-3"], correct: 1, difficulty: "hard" },
+            { q: "How many degrees are in π/2 radians?", desc: "Trigonometry", options: ["45°", "90°", "180°", "360°"], correct: 1, difficulty: "hard" },
+            { q: "What is the 10th term of the arithmetic sequence: 2, 5, 8, 11, ...?", desc: "Sequences & Series", options: ["29", "32", "35", "28"], correct: 0, difficulty: "hard" }
+        ];
 
         function switchILearnSubject(subject) {
+            if (isTestSagaActive) return;
             ilearnSubject = subject;
             ilearnIndex = 0;
             const mathBtn = document.getElementById('ilearn-tab-math');
@@ -935,10 +882,32 @@
         }
 
         function initILearn() {
+            isTestSagaActive = false;
             ilearnIndex = 0;
             ilearnScore = 0;
+            document.getElementById('ilearn-standard-tabs').classList.remove('hidden');
+            document.getElementById('saga-adaptive-notice').classList.add('hidden');
             document.getElementById('ilearn-score-badge').innerText = `Score: ${ilearnScore} XP`;
             renderILearnQuestion();
+        }
+
+        function startTestMeSaga() {
+            isTestSagaActive = true;
+            ilearnIndex = 0;
+            sagaUserAnswers = [];
+            consecutiveCorrectCount = 0;
+            consecutiveIncorrectCount = 0;
+            adaptiveDifficultyLevel = 'medium';
+            
+            sagaCurrentQuestions = [...sagaQuestionPool].sort(() => 0.5 - Math.random()).slice(0, 20);
+
+            document.getElementById('ilearn-standard-tabs').classList.add('hidden');
+            const notice = document.getElementById('saga-adaptive-notice');
+            notice.classList.remove('hidden');
+            document.getElementById('saga-tier-badge').innerText = `Tier: Medium`;
+            
+            showToast("Test Me! 20-Question Saga Started!");
+            renderSagaQuestion();
         }
 
         function renderILearnQuestion() {
@@ -970,72 +939,142 @@
             grid.innerHTML = '';
             item.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "ilearn-opt-btn p-4 bg-slate-50 hover:bg-cyan-50 hover:border-cyan-300 border border-slate-200 rounded-2xl text-left font-semibold text-slate-800 transition-all cursor-pointer flex items-center justify-between group";
+                btn.className = "p-4 bg-slate-50 hover:bg-cyan-50 hover:border-cyan-300 border border-slate-200 rounded-2xl text-left font-semibold text-slate-800 transition-all cursor-pointer flex items-center justify-between group";
                 btn.innerHTML = `
                     <span>${opt}</span>
                     <span class="w-6 h-6 rounded-full bg-slate-200 group-hover:bg-cyan-600 group-hover:text-white flex items-center justify-center text-xs font-bold text-slate-600 transition-colors">${String.fromCharCode(65 + idx)}</span>
                 `;
-                btn.onclick = () => checkILearnAnswer(idx, item.correct, item.explanation);
+                btn.onclick = () => checkILearnAnswer(idx, item.correct);
                 grid.appendChild(btn);
             });
         }
 
-        function checkILearnAnswer(selected, correct, explanationText) {
+        function checkILearnAnswer(selected, correct) {
             const feedback = document.getElementById('ilearn-feedback-box');
             feedback.classList.remove('hidden');
-            
-            const optionButtons = document.querySelectorAll('.ilearn-opt-btn');
-            optionButtons.forEach(btn => btn.disabled = true);
-
-            const isCorrect = selected === correct;
-            if (isCorrect) {
+            if (selected === correct) {
                 ilearnScore += 25;
                 document.getElementById('ilearn-score-badge').innerText = `Score: ${ilearnScore} XP`;
-                feedback.className = "p-5 rounded-2xl text-sm mt-4 space-y-3 bg-emerald-50 text-emerald-900 border border-emerald-200";
-                feedback.innerHTML = `
-                    <div class="flex items-center space-x-2 font-bold text-emerald-700 text-base">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>Correct! Excellent job (+25 XP)</span>
-                    </div>
-                    <div class="bg-white/80 p-3.5 rounded-xl border border-emerald-200/60 text-slate-700 leading-relaxed text-xs md:text-sm">
-                        <strong class="text-emerald-800 block mb-1"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Detailed Step-by-Step Explanation:</strong>
-                        ${explanationText}
-                    </div>
-                    <div class="pt-2">
-                        <button onclick="nextILearnQuestion()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center space-x-2">
-                            <span>Next Question</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                `;
+                feedback.className = "p-4 rounded-2xl text-sm font-medium mt-4 bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center space-x-2";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i><span>Correct! (+25 XP)</span>`;
                 showToast("Correct answer!");
             } else {
-                feedback.className = "p-5 rounded-2xl text-sm mt-4 space-y-3 bg-red-50 text-red-900 border border-red-200";
-                feedback.innerHTML = `
-                    <div class="flex items-center space-x-2 font-bold text-red-700 text-base">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                        <span>Incorrect. Let's learn why!</span>
-                    </div>
-                    <div class="bg-white/80 p-3.5 rounded-xl border border-red-200/60 text-slate-700 leading-relaxed text-xs md:text-sm">
-                        <strong class="text-red-800 block mb-1"><i class="fa-solid fa-book-open-reader text-red-500 mr-1"></i> Detailed Explanation & Solution:</strong>
-                        ${explanationText}
-                    </div>
-                    <div class="pt-2">
-                        <button onclick="nextILearnQuestion()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center space-x-2">
-                            <span>Next Question</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                `;
+                feedback.className = "p-4 rounded-2xl text-sm font-medium mt-4 bg-red-50 text-red-800 border border-red-200 flex items-center space-x-2";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600"></i><span>Incorrect. Keep trying!</span>`;
                 showToast("Incorrect answer");
             }
+
+            setTimeout(() => {
+                ilearnIndex++;
+                renderILearnQuestion();
+            }, 1500);
         }
 
-        function nextILearnQuestion() {
+        function renderSagaQuestion() {
+            if (ilearnIndex >= sagaCurrentQuestions.length) {
+                gradeSagaExam();
+                return;
+            }
+
+            const item = sagaCurrentQuestions[ilearnIndex];
+            document.getElementById('ilearn-category-label').innerText = `Test Me! Saga (Adaptive)`;
+            document.getElementById('ilearn-progress-label').innerText = `Question ${ilearnIndex + 1} of 20`;
+            document.getElementById('ilearn-question-title').innerText = item.q;
+            document.getElementById('ilearn-question-desc').innerText = `Category: ${item.desc} • Difficulty: ${adaptiveDifficultyLevel.toUpperCase()}`;
+            document.getElementById('ilearn-feedback-box').classList.add('hidden');
+            document.getElementById('saga-tier-badge').innerText = `Tier: ${adaptiveDifficultyLevel}`;
+
+            const grid = document.getElementById('ilearn-options-grid');
+            grid.innerHTML = '';
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-slate-50 hover:bg-amber-50 hover:border-amber-300 border border-slate-200 rounded-2xl text-left font-semibold text-slate-800 transition-all cursor-pointer flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <span class="w-6 h-6 rounded-full bg-slate-200 group-hover:bg-amber-600 group-hover:text-white flex items-center justify-center text-xs font-bold text-slate-600 transition-colors">${String.fromCharCode(65 + idx)}</span>
+                `;
+                btn.onclick = () => submitSagaAnswer(idx, item.correct);
+                grid.appendChild(btn);
+            });
+        }
+
+        function submitSagaAnswer(selectedIdx, correctIdx) {
+            const isCorrect = (selectedIdx === correctIdx);
+            sagaUserAnswers.push({
+                question: sagaCurrentQuestions[ilearnIndex].q,
+                selected: selectedIdx,
+                correct: correctIdx,
+                isCorrect: isCorrect,
+                difficulty: adaptiveDifficultyLevel
+            });
+
+            if (isCorrect) {
+                consecutiveCorrectCount++;
+                consecutiveIncorrectCount = 0;
+                if (consecutiveCorrectCount >= 2 && adaptiveDifficultyLevel === 'easy') adaptiveDifficultyLevel = 'medium';
+                else if (consecutiveCorrectCount >= 2 && adaptiveDifficultyLevel === 'medium') adaptiveDifficultyLevel = 'hard';
+            } else {
+                consecutiveIncorrectCount++;
+                consecutiveCorrectCount = 0;
+                if (consecutiveIncorrectCount >= 2 && adaptiveDifficultyLevel === 'hard') adaptiveDifficultyLevel = 'medium';
+                else if (consecutiveIncorrectCount >= 2 && adaptiveDifficultyLevel === 'medium') adaptiveDifficultyLevel = 'easy';
+            }
+
             ilearnIndex++;
-            renderILearnQuestion();
+            renderSagaQuestion();
         }
 
+        function gradeSagaExam() {
+            document.getElementById('saga-adaptive-notice').classList.add('hidden');
+            document.getElementById('ilearn-category-label').innerText = "Saga Exam Completed! 🏆";
+            document.getElementById('ilearn-progress-label').innerText = "Final Grade Report";
+            
+            const totalCorrect = sagaUserAnswers.filter(a => a.isCorrect).length;
+            const percentage = Math.round((totalCorrect / 20) * 100);
+            let gradeLetter = 'A';
+            let gradeColor = 'text-emerald-600';
+            let message = 'Outstanding mastery of advanced mathematical concepts!';
+
+            if (percentage < 60) { gradeLetter = 'F'; gradeColor = 'text-red-600'; message = 'Needs more practice with core equations and formulas.'; }
+            else if (percentage < 70) { gradeLetter = 'D'; gradeColor = 'text-orange-600'; message = 'Passing, but key misconceptions need review.'; }
+            else if (percentage < 80) { gradeLetter = 'C'; gradeColor = 'text-amber-600'; message = 'Solid effort! A few more practice sessions will make you an expert.'; }
+            else if (percentage < 90) { gradeLetter = 'B'; gradeColor = 'text-blue-600'; message = 'Great job! Strong analytical and problem-solving skills.'; }
+
+            document.getElementById('ilearn-question-title').innerHTML = `Your Final Score: <span class="${gradeColor}">${totalCorrect} / 20 (${percentage}%) - Grade: ${gradeLetter}</span>`;
+            document.getElementById('ilearn-question-desc').innerText = message;
+
+            let breakdownHTML = `
+                <div class="col-span-2 space-y-4 max-h-96 overflow-y-auto p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-sm mb-2">Question-by-Question Review Report:</h4>
+            `;
+
+            sagaUserAnswers.forEach((ans, idx) => {
+                breakdownHTML += `
+                    <div class="p-3 rounded-xl bg-white border ${ans.isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-red-200 bg-red-50/30'} flex items-start justify-between text-xs">
+                        <div>
+                            <span class="font-bold text-slate-700">Q${idx + 1}: ${ans.question}</span>
+                            <div class="text-slate-500 mt-1">Your answer was ${ans.isCorrect ? '<span class="text-emerald-600 font-bold">Correct</span>' : '<span class="text-red-600 font-bold">Incorrect</span>'} (Difficulty: ${ans.difficulty})</div>
+                        </div>
+                        <i class="fa-solid ${ans.isCorrect ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-red-600'} text-base"></i>
+                    </div>
+                `;
+            });
+
+            breakdownHTML += `
+                    <div class="pt-4 text-center">
+                        <button onclick="initILearn()" class="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl shadow-md transition-all cursor-pointer">
+                            Return to ILearn Hub
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('ilearn-options-grid').innerHTML = breakdownHTML;
+            document.getElementById('ilearn-feedback-box').classList.add('hidden');
+            showToast(`Saga Graded! Final Score: ${percentage}%`);
+        }
+
+        // GraphiteArea Drawing Canvas Logic
         let canvasInitialized = false;
         let isDrawing = false;
         let currentTool = 'brush';
@@ -1057,19 +1096,13 @@
 
                 canvasEl.addEventListener('touchstart', (e) => {
                     const touch = e.touches[0];
-                    const mouseEvent = new MouseEvent('mousedown', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
+                    const mouseEvent = new MouseEvent('mousedown', { clientX: touch.clientX, clientY: touch.clientY });
                     canvasEl.dispatchEvent(mouseEvent);
                     e.preventDefault();
                 });
                 canvasEl.addEventListener('touchmove', (e) => {
                     const touch = e.touches[0];
-                    const mouseEvent = new MouseEvent('mousemove', {
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
+                    const mouseEvent = new MouseEvent('mousemove', { clientX: touch.clientX, clientY: touch.clientY });
                     canvasEl.dispatchEvent(mouseEvent);
                     e.preventDefault();
                 });
@@ -1113,19 +1146,14 @@
             drawContext.lineCap = 'round';
             drawContext.lineJoin = 'round';
 
-            if (currentTool === 'eraser') {
-                drawContext.strokeStyle = '#ffffff';
-            } else {
-                drawContext.strokeStyle = color;
-            }
+            if (currentTool === 'eraser') drawContext.strokeStyle = '#ffffff';
+            else drawContext.strokeStyle = color;
 
             drawContext.lineTo(pos.x, pos.y);
             drawContext.stroke();
         }
 
-        function stopDrawing() {
-            isDrawing = false;
-        }
+        function stopDrawing() { isDrawing = false; }
 
         function setTool(tool) {
             currentTool = tool;
@@ -1158,6 +1186,7 @@
             showToast("Drawing saved as PNG!");
         }
 
+        // Geo's Presentation Station State
         let slidesData = JSON.parse(localStorage.getItem('fufudeer_slides') || JSON.stringify([
             { title: "Welcome to Geo's Presentation", content: "• High quality slide decks\n• Visual layouts & themes\n• Seamless slideshow preview" },
             { title: "Key Features & Highlights", content: "• Multiple slide management\n• Custom gorgeous gradient themes\n• Fully responsive and cloud-synced" },
@@ -1222,9 +1251,7 @@
                 return;
             }
             slidesData.splice(activeSlideIndex, 1);
-            if (activeSlideIndex >= slidesData.length) {
-                activeSlideIndex = slidesData.length - 1;
-            }
+            if (activeSlideIndex >= slidesData.length) activeSlideIndex = slidesData.length - 1;
             renderSlideThumbnails();
             loadActiveSlideIntoEditor();
             showToast("Slide removed");
@@ -1234,51 +1261,26 @@
             currentTheme = theme;
             const card = document.getElementById('active-slide-card');
             card.className = "w-full max-w-4xl aspect-[16/9] rounded-2xl shadow-2xl p-12 flex flex-col justify-between relative transition-all duration-300 ";
-            
-            if (theme === 'midnight') {
-                card.className += "bg-gradient-to-br from-purple-900/40 to-slate-900 border border-purple-500/30 text-white";
-            } else if (theme === 'sunset') {
-                card.className += "bg-gradient-to-br from-amber-900/40 to-rose-950 border border-amber-500/30 text-white";
-            } else if (theme === 'emerald') {
-                card.className += "bg-gradient-to-br from-emerald-950 to-teal-900 border border-emerald-500/30 text-white";
-            } else {
-                card.className += "bg-white border border-slate-300 text-slate-900";
-            }
+            if (theme === 'midnight') card.className += "bg-gradient-to-br from-purple-900/40 to-slate-900 border border-purple-500/30 text-white";
+            else if (theme === 'sunset') card.className += "bg-gradient-to-br from-amber-900/40 to-rose-950 border border-amber-500/30 text-white";
+            else if (theme === 'emerald') card.className += "bg-gradient-to-br from-emerald-950 to-teal-900 border border-emerald-500/30 text-white";
+            else card.className += "bg-white border border-slate-300 text-slate-900";
             showToast(`Theme updated to ${theme}`);
         }
 
         let slideshowIndex = 0;
-
         function startSlideShow() {
             slideshowIndex = activeSlideIndex;
             document.getElementById('slideshow-modal').classList.remove('hidden');
             renderSlideshowFrame();
         }
-
-        function closeSlideShow() {
-            document.getElementById('slideshow-modal').classList.add('hidden');
-        }
-
-        function nextSlideShow() {
-            if (slideshowIndex < slidesData.length - 1) {
-                slideshowIndex++;
-                renderSlideshowFrame();
-            }
-        }
-
-        function prevSlideShow() {
-            if (slideshowIndex > 0) {
-                slideshowIndex--;
-                renderSlideshowFrame();
-            }
-        }
-
+        function closeSlideShow() { document.getElementById('slideshow-modal').classList.add('hidden'); }
+        function nextSlideShow() { if (slideshowIndex < slidesData.length - 1) { slideshowIndex++; renderSlideshowFrame(); } }
+        function prevSlideShow() { if (slideshowIndex > 0) { slideshowIndex--; renderSlideshowFrame(); } }
         function renderSlideshowFrame() {
             const slide = slidesData[slideshowIndex] || { title: '', content: '' };
             document.getElementById('slideshow-progress-indicator').innerText = `Slide ${slideshowIndex + 1} of ${slidesData.length}`;
-            
-            const card = document.getElementById('slideshow-card-content');
-            card.innerHTML = `
+            document.getElementById('slideshow-card-content').innerHTML = `
                 <div>
                     <span class="text-xs font-bold px-3 py-1 bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30 mb-4 inline-block">Slide ${slideshowIndex + 1}</span>
                     <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">${slide.title || 'Untitled Slide'}</h2>
@@ -1287,8 +1289,7 @@
                     <p class="text-xl md:text-2xl text-slate-200 whitespace-pre-line leading-relaxed">${slide.content || ''}</p>
                 </div>
                 <div class="pt-4 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-                    <span>Geo's Presentation Station</span>
-                    <span>FufuDeer Slides</span>
+                    <span>Geo's Presentation Station</span><span>FufuDeer Slides</span>
                 </div>
             `;
         }
@@ -1296,13 +1297,9 @@
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('slideshow-modal');
             if (!modal.classList.contains('hidden')) {
-                if (e.key === 'ArrowRight' || e.key === 'Space') {
-                    nextSlideShow();
-                } else if (e.key === 'ArrowLeft') {
-                    prevSlideShow();
-                } else if (e.key === 'Escape') {
-                    closeSlideShow();
-                }
+                if (e.key === 'ArrowRight' || e.key === 'Space') nextSlideShow();
+                else if (e.key === 'ArrowLeft') prevSlideShow();
+                else if (e.key === 'Escape') closeSlideShow();
             }
         });
 
@@ -1311,24 +1308,9 @@
             document.getElementById('editor-canvas').focus();
         }
 
-        function insertLink() {
-            const url = prompt('Enter URL link:');
-            if (url) {
-                document.execCommand('createLink', false, url);
-            }
-        }
-
-        function insertImage() {
-            const url = prompt('Enter image URL:');
-            if (url) {
-                document.execCommand('insertImage', false, url);
-            }
-        }
-
-        function insertHorizontalRule() {
-            document.execCommand('insertHorizontalRule', false, null);
-        }
-
+        function insertLink() { const url = prompt('Enter URL link:'); if (url) document.execCommand('createLink', false, url); }
+        function insertImage() { const url = prompt('Enter image URL:'); if (url) document.execCommand('insertImage', false, url); }
+        function insertHorizontalRule() { document.execCommand('insertHorizontalRule', false, null); }
         function insertTable() {
             const rows = prompt('Enter number of rows:', '2');
             const cols = prompt('Enter number of columns:', '2');
@@ -1336,9 +1318,7 @@
                 let tableHTML = '<table class="border-collapse border border-slate-300 my-4 w-full"><tbody>';
                 for (let r = 0; r < parseInt(rows); r++) {
                     tableHTML += '<tr>';
-                    for (let c = 0; c < parseInt(cols); c++) {
-                        tableHTML += '<td class="border border-slate-300 p-2 min-w-[50px]">Cell</td>';
-                    }
+                    for (let c = 0; c < parseInt(cols); c++) tableHTML += '<td class="border border-slate-300 p-2 min-w-[50px]">Cell</td>';
                     tableHTML += '</tr>';
                 }
                 tableHTML += '</tbody></table><p><br></p>';
@@ -1353,23 +1333,16 @@
             const canvas = document.getElementById('editor-canvas');
             const btn = document.getElementById('dark-mode-btn');
             const wrapper = document.getElementById('editor-page-wrapper');
-
             if (isDarkMode) {
-                wrapper.classList.remove('bg-slate-200/70');
-                wrapper.classList.add('bg-slate-900');
-                container.classList.remove('bg-white', 'border-slate-300');
-                container.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-100');
-                canvas.classList.remove('text-slate-800');
-                canvas.classList.add('text-slate-100');
+                wrapper.classList.remove('bg-slate-200/70'); wrapper.classList.add('bg-slate-900');
+                container.classList.remove('bg-white', 'border-slate-300'); container.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-100');
+                canvas.classList.remove('text-slate-800'); canvas.classList.add('text-slate-100');
                 btn.innerHTML = '<i class="fa-solid fa-sun"></i><span>Light Mode</span>';
                 showToast("Dark mode activated");
             } else {
-                wrapper.classList.remove('bg-slate-900');
-                wrapper.classList.add('bg-slate-200/70');
-                container.classList.remove('bg-slate-800', 'border-slate-700', 'text-slate-100');
-                container.classList.add('bg-white', 'border-slate-300');
-                canvas.classList.remove('text-slate-100');
-                canvas.classList.add('text-slate-800');
+                wrapper.classList.remove('bg-slate-900'); wrapper.classList.add('bg-slate-200/70');
+                container.classList.remove('bg-slate-800', 'border-slate-700', 'text-slate-100'); container.classList.add('bg-white', 'border-slate-300');
+                canvas.classList.remove('text-slate-100'); canvas.classList.add('text-slate-800');
                 btn.innerHTML = '<i class="fa-solid fa-moon"></i><span>Dark Mode</span>';
                 showToast("Light mode activated");
             }
@@ -1392,24 +1365,18 @@
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = message;
             toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         }
 
         function saveNotes() {
-            const title = document.getElementById('note-title').value;
-            const content = document.getElementById('note-content').value;
-            localStorage.setItem('fufudeer_cafenote_title', title);
-            localStorage.setItem('fufudeer_cafenote_content', content);
+            localStorage.setItem('fufudeer_cafenote_title', document.getElementById('note-title').value);
+            localStorage.setItem('fufudeer_cafenote_content', document.getElementById('note-content').value);
             showToast("Note saved successfully!");
         }
 
         function loadNotes() {
-            const title = localStorage.getItem('fufudeer_cafenote_title') || '';
-            const content = localStorage.getItem('fufudeer_cafenote_content') || '';
-            document.getElementById('note-title').value = title;
-            document.getElementById('note-content').value = content;
+            document.getElementById('note-title').value = localStorage.getItem('fufudeer_cafenote_title') || '';
+            document.getElementById('note-content').value = localStorage.getItem('fufudeer_cafenote_content') || '';
         }
 
         function clearNotes() {
@@ -1423,11 +1390,9 @@
         }
 
         let tasks = JSON.parse(localStorage.getItem('fufudeer_tasks') || '["Finish FufuDeer Inkflow update", "Test markdown export", "Deploy happy plush airplane"]');
-
         function renderTasks() {
             const listEl = document.getElementById('task-list');
             listEl.innerHTML = '';
-
             tasks.forEach((task, index) => {
                 const item = document.createElement('div');
                 item.className = 'flex items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-slate-200/80';
@@ -1453,156 +1418,31 @@
                 showToast("Task added!");
             }
         }
-
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            renderTasks();
-            showToast("Task removed");
-        }
-
-        function toggleTask(index) {
-            showToast("Task updated!");
-        }
+        function deleteTask(index) { tasks.splice(index, 1); renderTasks(); showToast("Task removed"); }
+        function toggleTask(index) { showToast("Task updated!"); }
 
         function exportDoc(type) {
             const title = document.getElementById('doc-title').value || 'document';
             if (type === 'txt') {
-                const text = canvas.innerText;
-                const blob = new Blob([text], { type: 'text/plain' });
-                downloadBlob(blob, `${title}.txt`);
+                downloadBlob(new Blob([canvas.innerText], { type: 'text/plain' }), `${title}.txt`);
                 showToast("Exported as TXT");
             } else if (type === 'html') {
-                const html = `<!DOCTYPE html><html><head><title>${title}</title></head><body>${canvas.innerHTML}</body></html>`;
-                const blob = new Blob([html], { type: 'text/html' });
-                downloadBlob(blob, `${title}.html`);
+                downloadBlob(new Blob([`<!DOCTYPE html><html><head><title>${title}</title></head><body>${canvas.innerHTML}</body></html>`], { type: 'text/html' }), `${title}.html`);
                 showToast("Exported as HTML");
             }
         }
 
-        function handleBeffKey(e) {
-            if (e.key === 'Enter') {
-                sendToBeffAI();
-            }
-        }
-
-        function clearBeffChat() {
-            const container = document.getElementById('beff-chat-container');
-            container.innerHTML = `
-                <div class="flex items-start space-x-3">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
-                        <p><strong>Pello!</strong> New chat started with BeffAI! 🧸✨ How can I snuggle and help you today?</p>
-                    </div>
-                </div>
-            `;
-            showToast("Chat reset");
-        }
-
-        function sendToBeffAI() {
-            const inputEl = document.getElementById('beff-input');
-            const text = inputEl.value.trim();
-            if (!text) return;
-
-            const container = document.getElementById('beff-chat-container');
-            
-            // Append user bubble
-            const userBubble = document.createElement('div');
-            userBubble.className = 'flex items-start justify-end space-x-3';
-            userBubble.innerHTML = `
-                <div class="bg-pink-600 text-white rounded-2xl rounded-tr-sm p-4 shadow-sm max-w-xl text-sm leading-relaxed">
-                    <p>${escapeHTML(text)}</p>
-                </div>
-                <div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-            `;
-            container.appendChild(userBubble);
-            inputEl.value = '';
-            container.scrollTop = container.scrollHeight;
-
-            // Simulate BeffAI Plushie Response
-            setTimeout(() => {
-                const plushieReply = generatePlushieResponse(text);
-                const aiBubble = document.createElement('div');
-                aiBubble.className = 'flex items-start space-x-3 animate-fade-in';
-                aiBubble.innerHTML = `
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
-                        <p>${plushieReply}</p>
-                    </div>
-                `;
-                container.appendChild(aiBubble);
-                container.scrollTop = container.scrollHeight;
-            }, 600);
-        }
-
-        function generatePlushieResponse(userInput) {
-            const lower = userInput.toLowerCase();
-            let response = "";
-
-            if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
-                response = "<strong>Pello, pello!</strong> So wonderful to see you today! Sending you warmest plushie hugs! 🧸✨";
-            } else if (lower.includes('bye') || lower.includes('goodbye') || lower.includes('see you')) {
-                response = "<strong>Bello!</strong> Have a super fluffy day and come back soon for more cuddles! 👋🧸";
-            } else if (lower.includes('how are you') || lower.includes('status')) {
-                response = "I am feeling extra soft and cozy today! Ready to help you with whatever you need, my friend!";
-            } else if (lower.includes('help') || lower.includes('what can you do')) {
-                response = "I can chat with you, give you warm plushie hugs, share cozy stories, and greet you with a cheerful <strong>pello</strong> or <strong>bello</strong> anytime!";
-            } else if (lower.includes('hug') || lower.includes('cuddle')) {
-                response = "*Squeeeezes you tight with soft cotton paws* 🤗 You are giving off the coziest plushie energy today!";
-            } else {
-                const plushiePhrases = [
-                    `That is so interesting! As your plushie AI buddy, I say we make it extra fluffy and fun! 🧸`,
-                    `Pello! I heard you loud and clear. Let's tackle that with lots of cotton stuffing and smiles!`,
-                    `Bello to that idea! You are doing amazing things in the FufuDeer workspace today! ⭐`,
-                    `Oh wow, that sounds super snuggly and exciting! Tell BeffAI more!`
-                ];
-                response = plushiePhrases[Math.floor(Math.random() * plushiePhrases.length)];
-            }
-            return response;
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
         function downloadBlob(blob, filename) {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const a = document.createElement('a'); a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
         function printDoc() {
-            const content = canvas.innerHTML;
-            const title = document.getElementById('doc-title').value;
             const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>${title}</title>
-                        <style>
-                            body { font-family: 'Inter', Arial, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>${title}</h1>
-                        ${content}
-                    </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
+            printWindow.document.write(`<html><head><title>${document.getElementById('doc-title').value}</title><style>body { font-family: 'Inter', Arial, sans-serif; padding: 40px; color: #1e293b; line-height: 1.6; }</style></head><body><h1>${document.getElementById('doc-title').value}</h1>${canvas.innerHTML}</body></html>`);
+            printWindow.document.close(); printWindow.print();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -1613,8 +1453,8 @@
 
             const steps = [
                 { progress: 20, text: "Checking airplane wings and fuel levels..." },
-                { progress: 45, text: "Polishing plush engine and adjusting cozy cabin..." },
-                { progress: 75, text: "Synchronizing cloud airspace with FufuDeer Workspace..." },
+                { progress: 45, text: "Reintegrating BeffAI assistant and ILearn saga..." },
+                { progress: 75, text: "Synchronizing adaptive algorithms with FufuDeer Cloud..." },
                 { progress: 100, text: "Cleared for takeoff! Welcome aboard! ✈️✨" }
             ];
 
@@ -1629,9 +1469,7 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         screenEl.style.opacity = '0';
-                        setTimeout(() => {
-                            screenEl.style.display = 'none';
-                        }, 700);
+                        setTimeout(() => { screenEl.style.display = 'none'; }, 700);
                     }, 500);
                 }
             }, 550);
