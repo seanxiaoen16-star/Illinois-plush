@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Custom scrollbar for editor */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -18,20 +17,15 @@
 </head>
 <body class="bg-slate-50 h-full flex flex-col text-slate-800 overflow-hidden">
 
-    <!-- Airplane-themed "Cooperate & Awesome" Loading Screen Overlay -->
     <div id="loading-screen" class="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center text-white transition-opacity duration-700">
-        <!-- Animated Happy Airplane Graphic using SVG -->
         <div class="relative w-36 h-36 mb-8 animate-bounce">
             <div class="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse"></div>
             <svg class="w-full h-full drop-shadow-2xl relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <!-- Cute Airplane SVG -->
                 <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#10b981" stroke="#047857" stroke-linejoin="round"/>
-                <!-- Happy Eyes / Window -->
                 <circle cx="11" cy="7" r="1" fill="#ffffff"/>
                 <circle cx="13" cy="7" r="1" fill="#ffffff"/>
                 <path d="M11.5 9.5q1 1 2 0" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
             </svg>
-            <!-- Little Sparkles around plane -->
             <div class="absolute -top-2 -right-2 text-amber-400 animate-spin text-lg">✨</div>
             <div class="absolute -bottom-2 -left-2 text-emerald-400 animate-ping text-sm">⭐</div>
         </div>
@@ -39,8 +33,6 @@
         <div class="text-center space-y-3 max-w-md px-4">
             <h2 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">FufuDeer Flight Control</h2>
             <p id="loading-status" class="text-slate-300 text-sm font-medium">Preparing takeoff sequence for happy plane...</p>
-            
-            <!-- Progress Bar -->
             <div class="w-64 h-2 bg-slate-800 rounded-full mx-auto overflow-hidden border border-slate-700 shadow-inner mt-4">
                 <div id="loading-progress" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-0 transition-all duration-300 rounded-full"></div>
             </div>
@@ -50,28 +42,21 @@
 
     <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs z-10">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="returnToHub()">
-            <!-- Accurate Plush Deer Logo Icon matching user's reference -->
             <div class="w-11 h-11 bg-[#7c4a2d] rounded-2xl flex items-center justify-center text-white shadow-md shadow-amber-900/20 overflow-hidden relative border border-[#633a22]">
                 <svg viewBox="0 0 100 100" class="w-full h-full">
-                    <!-- Deer Head Background -->
                     <circle cx="50" cy="55" r="38" fill="#8B5A2B"/>
-                    <!-- White Cheek Patches (matching reference plushie) -->
                     <ellipse cx="32" cy="62" rx="20" ry="18" fill="#FFFFFF"/>
                     <ellipse cx="68" cy="62" rx="20" ry="18" fill="#FFFFFF"/>
-                    <!-- Little Antlers -->
                     <path d="M38 25 Q35 12 30 10 M33 18 Q38 16 42 12" stroke="#5C3317" stroke-width="4" stroke-linecap="round" fill="none"/>
                     <path d="M62 25 Q65 12 70 10 M67 18 Q62 16 58 12" stroke="#5C3317" stroke-width="4" stroke-linecap="round" fill="none"/>
-                    <!-- Cute Round Ears -->
                     <circle cx="24" cy="36" r="10" fill="#7A4E2B"/>
                     <circle cx="24" cy="36" r="6" fill="#F3D1C1"/>
                     <circle cx="76" cy="36" r="10" fill="#7A4E2B"/>
                     <circle cx="76" cy="36" r="6" fill="#F3D1C1"/>
-                    <!-- Eyes -->
                     <ellipse cx="38" cy="52" rx="4" ry="5" fill="#1e1e1e"/>
                     <circle cx="37" cy="50" r="1.5" fill="#FFFFFF"/>
                     <ellipse cx="62" cy="52" rx="4" ry="5" fill="#1e1e1e"/>
                     <circle cx="61" cy="50" r="1.5" fill="#FFFFFF"/>
-                    <!-- Cute Nose & Smile -->
                     <ellipse cx="50" cy="60" rx="5" ry="3.5" fill="#3E2723"/>
                     <path d="M46 66 Q50 71 54 66" stroke="#3E2723" stroke-width="2.5" stroke-linecap="round" fill="none"/>
                 </svg>
@@ -86,7 +71,7 @@
 
     <main class="flex-1 flex overflow-hidden">
 
-        <!-- Home Hub View (Landing / Tab selection) -->
+        <!-- Home Hub View -->
         <div id="home-view" class="flex-1 overflow-y-auto p-8 lg:p-12">
             <div class="max-w-5xl mx-auto space-y-8">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -101,14 +86,12 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Inkflow Tab Card -->
+                    <!-- Inkflow Card -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                                    I
-                                </div>
+                                <div class="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">I</div>
                                 <span class="text-xs font-semibold px-2 py-1 bg-blue-50 text-blue-700 rounded-md">Document</span>
                             </div>
                             <h3 class="text-lg font-bold text-slate-900">Inkflow</h3>
@@ -145,7 +128,7 @@
                         </div>
                     </div>
 
-                    <!-- CafeNotes App Card -->
+                    <!-- CafeNotes Card -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 to-orange-500"></div>
                         <div>
@@ -167,7 +150,29 @@
                         </div>
                     </div>
 
-                    <!-- DeerPlanner App Card -->
+                    <!-- GraphiteArea Card -->
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rose-500 to-pink-600"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-rose-500/30 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-paintbrush"></i>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 bg-rose-50 text-rose-700 rounded-md">Drawing</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">GraphiteArea</h3>
+                            <p class="text-slate-500 text-sm mt-1">A smooth HTML canvas drawing suite with brushes, colors, and export tools.</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-medium">Creative Studio</span>
+                            <button onclick="openGraphiteArea()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl shadow-md shadow-rose-600/20 hover:shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer">
+                                <span>Launch</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DeerPlanner Card -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-600"></div>
                         <div>
@@ -188,6 +193,50 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- ILearn Card -->
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-500 to-blue-600"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 bg-cyan-50 text-cyan-700 rounded-md">Education</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">ILearn</h3>
+                            <p class="text-slate-500 text-sm mt-1">Interactive learning platform with fun lessons and quizzes in Math and English.</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-medium">Interactive</span>
+                            <button onclick="openILearn()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-medium text-sm rounded-xl shadow-md shadow-cyan-600/20 hover:shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer">
+                                <span>Start Learning</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- BeffAI Card -->
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-500 to-rose-500"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-pink-500/30 group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <span class="text-xs font-semibold px-2 py-1 bg-pink-50 text-pink-700 rounded-md">Plushie AI</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">BeffAI</h3>
+                            <p class="text-slate-500 text-sm mt-1">Your cuddly plushie assistant who chats back using cozy plushie lingo (pello, bello)!</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-400 font-medium">Fluffy Assistant</span>
+                            <button onclick="openBeffAI()" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm rounded-xl shadow-md shadow-pink-600/20 hover:shadow-lg transition-all flex items-center space-x-1.5 cursor-pointer">
+                                <span>Chat with Beff</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +244,6 @@
         <!-- Inkflow Editor View -->
         <div id="editor-view" class="hidden flex-1 flex flex-col bg-slate-100 overflow-hidden">
             <div class="bg-white border-b border-slate-200 shadow-xs flex flex-col">
-                <!-- Top Toolbar row -->
                 <div class="flex items-center justify-between px-4 py-2 border-b border-slate-100">
                     <div class="flex items-center space-x-3">
                         <button onclick="returnToHub()" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
@@ -226,7 +274,6 @@
                     </div>
                 </div>
 
-                <!-- Ribbon Toolbars -->
                 <div class="bg-slate-50 px-4 py-2 flex flex-wrap items-center gap-2 overflow-x-auto text-sm text-slate-700">
                     <select id="fontFamily" onchange="formatDoc('fontName', this.value)" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-500">
                         <option value="Inter">Inter</option>
@@ -315,7 +362,6 @@
 
         <!-- Geo's Presentation Station View -->
         <div id="geo-presentation-view" class="hidden flex-1 flex flex-col bg-slate-900 text-slate-100 overflow-hidden">
-            <!-- Header for Presentation Station -->
             <div class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shadow-md">
                 <div class="flex items-center space-x-3">
                     <button onclick="returnToHub()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
@@ -329,7 +375,6 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <!-- Theme Selector -->
                     <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
                         <span class="text-slate-400">Theme:</span>
                         <select id="slide-theme-select" onchange="changeSlideTheme(this.value)" class="bg-transparent text-white font-semibold focus:outline-none cursor-pointer">
@@ -347,9 +392,7 @@
                 </div>
             </div>
 
-            <!-- Main Workspace: Left Thumbnail Sidebar + Right Slide Editor Canvas -->
             <div class="flex-1 flex overflow-hidden">
-                <!-- Slide Thumbnails Sidebar -->
                 <div class="w-64 bg-slate-800/80 border-r border-slate-700 flex flex-col">
                     <div class="p-4 border-b border-slate-700 flex items-center justify-between">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Slides (<span id="slide-count-badge">3</span>)</span>
@@ -358,27 +401,20 @@
                             <span>Add Slide</span>
                         </button>
                     </div>
-                    <div id="slide-thumbnails-list" class="flex-1 overflow-y-auto p-4 space-y-3">
-                        <!-- Thumbnails dynamically rendered here -->
-                    </div>
+                    <div id="slide-thumbnails-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
                 </div>
 
-                <!-- Slide Editor Canvas Area -->
                 <div class="flex-1 bg-slate-950 p-8 flex flex-col items-center justify-center overflow-y-auto relative">
                     <div id="active-slide-card" class="w-full max-w-4xl aspect-[16/9] bg-gradient-to-br from-purple-900/40 to-slate-900 border border-purple-500/30 rounded-2xl shadow-2xl p-12 flex flex-col justify-between relative transition-all duration-300">
-                        
-                        <!-- Slide Header / Title Input -->
                         <div>
                             <span class="text-xs font-bold px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30 mb-4 inline-block" id="current-slide-number-tag">Slide 1</span>
                             <input type="text" id="slide-heading-input" oninput="updateCurrentSlideData()" placeholder="Slide Title..." class="w-full text-3xl md:text-4xl font-bold bg-transparent border-b border-purple-500/20 focus:border-purple-400 focus:outline-none text-white pb-2 placeholder-slate-600">
                         </div>
 
-                        <!-- Slide Body Content Textarea -->
                         <div class="flex-1 my-6">
                             <textarea id="slide-body-input" oninput="updateCurrentSlideData()" placeholder="Type slide bullet points, notes, or explanations here... Use new lines for items." class="w-full h-full bg-slate-900/50 border border-slate-800 rounded-xl p-5 text-slate-200 text-lg focus:outline-none focus:border-purple-500 resize-none leading-relaxed font-sans placeholder-slate-600"></textarea>
                         </div>
 
-                        <!-- Slide Footer Actions -->
                         <div class="flex items-center justify-between pt-4 border-t border-slate-800/80 text-xs text-slate-400">
                             <span>Geo's Presentation Station • FufuDeer Cloud</span>
                             <div class="flex items-center space-x-2">
@@ -422,6 +458,49 @@
             </div>
         </div>
 
+        <!-- GraphiteArea Drawing App View -->
+        <div id="graphite-view" class="hidden flex-1 flex flex-col bg-slate-900 text-white overflow-hidden">
+            <div class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shadow-md">
+                <div class="flex items-center space-x-3">
+                    <button onclick="returnToHub()" class="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md">
+                            <i class="fa-solid fa-paintbrush"></i>
+                        </div>
+                        <h2 class="font-bold text-white text-lg">GraphiteArea Studio</h2>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 bg-slate-900 px-4 py-1.5 rounded-2xl border border-slate-700 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400">Color:</span>
+                        <input type="color" id="brush-color" value="#f43f5e" class="w-6 h-6 rounded border-0 bg-transparent cursor-pointer">
+                    </div>
+                    <div class="h-4 w-px bg-slate-700"></div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-slate-400">Size:</span>
+                        <input type="range" id="brush-size" min="1" max="50" value="5" class="w-24 accent-rose-500 cursor-pointer">
+                        <span id="brush-size-label" class="font-mono w-5">5px</span>
+                    </div>
+                    <div class="h-4 w-px bg-slate-700"></div>
+                    <button onclick="setTool('brush')" id="tool-brush-btn" class="px-3 py-1 bg-rose-600 text-white font-medium rounded-lg transition-colors cursor-pointer">Brush</button>
+                    <button onclick="setTool('eraser')" id="tool-eraser-btn" class="px-3 py-1 bg-slate-800 text-slate-300 font-medium rounded-lg hover:bg-slate-700 transition-colors cursor-pointer">Eraser</button>
+                    <div class="h-4 w-px bg-slate-700"></div>
+                    <button onclick="clearCanvas()" class="px-3 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-medium rounded-lg transition-colors cursor-pointer">Clear</button>
+                    <button onclick="downloadDrawing()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors flex items-center space-x-1 cursor-pointer">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Save PNG</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 bg-slate-950 p-6 flex items-center justify-center overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-800 relative">
+                    <canvas id="drawing-canvas" class="cursor-crosshair block"></canvas>
+                </div>
+            </div>
+        </div>
+
         <!-- DeerPlanner Planner View -->
         <div id="planner-view" class="hidden flex-1 flex flex-col bg-slate-100 overflow-hidden">
             <div class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs">
@@ -450,9 +529,129 @@
                         <h3 class="font-bold text-slate-900 text-base">Your Checklist</h3>
                         <span id="task-counter" class="text-xs font-medium text-slate-500 px-2.5 py-1 bg-slate-100 rounded-lg">0 completed</span>
                     </div>
-                    <div id="task-list" class="space-y-2">
-                        <!-- Tasks will populate here -->
+                    <div id="task-list" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ILearn Interactive Learning View -->
+        <div id="ilearn-view" class="hidden flex-1 flex flex-col bg-slate-50 overflow-hidden">
+            <div class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-xs">
+                <div class="flex items-center space-x-3">
+                    <button onclick="returnToHub()" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 bg-cyan-600 rounded-lg flex items-center justify-center text-white font-bold text-sm"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h2 class="font-bold text-slate-800 text-lg">ILearn Academy</h2>
                     </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="openILearnVideoModal()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 flex items-center space-x-1.5 transition-all cursor-pointer">
+                        <i class="fa-solid fa-play text-[10px]"></i>
+                        <span>Video Lesson</span>
+                    </button>
+                    <div class="relative">
+                        <button onclick="toggleILearnTopicMenu()" id="ilearn-topic-btn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 flex items-center space-x-1.5 transition-all cursor-pointer">
+                            <i class="fa-solid fa-list-check text-[10px]"></i>
+                            <span>Select Topic</span>
+                        </button>
+                        <div id="ilearn-topic-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl z-30 p-2 space-y-1">
+                            <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">Mathematics</div>
+                            <button onclick="selectSpecificTopic('math', 0)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">1. Multiplication Tables</button>
+                            <button onclick="selectSpecificTopic('math', 1)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">2. Algebraic Equations</button>
+                            <button onclick="selectSpecificTopic('math', 2)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">3. Area Measurement</button>
+                            <button onclick="selectSpecificTopic('math', 3)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">4. Square Roots</button>
+                            <div class="border-t border-slate-100 my-1"></div>
+                            <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">English & Grammar</div>
+                            <button onclick="selectSpecificTopic('english', 0)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">1. Parts of Speech</button>
+                            <button onclick="selectSpecificTopic('english', 1)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">2. Spelling & Vocabulary</button>
+                            <button onclick="selectSpecificTopic('english', 2)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">3. Synonyms & Meanings</button>
+                            <button onclick="selectSpecificTopic('english', 3)" class="w-full text-left px-3 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-700 rounded-xl transition-colors">4. Action Verbs</button>
+                        </div>
+                    </div>
+                    <span id="ilearn-score-badge" class="px-3 py-1 bg-cyan-50 text-cyan-700 text-xs font-bold rounded-lg border border-cyan-200">Score: 0 XP</span>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 lg:p-10 max-w-4xl mx-auto w-full space-y-8">
+                <div class="flex space-x-4">
+                    <button onclick="switchILearnSubject('math')" id="ilearn-tab-math" class="px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-square-root-variable"></i>
+                        <span>Mathematics</span>
+                    </button>
+                    <button onclick="switchILearnSubject('english')" id="ilearn-tab-english" class="px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>English & Grammar</span>
+                    </button>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <span id="ilearn-category-label" class="text-xs font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">Math Lesson</span>
+                        <span id="ilearn-progress-label" class="text-xs font-mono text-slate-400">Question 1 of 4</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 id="ilearn-question-title" class="text-xl font-bold text-slate-900">What is 7 multiplied by 8?</h3>
+                        <p id="ilearn-question-desc" class="text-sm text-slate-500">Choose the correct answer below:</p>
+                    </div>
+
+                    <div id="ilearn-options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
+
+                    <div id="ilearn-feedback-box" class="hidden p-5 rounded-2xl text-sm mt-4 space-y-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BeffAI Plushie Assistant View -->
+        <div id="beffai-view" class="hidden flex-1 flex flex-col bg-pink-50/50 overflow-hidden">
+            <div class="bg-white border-b border-pink-100 px-6 py-3 flex items-center justify-between shadow-xs">
+                <div class="flex items-center space-x-3">
+                    <button onclick="returnToHub()" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-pink-50 rounded-lg transition-colors cursor-pointer" title="Back to Hub">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white font-bold text-base shadow-md shadow-pink-500/20">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                                <span>BeffAI</span>
+                                <span class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full font-semibold">Fluffy Assistant ✨</span>
+                            </h2>
+                            <p class="text-xs text-slate-400">Your cozy plushie buddy for warm hugs and chats</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="clearBeffChat()" class="px-3 py-1.5 text-xs font-medium bg-white hover:bg-pink-50 text-pink-700 rounded-xl border border-pink-200 transition-colors flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>New Chat</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages Container -->
+            <div id="beff-chat-container" class="flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full space-y-6">
+                <!-- Initial Welcome Bubble -->
+                <div class="flex items-start space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
+                        <p><strong>Pello!</strong> I am BeffAI, your cuddly plushie helper! 🧸✨ How can I help you today? Do you want a cozy hug or a fluffy chat before saying bello?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="bg-white border-t border-pink-100 p-4 shadow-sm">
+                <div class="max-w-4xl mx-auto flex gap-3 items-center">
+                    <input type="text" id="beff-input" onkeydown="handleBeffKey(event)" placeholder="Type a message to BeffAI (e.g. hello, how are you?)..." class="flex-1 bg-pink-50/50 border border-pink-200 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-pink-500 text-slate-800 placeholder-slate-400 shadow-inner">
+                    <button onclick="sendToBeffAI()" class="px-6 py-3.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold text-sm rounded-2xl shadow-md shadow-pink-600/30 transition-all flex items-center space-x-2 cursor-pointer">
+                        <span>Send</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -460,7 +659,6 @@
 
     <!-- Fullscreen Slideshow Player Modal -->
     <div id="slideshow-modal" class="fixed inset-0 bg-black z-50 hidden flex flex-col justify-between p-12 text-white">
-        <!-- Top bar with slide index & close button -->
         <div class="flex items-center justify-between">
             <span id="slideshow-progress-indicator" class="text-sm font-mono text-purple-400">Slide 1 of 3</span>
             <button onclick="closeSlideShow()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center space-x-2">
@@ -469,14 +667,10 @@
             </button>
         </div>
 
-        <!-- Central Presentation Card in Fullscreen -->
         <div class="flex-1 flex items-center justify-center max-w-5xl mx-auto w-full">
-            <div id="slideshow-card-content" class="w-full aspect-[16/9] bg-gradient-to-br from-purple-900 to-slate-900 rounded-3xl p-16 shadow-2xl flex flex-col justify-between border border-purple-500/30">
-                <!-- Populated dynamically -->
-            </div>
+            <div id="slideshow-card-content" class="w-full aspect-[16/9] bg-gradient-to-br from-purple-900 to-slate-900 rounded-3xl p-16 shadow-2xl flex flex-col justify-between border border-purple-500/30"></div>
         </div>
 
-        <!-- Bottom Controls -->
         <div class="flex items-center justify-center space-x-6">
             <button onclick="prevSlideShow()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl font-medium text-sm transition-colors flex items-center space-x-2 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -496,12 +690,38 @@
         <span id="toast-message">Action completed successfully!</span>
     </div>
 
+    <!-- ILearn Video Modal Player Simulation -->
+    <div id="ilearn-video-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full p-6 text-white shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-rose-500 rounded-full animate-pulse"></div>
+                    <h3 id="ilearn-video-title" class="font-bold text-base">Video Lesson: Multiplication Tables & Core Concepts</h3>
+                </div>
+                <button onclick="closeILearnVideoModal()" class="p-2 text-slate-400 hover:text-white rounded-xl transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="w-full aspect-video bg-black rounded-2xl border border-slate-800 overflow-hidden relative shadow-inner">
+                <iframe id="ilearn-youtube-iframe" class="w-full h-full border-0" src="" title="Educational Video Lesson" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-400">
+                <span id="ilearn-video-subtitle">Instructor Walkthrough - Animated Interactive Lesson</span>
+                <span class="font-mono text-rose-400 font-semibold">ILearn Academy HD</span>
+            </div>
+            <p id="ilearn-video-desc" class="text-xs text-slate-400 leading-relaxed">
+                Watch this concise video breakdown to strengthen your core understanding before attempting the quiz question!
+            </p>
+        </div>
+    </div>
+
     <script>
-        // Switch views
         function openInkflow() {
             document.getElementById('home-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
             document.getElementById('editor-view').classList.remove('hidden');
             document.getElementById('editor-canvas').focus();
@@ -512,7 +732,9 @@
             document.getElementById('home-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.remove('hidden');
             renderSlideThumbnails();
             loadActiveSlideIntoEditor();
@@ -521,30 +743,421 @@
         function openCafeNotes() {
             document.getElementById('home-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
             document.getElementById('notes-view').classList.remove('hidden');
             loadNotes();
+        }
+
+        function openGraphiteArea() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('editor-view').classList.add('hidden');
+            document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
+            document.getElementById('geo-presentation-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.remove('hidden');
+            initDrawingCanvas();
         }
 
         function openDeerPlanner() {
             document.getElementById('home-view').classList.add('hidden');
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
             document.getElementById('planner-view').classList.remove('hidden');
             renderTasks();
         }
 
+        function openILearn() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('editor-view').classList.add('hidden');
+            document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
+            document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('geo-presentation-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.remove('hidden');
+            initILearn();
+        }
+
+        function openBeffAI() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('editor-view').classList.add('hidden');
+            document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
+            document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('geo-presentation-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.remove('hidden');
+            document.getElementById('beff-input').focus();
+        }
+
         function returnToHub() {
             document.getElementById('editor-view').classList.add('hidden');
             document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('graphite-view').classList.add('hidden');
             document.getElementById('planner-view').classList.add('hidden');
+            document.getElementById('ilearn-view').classList.add('hidden');
             document.getElementById('geo-presentation-view').classList.add('hidden');
+            document.getElementById('beffai-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
         }
 
-        // Geo's Presentation Station State
+        let ilearnSubject = 'math';
+        let ilearnIndex = 0;
+        let ilearnScore = 0;
+
+        const ilearnData = {
+            math: [
+                { 
+                    q: "What is 7 multiplied by 8?", 
+                    desc: "Multiplication tables fundamental test", 
+                    options: ["54", "56", "64", "49"], 
+                    correct: 1,
+                    explanation: "To find 7 × 8, you can think of it as adding the number 7 together eight times (7 + 7 + 7 + 7 + 7 + 7 + 7 + 7 = 56) or counting by 8 seven times (8, 16, 24, 32, 40, 48, 56). Therefore, the correct product is 56."
+                },
+                { 
+                    q: "Solve for x: 3x + 5 = 20", 
+                    desc: "Algebraic linear equations", 
+                    options: ["x = 5", "x = 3", "x = 7", "x = 4"], 
+                    correct: 0,
+                    explanation: "Step 1: Subtract 5 from both sides of the equation to isolate the term with x: 3x + 5 - 5 = 20 - 5, which gives 3x = 15. Step 2: Divide both sides by 3 to find x: x = 15 / 3 = 5."
+                },
+                { 
+                    q: "What is the area of a rectangle with length 10cm and width 5cm?", 
+                    desc: "Geometry measurement", 
+                    options: ["15 cm²", "50 cm²", "30 cm²", "100 cm²"], 
+                    correct: 1,
+                    explanation: "The formula for the area of a rectangle is Area = Length × Width. By multiplying the length (10 cm) by the width (5 cm), we get 10 × 5 = 50 cm². Area is always expressed in square units."
+                },
+                { 
+                    q: "What is the square root of 144?", 
+                    desc: "Exponents & Roots", 
+                    options: ["10", "11", "12", "14"], 
+                    correct: 2,
+                    explanation: "The square root of a number is a value that, when multiplied by itself, gives the original number. Since 12 × 12 = 144, the square root of 144 is 12."
+                }
+            ],
+            english: [
+                { 
+                    q: "Which of the following is a noun?", 
+                    desc: "Parts of speech identification", 
+                    options: ["Quickly", "Elephant", "Running", "Beautiful"], 
+                    correct: 1,
+                    explanation: "A noun is a word representing a person, place, thing, or idea. 'Elephant' is a physical animal (a noun). 'Quickly' is an adverb, 'Running' is a verb in participle form, and 'Beautiful' is an adjective."
+                },
+                { 
+                    q: "Choose the correct spelling:", 
+                    desc: "Spelling and vocabulary", 
+                    options: ["Necessary", "Neccessary", "Necessaury", "Nessessary"], 
+                    correct: 0,
+                    explanation: "The correct spelling is 'Necessary'. A helpful mnemonic to remember is that a shirt has 'One Collar (C) and Two Sleeves (S)' -> N-E-C-E-S-S-A-R-Y."
+                },
+                { 
+                    q: "What is a synonym for 'Benevolent'?", 
+                    desc: "Advanced vocabulary", 
+                    options: ["Hostile", "Kind", "Greedy", "Swift"], 
+                    correct: 1,
+                    explanation: "'Benevolent' means well meaning and kindly. Therefore, its synonym is 'Kind'. 'Hostile' is an antonym (unfriendly), 'Greedy' means selfishly desiring more, and 'Swift' means fast."
+                },
+                { 
+                    q: "Identify the verb in this sentence: 'The swift deer bounded across the meadow.'", 
+                    desc: "Sentence structure analysis", 
+                    options: ["swift", "deer", "bounded", "meadow"], 
+                    correct: 2,
+                    explanation: "A verb is an action word or state of being. In this sentence, 'bounded' is the action that the deer performed, making it the verb. 'Swift' is an adjective describing the deer, 'deer' is the noun, and 'meadow' is the noun destination."
+                }
+            ]
+        };
+
+        function toggleILearnTopicMenu() {
+            const dropdown = document.getElementById('ilearn-topic-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function selectSpecificTopic(subject, index) {
+            ilearnSubject = subject;
+            ilearnIndex = index;
+            document.getElementById('ilearn-topic-dropdown').classList.add('hidden');
+            
+            const mathBtn = document.getElementById('ilearn-tab-math');
+            const engBtn = document.getElementById('ilearn-tab-english');
+            if (subject === 'math') {
+                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
+                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
+            } else {
+                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
+                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
+            }
+            renderILearnQuestion();
+            showToast(`Jumped to ${subject.toUpperCase()} topic #${index + 1}`);
+        }
+
+        function openILearnVideoModal() {
+            const currentItem = ilearnData[ilearnSubject][ilearnIndex];
+            document.getElementById('ilearn-video-title').innerText = `Video Lesson: ${currentItem.q}`;
+            document.getElementById('ilearn-video-subtitle').innerText = `${ilearnSubject.toUpperCase()} Academy - Topic #${ilearnIndex + 1}`;
+            document.getElementById('ilearn-video-desc').innerText = `Detailed walkthrough for: "${currentItem.desc}". ${currentItem.explanation}`;
+            
+            const iframe = document.getElementById('ilearn-youtube-iframe');
+            if (ilearnSubject === 'math') {
+                iframe.src = "https://www.youtube-nocookie.com/embed/hj68ZXmiwZg?autoplay=1";
+            } else {
+                iframe.src = "https://www.youtube-nocookie.com/embed/NisInHsSK8A?autoplay=1";
+            }
+
+            document.getElementById('ilearn-video-modal').classList.remove('hidden');
+        }
+
+        function closeILearnVideoModal() {
+            document.getElementById('ilearn-video-modal').classList.add('hidden');
+            document.getElementById('ilearn-youtube-iframe').src = "";
+        }
+
+        function switchILearnSubject(subject) {
+            ilearnSubject = subject;
+            ilearnIndex = 0;
+            const mathBtn = document.getElementById('ilearn-tab-math');
+            const engBtn = document.getElementById('ilearn-tab-english');
+            if (subject === 'math') {
+                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
+                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
+            } else {
+                engBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-cyan-600 text-white shadow-md shadow-cyan-600/20 transition-all flex items-center space-x-2 cursor-pointer";
+                mathBtn.className = "px-5 py-3 rounded-2xl font-bold text-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all flex items-center space-x-2 cursor-pointer";
+            }
+            renderILearnQuestion();
+        }
+
+        function initILearn() {
+            ilearnIndex = 0;
+            ilearnScore = 0;
+            document.getElementById('ilearn-score-badge').innerText = `Score: ${ilearnScore} XP`;
+            renderILearnQuestion();
+        }
+
+        function renderILearnQuestion() {
+            const list = ilearnData[ilearnSubject];
+            if (ilearnIndex >= list.length) {
+                document.getElementById('ilearn-category-label').innerText = "Quiz Completed! 🎉";
+                document.getElementById('ilearn-progress-label').innerText = "Completed";
+                document.getElementById('ilearn-question-title').innerText = `Great job! You finished the ${ilearnSubject.toUpperCase()} quiz!`;
+                document.getElementById('ilearn-question-desc').innerText = `Total XP Earned: ${ilearnScore}`;
+                document.getElementById('ilearn-options-grid').innerHTML = `
+                    <div class="col-span-2 text-center py-6">
+                        <button onclick="initILearn()" class="px-6 py-3 bg-cyan-600 text-white font-bold rounded-xl shadow-md hover:bg-cyan-700 transition-all cursor-pointer">
+                            Restart Quiz
+                        </button>
+                    </div>
+                `;
+                document.getElementById('ilearn-feedback-box').classList.add('hidden');
+                return;
+            }
+
+            const item = list[ilearnIndex];
+            document.getElementById('ilearn-category-label').innerText = `${ilearnSubject.toUpperCase()} Lesson`;
+            document.getElementById('ilearn-progress-label').innerText = `Question ${ilearnIndex + 1} of ${list.length}`;
+            document.getElementById('ilearn-question-title').innerText = item.q;
+            document.getElementById('ilearn-question-desc').innerText = item.desc;
+            document.getElementById('ilearn-feedback-box').classList.add('hidden');
+
+            const grid = document.getElementById('ilearn-options-grid');
+            grid.innerHTML = '';
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "ilearn-opt-btn p-4 bg-slate-50 hover:bg-cyan-50 hover:border-cyan-300 border border-slate-200 rounded-2xl text-left font-semibold text-slate-800 transition-all cursor-pointer flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <span class="w-6 h-6 rounded-full bg-slate-200 group-hover:bg-cyan-600 group-hover:text-white flex items-center justify-center text-xs font-bold text-slate-600 transition-colors">${String.fromCharCode(65 + idx)}</span>
+                `;
+                btn.onclick = () => checkILearnAnswer(idx, item.correct, item.explanation);
+                grid.appendChild(btn);
+            });
+        }
+
+        function checkILearnAnswer(selected, correct, explanationText) {
+            const feedback = document.getElementById('ilearn-feedback-box');
+            feedback.classList.remove('hidden');
+            
+            const optionButtons = document.querySelectorAll('.ilearn-opt-btn');
+            optionButtons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selected === correct;
+            if (isCorrect) {
+                ilearnScore += 25;
+                document.getElementById('ilearn-score-badge').innerText = `Score: ${ilearnScore} XP`;
+                feedback.className = "p-5 rounded-2xl text-sm mt-4 space-y-3 bg-emerald-50 text-emerald-900 border border-emerald-200";
+                feedback.innerHTML = `
+                    <div class="flex items-center space-x-2 font-bold text-emerald-700 text-base">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Correct! Excellent job (+25 XP)</span>
+                    </div>
+                    <div class="bg-white/80 p-3.5 rounded-xl border border-emerald-200/60 text-slate-700 leading-relaxed text-xs md:text-sm">
+                        <strong class="text-emerald-800 block mb-1"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Detailed Step-by-Step Explanation:</strong>
+                        ${explanationText}
+                    </div>
+                    <div class="pt-2">
+                        <button onclick="nextILearnQuestion()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center space-x-2">
+                            <span>Next Question</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+                showToast("Correct answer!");
+            } else {
+                feedback.className = "p-5 rounded-2xl text-sm mt-4 space-y-3 bg-red-50 text-red-900 border border-red-200";
+                feedback.innerHTML = `
+                    <div class="flex items-center space-x-2 font-bold text-red-700 text-base">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <span>Incorrect. Let's learn why!</span>
+                    </div>
+                    <div class="bg-white/80 p-3.5 rounded-xl border border-red-200/60 text-slate-700 leading-relaxed text-xs md:text-sm">
+                        <strong class="text-red-800 block mb-1"><i class="fa-solid fa-book-open-reader text-red-500 mr-1"></i> Detailed Explanation & Solution:</strong>
+                        ${explanationText}
+                    </div>
+                    <div class="pt-2">
+                        <button onclick="nextILearnQuestion()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center space-x-2">
+                            <span>Next Question</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+                showToast("Incorrect answer");
+            }
+        }
+
+        function nextILearnQuestion() {
+            ilearnIndex++;
+            renderILearnQuestion();
+        }
+
+        let canvasInitialized = false;
+        let isDrawing = false;
+        let currentTool = 'brush';
+        let drawContext = null;
+
+        function initDrawingCanvas() {
+            const canvasEl = document.getElementById('drawing-canvas');
+            if (!canvasInitialized) {
+                canvasEl.width = 900;
+                canvasEl.height = 550;
+                drawContext = canvasEl.getContext('2d');
+                drawContext.fillStyle = '#ffffff';
+                drawContext.fillRect(0, 0, canvasEl.width, canvasEl.height);
+                
+                canvasEl.addEventListener('mousedown', startDrawing);
+                canvasEl.addEventListener('mousemove', draw);
+                canvasEl.addEventListener('mouseup', stopDrawing);
+                canvasEl.addEventListener('mouseleave', stopDrawing);
+
+                canvasEl.addEventListener('touchstart', (e) => {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousedown', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    canvasEl.dispatchEvent(mouseEvent);
+                    e.preventDefault();
+                });
+                canvasEl.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    const mouseEvent = new MouseEvent('mousemove', {
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    canvasEl.dispatchEvent(mouseEvent);
+                    e.preventDefault();
+                });
+                canvasEl.addEventListener('touchend', (e) => {
+                    const mouseEvent = new MouseEvent('mouseup', {});
+                    canvasEl.dispatchEvent(mouseEvent);
+                    e.preventDefault();
+                });
+
+                document.getElementById('brush-size').addEventListener('input', (e) => {
+                    document.getElementById('brush-size-label').innerText = `${e.target.value}px`;
+                });
+                canvasInitialized = true;
+            }
+        }
+
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (evt.clientX - rect.left) * (canvas.width / rect.width),
+                y: (evt.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const canvasEl = document.getElementById('drawing-canvas');
+            const pos = getMousePos(canvasEl, e);
+            drawContext.beginPath();
+            drawContext.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const canvasEl = document.getElementById('drawing-canvas');
+            const pos = getMousePos(canvasEl, e);
+            const size = document.getElementById('brush-size').value;
+            const color = document.getElementById('brush-color').value;
+
+            drawContext.lineWidth = size;
+            drawContext.lineCap = 'round';
+            drawContext.lineJoin = 'round';
+
+            if (currentTool === 'eraser') {
+                drawContext.strokeStyle = '#ffffff';
+            } else {
+                drawContext.strokeStyle = color;
+            }
+
+            drawContext.lineTo(pos.x, pos.y);
+            drawContext.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            const brushBtn = document.getElementById('tool-brush-btn');
+            const eraserBtn = document.getElementById('tool-eraser-btn');
+            if (tool === 'brush') {
+                brushBtn.className = "px-3 py-1 bg-rose-600 text-white font-medium rounded-lg transition-colors cursor-pointer";
+                eraserBtn.className = "px-3 py-1 bg-slate-800 text-slate-300 font-medium rounded-lg hover:bg-slate-700 transition-colors cursor-pointer";
+                showToast("Brush tool selected");
+            } else {
+                eraserBtn.className = "px-3 py-1 bg-rose-600 text-white font-medium rounded-lg transition-colors cursor-pointer";
+                brushBtn.className = "px-3 py-1 bg-slate-800 text-slate-300 font-medium rounded-lg hover:bg-slate-700 transition-colors cursor-pointer";
+                showToast("Eraser tool selected");
+            }
+        }
+
+        function clearCanvas() {
+            const canvasEl = document.getElementById('drawing-canvas');
+            drawContext.fillStyle = '#ffffff';
+            drawContext.fillRect(0, 0, canvasEl.width, canvasEl.height);
+            showToast("Canvas cleared");
+        }
+
+        function downloadDrawing() {
+            const canvasEl = document.getElementById('drawing-canvas');
+            const link = document.createElement('a');
+            link.download = 'fufudeer-drawing.png';
+            link.href = canvasEl.toDataURL('image/png');
+            link.click();
+            showToast("Drawing saved as PNG!");
+        }
+
         let slidesData = JSON.parse(localStorage.getItem('fufudeer_slides') || JSON.stringify([
             { title: "Welcome to Geo's Presentation", content: "• High quality slide decks\n• Visual layouts & themes\n• Seamless slideshow preview" },
             { title: "Key Features & Highlights", content: "• Multiple slide management\n• Custom gorgeous gradient themes\n• Fully responsive and cloud-synced" },
@@ -634,7 +1247,6 @@
             showToast(`Theme updated to ${theme}`);
         }
 
-        // Fullscreen Slideshow Player state
         let slideshowIndex = 0;
 
         function startSlideShow() {
@@ -681,7 +1293,6 @@
             `;
         }
 
-        // Keyboard navigation for slideshow
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('slideshow-modal');
             if (!modal.classList.contains('hidden')) {
@@ -816,7 +1427,6 @@
         function renderTasks() {
             const listEl = document.getElementById('task-list');
             listEl.innerHTML = '';
-            let completedCount = 0;
 
             tasks.forEach((task, index) => {
                 const item = document.createElement('div');
@@ -869,6 +1479,99 @@
             }
         }
 
+        function handleBeffKey(e) {
+            if (e.key === 'Enter') {
+                sendToBeffAI();
+            }
+        }
+
+        function clearBeffChat() {
+            const container = document.getElementById('beff-chat-container');
+            container.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
+                        <p><strong>Pello!</strong> New chat started with BeffAI! 🧸✨ How can I snuggle and help you today?</p>
+                    </div>
+                </div>
+            `;
+            showToast("Chat reset");
+        }
+
+        function sendToBeffAI() {
+            const inputEl = document.getElementById('beff-input');
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            const container = document.getElementById('beff-chat-container');
+            
+            // Append user bubble
+            const userBubble = document.createElement('div');
+            userBubble.className = 'flex items-start justify-end space-x-3';
+            userBubble.innerHTML = `
+                <div class="bg-pink-600 text-white rounded-2xl rounded-tr-sm p-4 shadow-sm max-w-xl text-sm leading-relaxed">
+                    <p>${escapeHTML(text)}</p>
+                </div>
+                <div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            `;
+            container.appendChild(userBubble);
+            inputEl.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Simulate BeffAI Plushie Response
+            setTimeout(() => {
+                const plushieReply = generatePlushieResponse(text);
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'flex items-start space-x-3 animate-fade-in';
+                aiBubble.innerHTML = `
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-md shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-white border border-pink-100 rounded-2xl rounded-tl-sm p-4 shadow-sm max-w-xl text-slate-800 text-sm leading-relaxed space-y-2">
+                        <p>${plushieReply}</p>
+                    </div>
+                `;
+                container.appendChild(aiBubble);
+                container.scrollTop = container.scrollHeight;
+            }, 600);
+        }
+
+        function generatePlushieResponse(userInput) {
+            const lower = userInput.toLowerCase();
+            let response = "";
+
+            if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+                response = "<strong>Pello, pello!</strong> So wonderful to see you today! Sending you warmest plushie hugs! 🧸✨";
+            } else if (lower.includes('bye') || lower.includes('goodbye') || lower.includes('see you')) {
+                response = "<strong>Bello!</strong> Have a super fluffy day and come back soon for more cuddles! 👋🧸";
+            } else if (lower.includes('how are you') || lower.includes('status')) {
+                response = "I am feeling extra soft and cozy today! Ready to help you with whatever you need, my friend!";
+            } else if (lower.includes('help') || lower.includes('what can you do')) {
+                response = "I can chat with you, give you warm plushie hugs, share cozy stories, and greet you with a cheerful <strong>pello</strong> or <strong>bello</strong> anytime!";
+            } else if (lower.includes('hug') || lower.includes('cuddle')) {
+                response = "*Squeeeezes you tight with soft cotton paws* 🤗 You are giving off the coziest plushie energy today!";
+            } else {
+                const plushiePhrases = [
+                    `That is so interesting! As your plushie AI buddy, I say we make it extra fluffy and fun! 🧸`,
+                    `Pello! I heard you loud and clear. Let's tackle that with lots of cotton stuffing and smiles!`,
+                    `Bello to that idea! You are doing amazing things in the FufuDeer workspace today! ⭐`,
+                    `Oh wow, that sounds super snuggly and exciting! Tell BeffAI more!`
+                ];
+                response = plushiePhrases[Math.floor(Math.random() * plushiePhrases.length)];
+            }
+            return response;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
         function downloadBlob(blob, filename) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -902,7 +1605,6 @@
             printWindow.print();
         }
 
-        // Airplane "Cooperate & Awesome" Loading Screen Animation Sequence
         window.addEventListener('DOMContentLoaded', () => {
             const progressEl = document.getElementById('loading-progress');
             const percentEl = document.getElementById('loading-percent');
