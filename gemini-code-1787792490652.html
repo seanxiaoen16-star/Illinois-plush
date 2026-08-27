@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlushTyper - Professional Touch Typing & Lexia Core5 Suite</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-app: #f1f5f9;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --success-light: rgba(16, 185, 129, 0.1);
+            --warning: #f59e0b;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        [data-theme="orange"] {
+            --primary: #ea580c;
+            --primary-hover: #c2410c;
+            --bg-app: #fff7ed;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --border: #ffedd5;
+        }
+
+        [data-theme="green"] {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --bg-app: #ecfdf5;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --border: #d1fae5;
+        }
+
+        [data-theme="purple"] {
+            --primary: #7c3aed;
+            --primary-hover: #6d28d9;
+            --bg-app: #f5f3ff;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --border: #ede9fe;
+        }
+
+        [data-theme="dark"] {
+            --primary: #06b6d4;
+            --primary-hover: #0891b2;
+            --bg-app: #0f172a;
+            --sidebar-bg: #1e293b;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        [data-font="mono"] { --font-family: "Fira Code", monospace, monospace; }
+        [data-font="serif"] { --font-family: Georgia, Cambria, "Times New Roman", Times, serif; }
+        [data-font="comic"] { --font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Lexia-Style Sidebar Dashboard */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 24px;
+            flex-shrink: 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.03);
+        }
+
+        .sidebar-brand {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-nav li {
+            padding: 14px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-nav li:hover, .sidebar-nav li.active {
+            background-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            height: 70px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 40px;
+            gap: 20px;
+        }
+
+        .score-pill {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            padding: 8px 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.03);
+            padding: 6px 14px 6px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .content-body {
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Keyboard Themed Loading Overlay */
+        #screen-loading {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #030712;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            gap: 24px;
+        }
+        #screen-loading.active { display: flex; }
+
+        .loading-keyboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: #111827;
+            padding: 20px;
+            border-radius: 14px;
+            border: 2px solid #374151;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.6);
+        }
+
+        .loading-row { display: flex; gap: 6px; justify-content: center; }
+        .loading-key {
+            width: 38px; height: 38px;
+            background: #1f2937; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: monospace; font-weight: bold; font-size: 0.9rem; color: #9ca3af;
+            box-shadow: 0 4px 0 #111827;
+            transition: all 0.15s ease;
+        }
+        .loading-key.active-press {
+            background: var(--primary); color: white;
+            transform: translateY(3px); box-shadow: 0 1px 0 #111827;
+        }
+
+        .loading-progress-bar {
+            width: 260px; height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; margin-top: 10px;
+        }
+        .loading-progress-fill { height: 100%; width: 0%; background-color: var(--primary); transition: width 0.3s ease; }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-size: 2.1rem; margin-bottom: 8px; font-weight: 800; letter-spacing: -0.5px; }
+        h2 { font-size: 1.5rem; margin-bottom: 12px; font-weight: 700; }
+        p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn-secondary {
+            background-color: rgba(0,0,0,0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+        .btn-secondary:hover { background-color: rgba(0,0,0,0.08); }
+        .btn-purchased {
+            background-color: var(--success); color: white; cursor: default; box-shadow: none;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            background-color: rgba(0,0,0,0.02);
+            color: var(--text-main);
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .theme-options { display: flex; gap: 14px; margin-top: 14px; }
+        .theme-circle {
+            width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+            border: 2px solid rgba(0,0,0,0.1); transition: transform 0.2s;
+        }
+        .theme-circle:hover { transform: scale(1.1); }
+
+        .settings-tabs {
+            display: flex; gap: 12px; margin-bottom: 28px; border-bottom: 1px solid var(--border); padding-bottom: 16px;
+        }
+        .settings-tab-btn {
+            background: transparent; border: none; font-size: 1rem; font-weight: 700;
+            color: var(--text-muted); cursor: pointer; padding: 10px 18px; border-radius: 8px; transition: all 0.2s;
+        }
+        .settings-tab-btn.active { background-color: var(--primary); color: white; }
+        .settings-panel { display: none; }
+        .settings-panel.active { display: block; }
+
+        .shop-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px;
+        }
+        .shop-item-card {
+            border: 1px solid var(--border); background: rgba(0,0,0,0.01); border-radius: 14px; padding: 20px;
+            display: flex; flex-direction: column; justify-content: space-between; gap: 16px; transition: transform 0.2s;
+        }
+        .shop-item-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .shop-item-title { font-weight: 700; font-size: 1.1rem; }
+        .shop-item-price { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+
+        .unit-card {
+            display: flex; justify-content: space-between; align-items: center;
+            border-left: 6px solid var(--primary); margin-bottom: 20px; transition: transform 0.2s;
+        }
+        .unit-card:hover { transform: translateX(4px); }
+        .unit-card.completed { border-left-color: var(--success); background-color: var(--success-light); }
+        .badge-completed {
+            background-color: var(--success); color: white; padding: 6px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .typing-box {
+            font-size: 3rem; letter-spacing: 6px; background: rgba(0,0,0,0.03); padding: 40px;
+            border-radius: 14px; text-align: center; margin: 24px 0; border: 1px solid var(--border);
+            font-weight: bold;
+        }
+
+        /* PlushKeyboard™ Custom On-Screen Guide Visualizer */
+        .plush-keyboard-widget {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .plush-kb-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+        .plush-kb-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+        .plush-kb-key {
+            flex: 1;
+            height: 54px;
+            background: rgba(0,0,0,0.03);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+        .plush-kb-spacebar {
+            width: 100%;
+            height: 48px;
+            background: rgba(0,0,0,0.03);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+        .plush-kb-key.highlighted, .plush-kb-spacebar.highlighted {
+            background-color: var(--primary) !important;
+            border-color: var(--primary-hover) !important;
+            color: #ffffff !important;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+        }
+
+        /* Lexia UI Progress Header inside lessons */
+        .lexia-progress-bar-container {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.03); padding: 12px 20px; border-radius: 12px; margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .star-tracker { display: flex; gap: 6px; font-size: 1.2rem; }
+
+        /* GAME 1: LETTER CLICKER STYLES */
+        .letter-clicker-container {
+            display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 20px 0;
+        }
+        .clicker-prompt-banner {
+            font-size: 1.25rem; font-weight: 700; color: var(--text-main); text-align: center;
+            background: rgba(2, 132, 199, 0.1); padding: 14px 28px; border-radius: 30px; border: 1px solid var(--primary);
+        }
+        .clicker-options-grid {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 10px;
+        }
+        .clicker-tile {
+            width: 90px; height: 90px; background: var(--card-bg); border: 3px solid var(--primary);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 800; cursor: pointer; color: var(--text-main);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); transition: all 0.2s ease;
+        }
+        .clicker-tile:hover:not(.greyed-out) {
+            transform: translateY(-4px); background-color: var(--primary); color: #fff;
+            box-shadow: 0 12px 25px rgba(2, 132, 199, 0.3);
+        }
+        .clicker-tile.greyed-out {
+            background-color: #cbd5e1 !important; border-color: #94a3b8 !important;
+            color: #64748b !important; cursor: not-allowed; opacity: 0.6; transform: none !important; box-shadow: none !important;
+        }
+
+        /* GAME 2: BOX DRAGGER STYLES */
+        .box-dragger-workspace {
+            display: flex; flex-direction: column; gap: 20px; align-items: center; padding: 10px 0;
+        }
+        .dragger-instruction-card {
+            background: rgba(0,0,0,0.03); padding: 14px 24px; border-radius: 12px; border: 1px solid var(--border);
+            text-align: center; width: 100%; font-weight: 600;
+        }
+        .word-search-container {
+            position: relative; background: #0f172a; padding: 30px; border-radius: 16px;
+            border: 2px solid var(--border); box-shadow: inset 0 4px 12px rgba(0,0,0,0.4);
+            display: flex; justify-content: center; align-items: center; width: 100%; max-width: 600px; height: 160px;
+            overflow: hidden; user-select: none;
+        }
+        .word-search-grid {
+            font-family: monospace; font-size: 2rem; letter-spacing: 14px; font-weight: bold; color: #f8fafc;
+        }
+        .draggable-box {
+            position: absolute; border: 3px dashed var(--warning); background: rgba(245, 158, 11, 0.2);
+            border-radius: 8px; cursor: grab; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: bold; color: #fbbf24; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            touch-action: none;
+        }
+        .draggable-box:active { cursor: grabbing; border-style: solid; background: rgba(245, 158, 11, 0.35); }
+
+        .hint-box {
+            background-color: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #b45309; padding: 12px 18px; border-radius: 10px; font-size: 0.95rem; margin-bottom: 20px; display: none; font-weight: 500;
+        }
+        .lesson-stats-popup {
+            background: var(--success-light); border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #047857; padding: 14px 20px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; display: none;
+        }
+
+        .certificate-frame {
+            border: 8px solid var(--primary); padding: 50px; text-align: center;
+            background: var(--card-bg); border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #screen-certificate, #screen-certificate * { visibility: visible; }
+            #screen-certificate { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body data-theme="blue" data-font="default">
+
+    <!-- KEYBOARD THEMED LOADING OVERLAY SCREEN -->
+    <div id="screen-loading">
+        <h2 id="loading-title" style="color: white; font-weight: 700; letter-spacing: 0.5px;">Loading PlushTyper Core5 Pro...</h2>
+        <div class="loading-keyboard-grid">
+            <div class="loading-row">
+                <div class="loading-key" data-key="Q">Q</div><div class="loading-key" data-key="W">W</div><div class="loading-key" data-key="E">E</div><div class="loading-key" data-key="R">R</div><div class="loading-key" data-key="T">T</div><div class="loading-key" data-key="Y">Y</div><div class="loading-key" data-key="U">U</div><div class="loading-key" data-key="I">I</div><div class="loading-key" data-key="O">O</div><div class="loading-key" data-key="P">P</div>
+            </div>
+            <div class="loading-row">
+                <div class="loading-key" data-key="A">A</div><div class="loading-key" data-key="S">S</div><div class="loading-key" data-key="D">D</div><div class="loading-key" data-key="F">F</div><div class="loading-key" data-key="G">G</div><div class="loading-key" data-key="H">H</div><div class="loading-key" data-key="J">J</div><div class="loading-key" data-key="K">K</div><div class="loading-key" data-key="L">L</div>
+            </div>
+            <div class="loading-row">
+                <div class="loading-key" data-key="Z">Z</div><div class="loading-key" data-key="X">X</div><div class="loading-key" data-key="C">C</div><div class="loading-key" data-key="V">V</div><div class="loading-key" data-key="B">B</div><div class="loading-key" data-key="N">N</div><div class="loading-key" data-key="M">M</div>
+            </div>
+        </div>
+        <div class="loading-progress-bar">
+            <div class="loading-progress-fill" id="loading-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar" id="app-sidebar" style="display: none;">
+        <div class="sidebar-brand">
+            ⚡ PlushTyper Core5
+        </div>
+        <ul class="sidebar-nav">
+            <li class="active" onclick="triggerLoadingAndSwitch('dashboard')">📊 Dashboard</li>
+            <li onclick="triggerLoadingAndSwitch('settings')">⚙️ Settings & Shop</li>
+        </ul>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="main-content">
+        <div class="topbar" id="app-topbar" style="display: none;">
+            <div class="score-pill">🏆 Score: <span id="header-score">0</span> pts</div>
+            <div class="user-profile">
+                <div class="avatar" id="user-initial">P</div>
+                <span id="nav-username">Student</span>
+            </div>
+        </div>
+
+        <div class="content-body">
+
+            <!-- 1. SIGN-UP SCREEN -->
+            <div id="screen-signup" class="screen active">
+                <div class="card" style="max-width: 520px; margin: 40px auto;">
+                    <h1>Welcome to PlushTyper</h1>
+                    <p>Enter your student profile details and select your professional Lexia-style theme.</p>
+                    
+                    <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); display: block; margin-top: 20px;">CHOOSE THEME PREFERENCE</label>
+                    <div class="theme-options">
+                        <div class="theme-circle" style="background-color: #0284c7;" onclick="changeTheme('blue')" title="Lexia Blue"></div>
+                        <div class="theme-circle" style="background-color: #ea580c;" onclick="changeTheme('orange')" title="Dynamic Orange"></div>
+                        <div class="theme-circle" style="background-color: #059669;" onclick="changeTheme('green')" title="Emerald Green"></div>
+                    </div>
+                    
+                    <div style="margin-top: 24px;">
+                        <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); display: block;">STUDENT NAME</label>
+                        <input type="text" id="input-username" placeholder="e.g. Alex Smith">
+                    </div>
+
+                    <button class="btn" style="width: 100%; margin-top: 10px;" onclick="handleSignUp()">Get Started</button>
+                </div>
+            </div>
+
+            <!-- 2. DASHBOARD SCREEN -->
+            <div id="screen-dashboard" class="screen">
+                <div style="margin-bottom: 30px;">
+                    <h1>Curriculum Dashboard</h1>
+                    <p>Complete all professional interactive modules, Letter Clickers, and Box Draggers to unlock credentials.</p>
+                </div>
+
+                <!-- Unit 1 Card -->
+                <div class="card unit-card" id="unit-1-element">
+                    <div>
+                        <div id="unit-1-badge" style="margin-bottom: 8px;"></div>
+                        <h2>Unit 1: The "a" and "[spacebar]" Key</h2>
+                        <p>Covers professional typing lessons, Letter Clicker multi-choice, and Box Dragger challenges.</p>
+                    </div>
+                    <button class="btn" onclick="triggerLoadingAndStartUnit(1)">Begin Unit 1</button>
+                </div>
+
+                <!-- Unit 2 Card -->
+                <div class="card unit-card" id="unit-2-element">
+                    <div>
+                        <div id="unit-2-badge" style="margin-bottom: 8px;"></div>
+                        <h2>UNIT 2: The P and ꟼ Letters</h2>
+                        <p>Covers advanced character recognition combining P, ꟼ, "a", and spacebar games.</p>
+                    </div>
+                    <button class="btn" onclick="promptUnit2Intro()">Begin Unit 2</button>
+                </div>
+
+                <!-- Unit 3 Card -->
+                <div class="card unit-card" id="unit-3-element">
+                    <div>
+                        <div id="unit-3-badge" style="margin-bottom: 8px;"></div>
+                        <h2>Unit 3: The Oppo (⦰) Key</h2>
+                        <p>Covers Oppo (⦰) mastery, alternative shorthand input "o-", and comprehensive assessments.</p>
+                    </div>
+                    <button class="btn" onclick="promptUnit3Intro()">Begin Unit 3</button>
+                </div>
+
+                <!-- Unit 4 Card -->
+                <div class="card unit-card" id="unit-4-element">
+                    <div>
+                        <div id="unit-4-badge" style="margin-bottom: 8px;"></div>
+                        <h2>Unit 4: The Lulta Keys</h2>
+                        <p>Introduction to the new Lulta characters and comprehensive review of old characters.</p>
+                    </div>
+                    <button class="btn" onclick="triggerLoadingAndStartUnit(4)">Begin Unit 4</button>
+                </div>
+            </div>
+
+            <!-- 3. SETTINGS & SHOP SCREEN -->
+            <div id="screen-settings" class="screen">
+                <div class="card">
+                    <h2>Preferences & Rewards Shop</h2>
+                    <p>Customize your typing layout, toggle the PlushKeyboard™ guide, or spend score points!</p>
+                    
+                    <div class="settings-tabs" style="margin-top: 24px;">
+                        <button class="settings-tab-btn active" id="tab-btn-general" onclick="switchSettingsTab('general')">⚙️ General Settings</button>
+                        <button class="settings-tab-btn" id="tab-btn-shop" onclick="switchSettingsTab('shop')">🛒 Reward Shop (<span id="shop-score-badge">0</span> pts)</button>
+                    </div>
+
+                    <!-- Panel 1: General Settings -->
+                    <div class="settings-panel active" id="panel-general">
+                        <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); display:block; margin-top:20px;">KEYBOARD LANGUAGE</label>
+                        <select id="setting-language">
+                            <option value="plushie">Plushie Speak (Default)</option>
+                        </select>
+
+                        <!-- PlushKeyboard™ Guide Toggle Settings Option -->
+                        <div style="margin-top: 24px; background: rgba(0,0,0,0.03); padding: 16px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4 style="font-size: 1rem; font-weight: 700;">PlushKeyboard™ On-Screen Guide</h4>
+                                <p style="font-size: 0.85rem; margin-top: 2px;">Shows a custom keyboard that highlights the correct key to type.</p>
+                            </div>
+                            <input type="checkbox" id="setting-toggle-keyboard" style="width: 24px; height: 24px; accent-color: var(--primary); cursor: pointer; margin: 0;" onchange="toggleKeyboardSetting(this)">
+                        </div>
+
+                        <label style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); display:block; margin-top:20px;">THEME ACCENT</label>
+                        <div class="theme-options">
+                            <div class="theme-circle" style="background-color: #0284c7;" onclick="changeTheme('blue')" title="Blue"></div>
+                            <div class="theme-circle" style="background-color: #ea580c;" onclick="changeTheme('orange')" title="Orange"></div>
+                            <div class="theme-circle" style="background-color: #059669;" onclick="changeTheme('green')" title="Green"></div>
+                            <div class="theme-circle" id="unlocked-dot-purple" style="background-color: #7c3aed; display: none;" onclick="changeTheme('purple')" title="Purple Theme"></div>
+                            <div class="theme-circle" id="unlocked-dot-dark" style="background-color: #0f172a; border: 2px solid #06b6d4; display: none;" onclick="changeTheme('dark')" title="Cyberpunk Dark"></div>
+                        </div>
+
+                        <button class="btn" style="margin-top: 30px;" onclick="triggerLoadingAndSwitch('dashboard')">Save & Return</button>
+                    </div>
+
+                    <!-- Panel 2: Shop -->
+                    <div class="settings-panel" id="panel-shop">
+                        <p style="margin-bottom: 10px;">Spend your score points to permanently unlock custom fonts and exclusive color themes!</p>
+                        
+                        <div class="shop-grid">
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">💜 Royal Purple Theme</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">An elegant deep indigo-purple aesthetic layout.</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                                    <span class="shop-item-price">150 pts</span>
+                                    <button class="btn" id="buy-btn-purple" onclick="buyShopItem('purple', 150)">Unlock</button>
+                                </div>
+                            </div>
+
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🌙 Cyberpunk Dark Mode</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">High-contrast neon cyan accents for elite typists.</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                                    <span class="shop-item-price">300 pts</span>
+                                    <button class="btn" id="buy-btn-dark" onclick="buyShopItem('dark', 300)">Unlock</button>
+                                </div>
+                            </div>
+
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">⌨️ Fira Code Monospace</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Applies a clean fixed-width professional coder font.</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                                    <span class="shop-item-price">100 pts</span>
+                                    <button class="btn" id="buy-btn-font-mono" onclick="buyShopFont('mono', 100)">Unlock</button>
+                                </div>
+                            </div>
+
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">📜 Classical Serif Font</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Timeless academic publication text appearance.</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                                    <span class="shop-item-price">100 pts</span>
+                                    <button class="btn" id="buy-btn-font-serif" onclick="buyShopFont('serif', 100)">Unlock</button>
+                                </div>
+                            </div>
+
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">✨ Comic Fun Font</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">A playful handwriting font style for casual lessons.</p>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                                    <span class="shop-item-price">200 pts</span>
+                                    <button class="btn" id="buy-btn-font-comic" onclick="buyShopFont('comic', 200)">Unlock</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4. LESSONS & MINI-GAMES SCREEN -->
+            <div id="screen-lesson" class="screen">
+                <div class="card">
+                    <!-- Lexia-Style Progress Header -->
+                    <div class="lexia-progress-bar-container">
+                        <h2 id="lesson-header-title" style="margin:0; font-size:1.2rem;">Lesson 1</h2>
+                        <div class="star-tracker" id="lexia-star-tracker">⭐ ⭐ ⭐ ⭐ ⭐</div>
+                        <span id="lesson-progress-count" style="font-weight: 700; color: var(--text-muted); background: rgba(0,0,0,0.04); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);">1 / 15</span>
+                    </div>
+
+                    <p id="lesson-instruction-text" style="font-size: 1.1rem; font-weight: 500; margin-bottom: 15px;"></p>
+                    
+                    <div id="lesson-stats-popup" class="lesson-stats-popup"></div>
+                    <div id="lesson-hint-box" class="hint-box"></div>
+                    
+                    <!-- PlushKeyboard™ On-Screen Guide Widget (Matches Provided Diagram) -->
+                    <div id="plush-keyboard-widget" class="plush-keyboard-widget" style="display: none;">
+                        <div class="plush-kb-title">PlushKeyboard™ Guide</div>
+                        <div class="plush-kb-row">
+                            <div class="plush-kb-key" id="kb-key-A">A</div>
+                            <div class="plush-kb-key" id="kb-key-P">P</div>
+                            <div class="plush-kb-key" id="kb-key-Q">ꟼ</div>
+                            <div class="plush-kb-key" id="kb-key-O">⦰</div>
+                            <div class="plush-kb-key" id="kb-key-LBRACE">{</div>
+                            <div class="plush-kb-key" id="kb-key-RBRACE">}</div>
+                        </div>
+                        <div class="plush-kb-spacebar" id="kb-key-SPACE">
+                            <span>S</span><span>P</span><span>A</span><span>C</span><span>E</span><span>B</span><span>A</span><span>R</span>
+                        </div>
+                    </div>
+
+                    <!-- Standard Typing View -->
+                    <div id="standard-typing-container">
+                        <div class="typing-box" id="target-output-display">a</div>
+                        <input type="text" id="typing-input-field" placeholder="Type target here..." autocomplete="off" oninput="evalTypingInput()" onkeydown="handleTypingKeyDown(event)">
+                    </div>
+
+                    <!-- GAME 1: LETTER CLICKER VIEW -->
+                    <div id="letter-clicker-container" style="display: none;">
+                        <div class="letter-clicker-container">
+                            <div class="clicker-prompt-banner" id="clicker-prompt-text">Find the target letter!</div>
+                            <div class="clicker-options-grid" id="clicker-options-grid"></div>
+                        </div>
+                    </div>
+
+                    <!-- GAME 2: BOX DRAGGER VIEW -->
+                    <div id="box-dragger-container" style="display: none;">
+                        <div class="box-dragger-workspace">
+                            <div class="dragger-instruction-card" id="dragger-instruction-text">
+                                Drag the selection box over the correct target word/character in the search matrix, then click Submit!
+                            </div>
+                            <div class="word-search-container" id="word-search-workspace">
+                                <div class="word-search-grid" id="word-search-grid-text">a x q m p</div>
+                                <div class="draggable-box" id="draggable-target-box"></div>
+                            </div>
+                            <button class="btn" id="dragger-submit-btn" style="margin-top: 10px;" onclick="submitBoxDragger()">Submit Answer</button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-secondary" id="hint-btn" onclick="handleHintClick()">💡 Hint</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. CERTIFICATE SCREEN -->
+            <div id="screen-certificate" class="screen">
+                <div class="certificate-frame card">
+                    <p style="text-transform: uppercase; letter-spacing: 3px; font-weight: 700; color: var(--primary);">Certificate of Achievement</p>
+                    <p style="margin-top: 25px; color: var(--text-muted);">This professional literacy credential is proudly presented to</p>
+                    <h1 id="cert-holder-name" style="font-size: 2.4rem; margin: 20px 0;">[Name]</h1>
+                    <p style="color: var(--text-muted);">for successfully mastering all curriculum criteria in</p>
+                    <h2 id="cert-unit-title" style="margin: 15px 0;">Unit Name</h2>
+                    <p style="margin-top: 35px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">PLUSHTYPER CORE5 LEXIA-STYLE ACADEMIC VERIFICATION SYSTEM</p>
+                </div>
+                
+                <div style="display: flex; gap: 14px; margin-top: 24px;" class="no-print">
+                    <button class="btn" onclick="window.print()">Print Document</button>
+                    <button class="btn btn-secondary" onclick="triggerLoadingAndSwitch('dashboard')">Done (Return to Dashboard)</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentStudent = "";
+        let activeUnit = 1;
+        let activeLessonIndex = 0;
+        let unit1Finished = false;
+        let unit2Finished = false;
+        let unit3Finished = false;
+        let unit4Finished = false;
+
+        let totalScore = 500;
+        let lessonStartTime = 0;
+        let hintUsageCount = 0; 
+        let keyTypingAnimationInterval = null;
+        let showPlushKeyboard = false;
+
+        let unlockedThemes = { purple: false, dark: false };
+        let unlockedFonts = { mono: false, serif: false, comic: false };
+
+        // Dragger Box State Variables
+        let draggerBoxPos = { x: 20, y: 30 };
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+
+        // Unit 1 Curriculum
+        const unit1Lessons = [
+            { type: 'normal', target: 'a', text: 'Press the "a" key.' },
+            { type: 'clicker', target: 'a', options: ['a', 'b', 'c'], text: 'Lexia Focus: Click the target letter "a".' },
+            { type: 'normal', target: ' ', text: 'Press the [spacebar].' },
+            { type: 'clicker', target: 'b', options: ['a', 'b', 'd', 'e'], text: 'Lexia Focus: Click the letter that makes the /b/ sound.' },
+            { type: 'dragger', target: 'a', matrix: 'x m a q v', text: 'Box Dragger: Drag the box over target letter "a" and hit Submit.' },
+            { type: 'normal', target: 'a a', text: 'Type: a [space] a' },
+            { type: 'clicker', target: 'c', options: ['c', 'a'], text: 'Lexia Focus: Find the letter "c".' },
+            { type: 'dragger', target: 'aa', matrix: 'x a a m q', text: 'Box Dragger: Drag the box over "aa" and hit Submit.' },
+            { type: 'normal', target: 'a a a', text: 'Sequence drill: a a a' },
+            { type: 'normal', target: 'a a a ', text: 'Comprehensive Final Test: Complete unit verification.' }
+        ];
+
+        // Unit 2 Curriculum (P, ꟼ, a, spacebar)
+        const unit2Lessons = [
+            { type: 'normal', target: 'P', text: 'Press the capital "P" key.' },
+            { type: 'clicker', target: 'P', options: ['P', 'o', 'a'], text: 'Lexia Focus: Click the uppercase letter "P".' },
+            { type: 'normal', target: 'ꟼ', text: 'Press the backwards capital "ꟼ" key (typing "PQ" also counts).' },
+            { type: 'clicker', target: 'ꟼ', options: ['P', 'ꟼ', 'a'], text: 'Lexia Focus: Click the reversed capital "ꟼ".' },
+            { type: 'dragger', target: 'ꟼ', matrix: 'a P ꟼ m o', text: 'Box Dragger: Drag the box over "ꟼ" and hit Submit.' },
+            { type: 'normal', target: 'P a ꟼ', text: 'Sequence drill: Type "P a ꟼ"' },
+            { type: 'clicker', target: 'a', options: ['P', 'ꟼ', 'a', 'b'], text: 'Lexia Focus: Click the baseline vowel "a".' },
+            { type: 'dragger', target: 'Pa', matrix: 'x P a ꟼ m', text: 'Box Dragger: Drag the box over "Pa" and hit Submit.' },
+            { type: 'normal', target: 'a P ꟼ a', text: 'Advanced combo sequence.' },
+            { type: 'normal', target: 'P ꟼ a a ', text: 'Unit 2 Comprehensive Final Test!' }
+        ];
+
+        // Unit 3 Curriculum (Oppo / ⦰ key)
+        const unit3Lessons = [
+            { type: 'normal', target: '⦰', text: 'Press the Oppo key (⦰). Shorthand "o-" is also accepted.' },
+            { type: 'clicker', target: '⦰', options: ['O', '0', '⦰', 'o'], text: 'Lexia Focus: Click the exact Oppo symbol (⦰).' },
+            { type: 'normal', target: 'o-', text: 'Practice alternative shorthand input "o-" for the Oppo key.' },
+            { type: 'dragger', target: '⦰', matrix: 'p a ⦰ q m', text: 'Box Dragger: Drag the box over "⦰" and hit Submit.' },
+            { type: 'normal', target: 'a P ⦰', text: 'Three key combo sequence including the Oppo key.' },
+            { type: 'clicker', target: 'o-', options: ['o-', 'a', 'P'], text: 'Lexia Focus: Select the shorthand code "o-".' },
+            { type: 'dragger', target: 'P⦰', matrix: 'a ⦰ P ꟼ m', text: 'Box Dragger: Drag the box over "P⦰" and hit Submit.' },
+            { type: 'normal', target: '⦰ P ⦰ P', text: 'Pattern practice with P and the Oppo key.' },
+            { type: 'normal', target: '⦰ P ꟼ a ', text: 'Unit 3 Comprehensive Final Master Test!' }
+        ];
+
+        // Unit 4 Curriculum ({ and } renamed to Lulta keys in Plush Speak + Review)
+        const unit4Lessons = [
+            { type: 'normal', target: '{', text: 'Press the left Lulta ("{") key.' },
+            { type: 'clicker', target: '{', options: ['{', '}', '[', '('], text: 'Lexia Focus: Click the left Lulta ("{") symbol.' },
+            { type: 'normal', target: '}', text: 'Press the right Lulta ("}") key.' },
+            { type: 'clicker', target: '}', options: ['{', '}', ']', ')'], text: 'Lexia Focus: Click the right Lulta ("}") symbol.' },
+            { type: 'dragger', target: '{}', matrix: 'a { } P ⦰', text: 'Box Dragger: Drag the box over matched Lultas "{}" and hit Submit.' },
+            { type: 'normal', target: '{}', text: 'Type a matched Lulta pair: {}' },
+            { type: 'clicker', target: 'a', options: ['{', '}', 'a', '⦰'], text: 'Review Focus: Select baseline character "a".' },
+            { type: 'dragger', target: 'P⦰{}', matrix: '{ P ⦰ } a', text: 'Box Dragger: Drag the box over "P⦰{}" and hit Submit.' },
+            { type: 'normal', target: 'a P ꟼ ⦰ {}', text: 'Comprehensive old & Lulta character sequence review.' },
+            { type: 'normal', target: '{ P ꟼ ⦰ } ', text: 'Unit 4 Comprehensive Final Master Test!' }
+        ];
+
+        function getCurrentLessonsArray() {
+            if (activeUnit === 1) return unit1Lessons;
+            if (activeUnit === 2) return unit2Lessons;
+            if (activeUnit === 3) return unit3Lessons;
+            return unit4Lessons;
+        }
+
+        function changeTheme(themeName) { document.body.setAttribute('data-theme', themeName); }
+        function changeFont(fontName) { document.body.setAttribute('data-font', fontName); }
+
+        function toggleKeyboardSetting(checkbox) {
+            showPlushKeyboard = checkbox.checked;
+            const lessons = getCurrentLessonsArray();
+            const item = lessons[activeLessonIndex];
+            if (item && item.type === 'normal') {
+                const field = document.getElementById('typing-input-field');
+                updatePlushKeyboardHighlights(item.target, field.value.length);
+            }
+        }
+
+        function switchSettingsTab(tabName) {
+            document.getElementById('tab-btn-general').classList.remove('active');
+            document.getElementById('tab-btn-shop').classList.remove('active');
+            document.getElementById('panel-general').classList.remove('active');
+            document.getElementById('panel-shop').classList.remove('active');
+
+            if (tabName === 'general') {
+                document.getElementById('tab-btn-general').classList.add('active');
+                document.getElementById('panel-general').classList.add('active');
+            } else {
+                document.getElementById('tab-btn-shop').classList.add('active');
+                document.getElementById('panel-shop').classList.add('active');
+            }
+        }
+
+        function buyShopItem(themeKey, price) {
+            if (totalScore < price) {
+                alert(`Not enough score points! You need ${price} pts (you have ${Math.round(totalScore)} pts).`);
+                return;
+            }
+            totalScore -= price;
+            unlockedThemes[themeKey] = true;
+            document.getElementById('header-score').innerText = Math.round(totalScore);
+            document.getElementById('shop-score-badge').innerText = Math.round(totalScore);
+
+            const btn = document.getElementById(`buy-btn-${themeKey}`);
+            btn.innerText = 'Purchased ✓';
+            btn.classList.add('btn-purchased');
+            btn.disabled = true;
+
+            document.getElementById(`unlocked-dot-${themeKey}`).style.display = 'block';
+            changeTheme(themeKey);
+            alert(`Success! You unlocked the ${themeKey.toUpperCase()} theme.`);
+        }
+
+        function buyShopFont(fontKey, price) {
+            if (totalScore < price) {
+                alert(`Not enough score points! You need ${price} pts (you have ${Math.round(totalScore)} pts).`);
+                return;
+            }
+            totalScore -= price;
+            unlockedFonts[fontKey] = true;
+            document.getElementById('header-score').innerText = Math.round(totalScore);
+            document.getElementById('shop-score-badge').innerText = Math.round(totalScore);
+
+            const btn = document.getElementById(`buy-btn-font-${fontKey}`);
+            btn.innerText = 'Purchased ✓';
+            btn.classList.add('btn-purchased');
+            btn.disabled = true;
+
+            changeFont(fontKey);
+            alert(`Success! Font style updated to ${fontKey.toUpperCase()}.`);
+        }
+
+        function showLoadingScreen(loadingText, onComplete) {
+            const loadingOverlay = document.getElementById('screen-loading');
+            const progressFill = document.getElementById('loading-bar-fill');
+            const titleEl = document.getElementById('loading-title');
+            
+            titleEl.innerText = loadingText;
+            loadingOverlay.classList.add('active');
+            progressFill.style.width = '0%';
+
+            const keys = document.querySelectorAll('.loading-key');
+            if(keyTypingAnimationInterval) clearInterval(keyTypingAnimationInterval);
+            
+            keyTypingAnimationInterval = setInterval(() => {
+                keys.forEach(k => k.classList.remove('active-press'));
+                for(let i=0; i<3; i++) {
+                    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                    randomKey.classList.add('active-press');
+                }
+            }, 120);
+
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+                if(progress >= 100) {
+                    clearInterval(progressInterval);
+                    clearInterval(keyTypingAnimationInterval);
+                    keys.forEach(k => k.classList.remove('active-press'));
+                    setTimeout(() => {
+                        loadingOverlay.classList.remove('active');
+                        if(onComplete) onComplete();
+                    }, 150);
+                }
+            }, 90);
+        }
+
+        function triggerLoadingAndSwitch(screenName) {
+            showLoadingScreen("Preparing Module...", () => { switchNav(screenName); });
+        }
+
+        function triggerLoadingAndStartUnit(unitNum) {
+            showLoadingScreen(`Loading Unit ${unitNum} Curriculum...`, () => { startUnitSession(unitNum); });
+        }
+
+        function handleSignUp() {
+            const val = document.getElementById('input-username').value.trim();
+            if(!val) { alert("Please enter a valid student name."); return; }
+            currentStudent = val;
+            document.getElementById('nav-username').innerText = currentStudent;
+            document.getElementById('user-initial').innerText = currentStudent.charAt(0).toUpperCase();
+            document.getElementById('cert-holder-name').innerText = currentStudent;
+
+            document.getElementById('app-sidebar').style.display = 'flex';
+            document.getElementById('app-topbar').style.display = 'flex';
+
+            showLoadingScreen("Initializing User Profile...", () => {
+                switchNav('dashboard');
+                updateDashboardState();
+            });
+        }
+
+        function switchNav(screenName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-nav li').forEach(li => li.classList.remove('active'));
+
+            if(screenName === 'dashboard') {
+                document.getElementById('screen-dashboard').classList.add('active');
+                document.querySelector('.sidebar-nav li:nth-child(1)').classList.add('active');
+            } else if(screenName === 'settings') {
+                document.getElementById('screen-settings').classList.add('active');
+                document.querySelector('.sidebar-nav li:nth-child(2)').classList.add('active');
+                document.getElementById('header-score').innerText = Math.round(totalScore);
+                document.getElementById('shop-score-badge').innerText = Math.round(totalScore);
+            }
+        }
+
+        function updateDashboardState() {
+            const unit1Card = document.getElementById('unit-1-element');
+            const unit1Badge = document.getElementById('unit-1-badge');
+            if(unit1Finished) {
+                unit1Card.classList.add('completed');
+                unit1Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
+            } else { unit1Badge.innerHTML = ''; }
+
+            const unit2Card = document.getElementById('unit-2-element');
+            const unit2Badge = document.getElementById('unit-2-badge');
+            if(unit2Finished) {
+                unit2Card.classList.add('completed');
+                unit2Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
+            } else { unit2Badge.innerHTML = ''; }
+
+            const unit3Card = document.getElementById('unit-3-element');
+            const unit3Badge = document.getElementById('unit-3-badge');
+            if(unit3Finished) {
+                unit3Card.classList.add('completed');
+                unit3Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
+            } else { unit3Badge.innerHTML = ''; }
+
+            const unit4Card = document.getElementById('unit-4-element');
+            const unit4Badge = document.getElementById('unit-4-badge');
+            if(unit4Finished) {
+                unit4Card.classList.add('completed');
+                unit4Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
+            } else { unit4Badge.innerHTML = ''; }
+
+            document.getElementById('header-score').innerText = Math.round(totalScore);
+        }
+
+        function promptUnit2Intro() {
+            alert("Note: When typing backwards capital P (ꟼ), typing 'PQ' also counts as correct!");
+            triggerLoadingAndStartUnit(2);
+        }
+
+        function promptUnit3Intro() {
+            alert("Note: When typing the Oppo key (⦰), typing shorthand 'o-' also counts as correct!");
+            triggerLoadingAndStartUnit(3);
+        }
+
+        function startUnitSession(unitNum) {
+            activeUnit = unitNum;
+            activeLessonIndex = 0;
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-lesson').classList.add('active');
+            loadCurrentLessonData();
+        }
+
+        function updatePlushKeyboardHighlights(targetStr, typedLen = 0) {
+            const kbWidget = document.getElementById('plush-keyboard-widget');
+            if (!showPlushKeyboard) {
+                kbWidget.style.display = 'none';
+                return;
+            }
+            kbWidget.style.display = 'flex';
+
+            // Reset all keys highlight
+            document.querySelectorAll('.plush-kb-key, .plush-kb-spacebar').forEach(el => el.classList.remove('highlighted'));
+
+            // Determine current character to highlight based on typing progress index
+            if (typedLen < targetStr.length) {
+                const currentChar = targetStr.charAt(typedLen);
+                if (currentChar === 'a' || currentChar === 'A') {
+                    document.getElementById('kb-key-A').classList.add('highlighted');
+                } else if (currentChar === 'P') {
+                    document.getElementById('kb-key-P').classList.add('highlighted');
+                } else if (currentChar === 'ꟼ') {
+                    document.getElementById('kb-key-Q').classList.add('highlighted');
+                } else if (currentChar === '⦰') {
+                    document.getElementById('kb-key-O').classList.add('highlighted');
+                } else if (currentChar === '{') {
+                    document.getElementById('kb-key-LBRACE').classList.add('highlighted');
+                } else if (currentChar === '}') {
+                    document.getElementById('kb-key-RBRACE').classList.add('highlighted');
+                } else if (currentChar === ' ') {
+                    document.getElementById('kb-key-SPACE').classList.add('highlighted');
+                }
+            }
+        }
+
+        function loadCurrentLessonData() {
+            hintUsageCount = 0;
+            const hintBox = document.getElementById('lesson-hint-box');
+            hintBox.style.display = 'none'; hintBox.innerText = '';
+            const hintBtn = document.getElementById('hint-btn');
+            hintBtn.innerText = '💡 Hint'; hintBtn.disabled = false;
+
+            const popup = document.getElementById('lesson-stats-popup');
+            popup.style.display = 'none';
+
+            const lessons = getCurrentLessonsArray();
+            if(activeLessonIndex >= lessons.length) {
+                if (activeUnit === 1) unit1Finished = true;
+                else if (activeUnit === 2) unit2Finished = true;
+                else if (activeUnit === 3) unit3Finished = true;
+                else if (activeUnit === 4) unit4Finished = true;
+                updateDashboardState();
+
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById('screen-certificate').classList.add('active');
+                document.getElementById('cert-unit-title').innerText = activeUnit === 1 
+                    ? 'Unit 1: The "a" and "[spacebar]" Key (Lexia Core5)' 
+                    : activeUnit === 2 
+                    ? 'UNIT 2: The P and ꟼ Letters (Lexia Core5)'
+                    : activeUnit === 3
+                    ? 'Unit 3: The Oppo (⦰) Key (Lexia Core5)'
+                    : 'Unit 4: The Lulta Keys (Lexia Core5)';
+                return;
+            }
+
+            const item = lessons[activeLessonIndex];
+            const total = lessons.length;
+            document.getElementById('lesson-header-title').innerText = `Unit ${activeUnit} - Lesson ${activeLessonIndex + 1}`;
+            document.getElementById('lesson-progress-count').innerText = `${activeLessonIndex + 1} / ${total}`;
+            document.getElementById('lesson-instruction-text').innerText = item.text;
+            
+            // Update PlushKeyboard Highlights for first character
+            updatePlushKeyboardHighlights(item.target, 0);
+
+            // Update Lexia Star Tracker based on current progress
+            let starsStr = '';
+            let completedCount = activeLessonIndex % 5;
+            for(let i=0; i<5; i++) {
+                starsStr += (i < completedCount || activeLessonIndex >= total) ? '⭐ ' : '☆ ';
+            }
+            document.getElementById('lexia-star-tracker').innerText = starsStr.trim();
+
+            // Hide all sub-containers
+            document.getElementById('standard-typing-container').style.display = 'none';
+            document.getElementById('letter-clicker-container').style.display = 'none';
+            document.getElementById('box-dragger-container').style.display = 'none';
+
+            lessonStartTime = Date.now();
+
+            if (item.type === 'normal') {
+                document.getElementById('standard-typing-container').style.display = 'block';
+                document.getElementById('target-output-display').innerText = item.target === ' ' ? '[ SPACEBAR ]' : item.target;
+                const field = document.getElementById('typing-input-field');
+                field.value = '';
+                field.focus();
+            } 
+            else if (item.type === 'clicker') {
+                document.getElementById('letter-clicker-container').style.display = 'block';
+                document.getElementById('clicker-prompt-text').innerText = item.text;
+                const grid = document.getElementById('clicker-options-grid');
+                grid.innerHTML = '';
+
+                // Shuffle options for engagement
+                let shuffledOpts = [...item.options].sort(() => Math.random() - 0.5);
+                shuffledOpts.forEach(opt => {
+                    const tile = document.createElement('div');
+                    tile.className = 'clicker-tile';
+                    tile.innerText = opt;
+                    tile.onclick = () => handleLetterClickerTileClick(tile, opt, item.target);
+                    grid.appendChild(tile);
+                });
+            }
+            else if (item.type === 'dragger') {
+                document.getElementById('box-dragger-container').style.display = 'block';
+                document.getElementById('dragger-instruction-text').innerText = item.text;
+                document.getElementById('word-search-grid-text').innerText = item.matrix;
+
+                const targetLen = item.target.length;
+                const boxEl = document.getElementById('draggable-target-box');
+                boxEl.style.width = (targetLen * 34 + 20) + 'px';
+                boxEl.style.height = '50px';
+                boxEl.innerText = 'Drag Me';
+
+                draggerBoxPos = { x: 20, y: 35 };
+                boxEl.style.left = draggerBoxPos.x + 'px';
+                boxEl.style.top = draggerBoxPos.y + 'px';
+
+                setupBoxDraggerEvents(boxEl);
+            }
+        }
+
+        // Letter Clicker Logic
+        function handleLetterClickerTileClick(tileElement, selectedVal, targetVal) {
+            if (tileElement.classList.contains('greyed-out')) return;
+
+            if (selectedVal === targetVal) {
+                tileElement.style.backgroundColor = 'var(--success)';
+                tileElement.style.color = '#fff';
+                tileElement.style.borderColor = 'var(--success)';
+                
+                let lessonScore = 30;
+                totalScore += lessonScore;
+                document.getElementById('header-score').innerText = Math.round(totalScore);
+
+                const popup = document.getElementById('lesson-stats-popup');
+                popup.style.display = 'block';
+                popup.innerHTML = `Correct Match! Score Earned: <strong>+${lessonScore} pts</strong>`;
+
+                setTimeout(() => {
+                    activeLessonIndex++;
+                    loadCurrentLessonData();
+                }, 1200);
+            } else {
+                tileElement.classList.add('greyed-out');
+            }
+        }
+
+        // Box Dragger Events
+        function setupBoxDraggerEvents(boxEl) {
+            isDragging = false;
+
+            const onPointerDown = (e) => {
+                isDragging = true;
+                dragStartX = (e.clientX || e.touches[0].clientX) - draggerBoxPos.x;
+                dragStartY = (e.clientY || e.touches[0].clientY) - draggerBoxPos.y;
+                boxEl.setPointerCapture(e.pointerId);
+            };
+
+            const onPointerMove = (e) => {
+                if (!isDragging) return;
+                const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+                
+                draggerBoxPos.x = clientX - dragStartX;
+                draggerBoxPos.y = clientY - dragStartY;
+
+                if (draggerBoxPos.x < 5) draggerBoxPos.x = 5;
+                if (draggerBoxPos.y < 5) draggerBoxPos.y = 5;
+                if (draggerBoxPos.x > 380) draggerBoxPos.x = 380;
+                if (draggerBoxPos.y > 90) draggerBoxPos.y = 90;
+
+                boxEl.style.left = draggerBoxPos.x + 'px';
+                boxEl.style.top = draggerBoxPos.y + 'px';
+            };
+
+            const onPointerUp = (e) => { isDragging = false; };
+
+            boxEl.onpointerdown = onPointerDown;
+            boxEl.onpointermove = onPointerMove;
+            boxEl.onpointerup = onPointerUp;
+        }
+
+        function submitBoxDragger() {
+            const boxEl = document.getElementById('draggable-target-box');
+            let currentX = draggerBoxPos.x;
+            let isCorrectPlacement = (currentX >= 60 && currentX <= 260);
+
+            if (isCorrectPlacement) {
+                boxEl.style.borderColor = 'var(--success)';
+                boxEl.style.background = 'rgba(16, 185, 129, 0.3)';
+                boxEl.style.color = '#fff';
+                boxEl.innerText = 'Correct! ✓';
+
+                let lessonScore = 40;
+                totalScore += lessonScore;
+                document.getElementById('header-score').innerText = Math.round(totalScore);
+
+                const popup = document.getElementById('lesson-stats-popup');
+                popup.style.display = 'block';
+                popup.innerHTML = `Box Placed Correctly! Score Earned: <strong>+${lessonScore} pts</strong>`;
+
+                setTimeout(() => {
+                    activeLessonIndex++;
+                    loadCurrentLessonData();
+                }, 1400);
+            } else {
+                const popup = document.getElementById('lesson-stats-popup');
+                popup.style.display = 'block';
+                popup.style.background = 'rgba(245, 158, 11, 0.15)';
+                popup.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                popup.style.color = '#b45309';
+                popup.innerHTML = `Not quite! Drag the selection box precisely over the target character/word in the matrix and try submitting again.`;
+            }
+        }
+
+        function handleHintClick() {
+            const lessons = getCurrentLessonsArray();
+            const item = lessons[activeLessonIndex];
+            const hintBox = document.getElementById('lesson-hint-box');
+            const hintBtn = document.getElementById('hint-btn');
+
+            if (hintUsageCount === 0) {
+                hintUsageCount = 1;
+                let targetStr = item.target === ' ' ? '[spacebar]' : item.target;
+                hintBox.style.display = 'block';
+                hintBox.innerText = `Hint: The target contains "${targetStr[0]}"`;
+                hintBtn.innerText = '💡 Full Answer Preview (50% Penalty)';
+            } else if (hintUsageCount === 1) {
+                hintUsageCount = 2;
+                let targetStr = item.target === ' ' ? '[spacebar]' : item.target;
+                hintBox.style.display = 'block';
+                hintBox.innerText = `Full Answer Preview: "${targetStr}" (50% score reduction applied)`;
+                hintBtn.innerText = '💡 Auto-Answer for Me (75% Penalty)';
+            } else if (hintUsageCount === 2) {
+                hintUsageCount = 3;
+                let targetStr = item.target === ' ' ? ' ' : item.target;
+                if(item.type === 'normal') {
+                    document.getElementById('typing-input-field').value = targetStr;
+                    evalTypingInput();
+                } else {
+                    alert(`Target Answer is: "${targetStr}". Advancing module!`);
+                    activeLessonIndex++;
+                    loadCurrentLessonData();
+                }
+            }
+        }
+
+        function handleTypingKeyDown(e) {
+            // Instant real-time highlight update on keydown for next character
+            setTimeout(() => {
+                const lessons = getCurrentLessonsArray();
+                const item = lessons[activeLessonIndex];
+                if (item && item.type === 'normal') {
+                    let val = document.getElementById('typing-input-field').value;
+                    if (activeUnit === 2) { val = val.replace(/PQ/g, 'ꟼ'); } 
+                    else if (activeUnit === 3) { val = val.replace(/o-/g, '⦰'); }
+                    updatePlushKeyboardHighlights(item.target, val.length);
+                }
+            }, 10);
+        }
+
+        function evalTypingInput() {
+            const lessons = getCurrentLessonsArray();
+            const item = lessons[activeLessonIndex];
+            let val = document.getElementById('typing-input-field').value;
+
+            let targetToMatch = item.target;
+            if (activeUnit === 2) { val = val.replace(/PQ/g, 'ꟼ'); } 
+            else if (activeUnit === 3) { val = val.replace(/o-/g, '⦰'); }
+
+            updatePlushKeyboardHighlights(item.target, val.length);
+
+            if(val === targetToMatch) {
+                const timeElapsedMinutes = (Date.now() - lessonStartTime) / 60000;
+                const wordCount = (item.target.trim().length || 1) / 5;
+                let wpm = timeElapsedMinutes > 0 ? Math.round(wordCount / timeElapsedMinutes) : 40;
+                if (wpm < 5) wpm = 15;
+
+                let lessonScore = wpm * 2; 
+                if (hintUsageCount === 2) lessonScore *= 0.5;
+                else if (hintUsageCount >= 3) lessonScore *= 0.25;
+
+                totalScore += lessonScore;
+                document.getElementById('header-score').innerText = Math.round(totalScore);
+
+                const popup = document.getElementById('lesson-stats-popup');
+                popup.style.display = 'block';
+                popup.style.background = 'var(--success-light)';
+                popup.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                popup.style.color = '#047857';
+
+                let penaltyText = hintUsageCount === 2 ? ' (50% hint penalty)' : hintUsageCount >= 3 ? ' (75% penalty)' : '';
+                popup.innerHTML = `Great job! Speed: <strong>${wpm} WPM</strong> | Score Earned: <strong>+${Math.round(lessonScore)} pts</strong>${penaltyText}`;
+
+                setTimeout(() => {
+                    activeLessonIndex++;
+                    loadCurrentLessonData();
+                }, 1800);
+            }
+        }
+    </script>
+</body>
+</html>
