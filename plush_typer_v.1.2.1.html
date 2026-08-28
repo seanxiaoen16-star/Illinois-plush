@@ -374,7 +374,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.05rem;
             color: var(--text-main);
             transition: all 0.2s ease;
         }
@@ -424,7 +424,7 @@
         .clicker-tile {
             width: 90px; height: 90px; background: var(--card-bg); border: 3px solid var(--primary);
             border-radius: 20px; display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; font-weight: 800; cursor: pointer; color: var(--text-main);
+            font-size: 1.8rem; font-weight: 800; cursor: pointer; color: var(--text-main);
             box-shadow: 0 8px 20px rgba(0,0,0,0.06); transition: all 0.2s ease;
         }
         .clicker-tile:hover:not(.greyed-out) {
@@ -451,7 +451,7 @@
             overflow: hidden; user-select: none;
         }
         .word-search-grid {
-            font-family: monospace; font-size: 2rem; letter-spacing: 14px; font-weight: bold; color: #f8fafc;
+            font-family: monospace; font-size: 1.8rem; letter-spacing: 10px; font-weight: bold; color: #f8fafc;
         }
         .draggable-box {
             position: absolute; border: 3px dashed var(--warning); background: rgba(245, 158, 11, 0.2);
@@ -512,6 +512,7 @@
         <ul class="sidebar-nav">
             <li class="active" onclick="triggerLoadingAndSwitch('dashboard')">📊 Dashboard</li>
             <li onclick="triggerLoadingAndSwitch('settings')">⚙️ Settings & Shop</li>
+            <li onclick="triggerLoadingAndSwitch('games')">🎮 Games Arcade</li>
         </ul>
     </div>
 
@@ -581,7 +582,7 @@
                     <div>
                         <div id="unit-3-badge" style="margin-bottom: 8px;"></div>
                         <h2>Unit 3: The Oppo (⦰) Key</h2>
-                        <p>Covers Oppo (⦰) mastery, alternative shorthand input "o-", and comprehensive assessments [cite: Results from the user's Gemini Conversations for "What is the PlushTyper code for Unit 3 Oppo?": The code for the PlushTyper typing program, including the unit introducing the Oppo ($\text{\textcurrency}$) key, was last provided in the conversation from August 26, 2026. This version incorporates comprehensive curriculum updates, a shop system, minigames like Word Rain and Time Attack, and an integrated keyboard-themed loading screen. The unit for the Oppo character, which also accepts "o-" as an alternative input, features 20 progressive lessons that build on previous characters. The code is designed as a single-file professional HTML, CSS, and JavaScript application.].</p>
+                        <p>Covers Oppo (⦰) mastery, alternative shorthand input "o-", and comprehensive assessments.</p>
                     </div>
                     <button class="btn" onclick="promptUnit3Intro()">Begin Unit 3</button>
                 </div>
@@ -600,10 +601,20 @@
                 <div class="card unit-card" id="unit-5-element">
                     <div>
                         <div id="unit-5-badge" style="margin-bottom: 8px;"></div>
-                        <h2>Unit 5: Beginner Review 1</h2>
-                        <p>A comprehensive 50-lesson review of units 1 through 4 covering all characters, sequences, clickers, and draggers.</p>
+                        <h2>Unit 5: The Elphen & Helpha Keys</h2>
+                        <p>Master the left "elphen" (⟨) and right "helpha" (⟩) operational keys with advanced sequence drills.</p>
                     </div>
-                    <button class="btn" onclick="triggerLoadingAndStartUnit(5)">Begin Unit 5</button>
+                    <button class="btn" onclick="promptUnit5Intro()">Begin Unit 5</button>
+                </div>
+
+                <!-- Unit 6 Card -->
+                <div class="card unit-card" id="unit-6-element">
+                    <div>
+                        <div id="unit-6-badge" style="margin-bottom: 8px;"></div>
+                        <h2>Unit 6: Beginner Master Review</h2>
+                        <p>A comprehensive master review of units 1 through 5 covering all characters, sequences, clickers, and draggers.</p>
+                    </div>
+                    <button class="btn" onclick="triggerLoadingAndStartUnit(6)">Begin Unit 6</button>
                 </div>
             </div>
 
@@ -711,7 +722,86 @@
                 </div>
             </div>
 
-            <!-- 4. LESSONS & MINI-GAMES SCREEN -->
+            <!-- 4. GAMES ARCADE SCREEN (5-Minute Limited Exploration & 5 Unique Mini-Games) -->
+            <div id="screen-games" class="screen">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h1>🎮 Games Arcade</h1>
+                            <p>Explore 5 unique fun mini-games with a strict 5-minute session timer!</p>
+                        </div>
+                        <div id="arcade-timer-badge" style="background: var(--warning); color: #fff; font-weight: 800; padding: 10px 20px; border-radius: 30px; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            ⏱️ <span id="arcade-time-left">05:00</span>
+                        </div>
+                    </div>
+
+                    <div id="arcade-lobby" style="display: block;">
+                        <div id="arcade-expired-notice" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #b91c1c; padding: 16px; border-radius: 12px; font-weight: 700; margin-bottom: 20px; text-align: center;">
+                            ⌛ Your 5-minute arcade exploration session has expired! Return to Dashboard or restart session.
+                        </div>
+
+                        <div class="shop-grid" style="margin-top: 10px;">
+                            <!-- Game 1 -->
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🎈 Balloon Pop Typer</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Type matching floating letters before they drift away!</p>
+                                </div>
+                                <button class="btn" style="margin-top: 14px;" onclick="startArcadeGame(1)">Play Game 1</button>
+                            </div>
+                            <!-- Game 2 -->
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🦖 Dino Dash Sprint</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Jump over obstacles by rapidly pressing spacebar or letters.</p>
+                                </div>
+                                <button class="btn" style="margin-top: 14px;" onclick="startArcadeGame(2)">Play Game 2</button>
+                            </div>
+                            <!-- Game 3 -->
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🧩 Emoji Match Puzzle</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Match pairs of plushie icons and symbol cards.</p>
+                                </div>
+                                <button class="btn" style="margin-top: 14px;" onclick="startArcadeGame(3)">Play Game 3</button>
+                            </div>
+                            <!-- Game 4 -->
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🎯 Target Reflex Clicker</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Test your click accuracy on rapidly moving plush targets.</p>
+                                </div>
+                                <button class="btn" style="margin-top: 14px;" onclick="startArcadeGame(4)">Play Game 4</button>
+                            </div>
+                            <!-- Game 5 -->
+                            <div class="shop-item-card">
+                                <div>
+                                    <div class="shop-item-title">🪐 Space Word Invaders</div>
+                                    <p style="font-size: 0.85rem; margin-top: 6px;">Defend your base by typing descending alien vocabulary words.</p>
+                                </div>
+                                <button class="btn" style="margin-top: 14px;" onclick="startArcadeGame(5)">Play Game 5</button>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-secondary" style="margin-top: 30px;" onclick="resetArcadeTimer()">🔄 Reset 5-Minute Timer</button>
+                    </div>
+
+                    <!-- Active Mini-Game Play Area -->
+                    <div id="arcade-game-workspace" style="display: none; text-align: center; padding: 20px 0;">
+                        <h2 id="active-game-title" style="color: var(--primary);">Game Title</h2>
+                        <p id="active-game-desc" style="margin-bottom: 20px;">Instructions go here...</p>
+                        
+                        <div id="arcade-game-container" style="background: rgba(0,0,0,0.03); border: 2px solid var(--border); border-radius: 14px; padding: 40px; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;">
+                            <div id="arcade-game-content" style="font-size: 2rem; font-weight: bold;">Interactive Game Content</div>
+                        </div>
+
+                        <button class="btn btn-secondary" style="margin-top: 24px;" onclick="closeArcadeGame()">⬅️ Back to Arcade Lobby</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 5. LESSONS & MINI-GAMES SCREEN -->
             <div id="screen-lesson" class="screen">
                 <div class="card">
                     <!-- Lexia-Style Progress Header -->
@@ -726,7 +816,7 @@
                     <div id="lesson-stats-popup" class="lesson-stats-popup"></div>
                     <div id="lesson-hint-box" class="hint-box"></div>
                     
-                    <!-- PlushKeyboard™ On-Screen Guide Widget (Matches Provided Diagram) -->
+                    <!-- PlushKeyboard™ On-Screen Guide Widget (Expanded with Elphen & Helpha) -->
                     <div id="plush-keyboard-widget" class="plush-keyboard-widget" style="display: none;">
                         <div class="plush-kb-title">PlushKeyboard™ Guide</div>
                         <div class="plush-kb-row">
@@ -734,8 +824,8 @@
                             <div class="plush-kb-key" id="kb-key-P">P</div>
                             <div class="plush-kb-key" id="kb-key-Q">ꟼ</div>
                             <div class="plush-kb-key" id="kb-key-O">⦰</div>
-                            <div class="plush-kb-key" id="kb-key-LBRACE">{</div>
-                            <div class="plush-kb-key" id="kb-key-RBRACE">}</div>
+                            <div class="plush-kb-key" id="kb-key-ELPHEN" title="Elphen Key">⟨</div>
+                            <div class="plush-kb-key" id="kb-key-HELPHA" title="Helpha Key">⟩</div>
                         </div>
                         <div class="plush-kb-spacebar" id="kb-key-SPACE">
                             <span>S</span><span>P</span><span>A</span><span>C</span><span>E</span><span>B</span><span>A</span><span>R</span>
@@ -777,7 +867,7 @@
                 </div>
             </div>
 
-            <!-- 5. CERTIFICATE SCREEN -->
+            <!-- 6. CERTIFICATE SCREEN -->
             <div id="screen-certificate" class="screen">
                 <div class="certificate-frame card">
                     <p style="text-transform: uppercase; letter-spacing: 3px; font-weight: 700; color: var(--primary);">Certificate of Achievement</p>
@@ -806,6 +896,7 @@
         let unit3Finished = false;
         let unit4Finished = false;
         let unit5Finished = false;
+        let unit6Finished = false;
 
         let totalScore = 500;
         let lessonStartTime = 0;
@@ -815,6 +906,11 @@
 
         let unlockedThemes = { purple: false, dark: false };
         let unlockedFonts = { mono: false, serif: false, comic: false };
+
+        // Arcade 5-Minute Timer State
+        let arcadeSecondsLeft = 300;
+        let arcadeTimerInterval = null;
+        let arcadeActiveGameId = null;
 
         // Dragger Box State Variables
         let draggerBoxPos = { x: 20, y: 30 };
@@ -877,49 +973,73 @@
             { type: 'normal', target: '{ P ꟼ ⦰ } ', text: 'Unit 4 Comprehensive Final Master Test!' }
         ];
 
-        // Unit 5: Beginner Review 1 Curriculum (50 Comprehensive Lessons covering Units 1-4)
-        const unit5Lessons = [];
-        const reviewTargets = ['a', 'P', 'ꟼ', '⦰', '{', '}', 'a a', 'P ꟼ', '⦰ {}', 'a P ⦰'];
-        const reviewClickerPools = [
-            { target: 'a', options: ['a', 'P', '⦰'] },
-            { target: 'P', options: ['P', 'ꟼ', '{'] },
-            { target: 'ꟼ', options: ['a', 'ꟼ', '}'] },
-            { target: '⦰', options: ['⦰', 'a', 'P'] },
-            { target: '{', options: ['{', '}', '⦰'] }
+        // Unit 5 Curriculum (Expanded to 20 progressive lessons with Elphen ⟨ and Helpha ⟩ keys)
+        const unit5Lessons = [
+            { type: 'normal', target: '⟨', text: 'Press the left "elphen" (⟨) key. Shorthand "<" is also accepted.' },
+            { type: 'clicker', target: '⟨', options: ['⟨', '⟩', '(', '['], text: 'Lexia Focus: Click the left elphen key (⟨).' },
+            { type: 'normal', target: '⟩', text: 'Press the right "helpha" (⟩) key. Shorthand ">" is also accepted.' },
+            { type: 'clicker', target: '⟩', options: ['⟨', '⟩', ')', ']'], text: 'Lexia Focus: Click the right helpha key (⟩).' },
+            { type: 'dragger', target: '⟨⟩', matrix: 'a ⟨ ⟩ P ⦰', text: 'Box Dragger: Drag the box over matched elphen & helpha ("⟨⟩") and hit Submit.' },
+            { type: 'normal', target: '⟨ ⟩', text: 'Type a combined elphen and helpha bracket pair: ⟨ ⟩' },
+            { type: 'clicker', target: '⟨', options: ['⟨', '⦰', 'a'], text: 'Lexia Focus: Select the elphen symbol (⟨).' },
+            { type: 'dragger', target: '⟨P⟩', matrix: '⦰ ⟨ P ⟩ a', text: 'Box Dragger: Drag the box over "⟨P⟩" and hit Submit.' },
+            { type: 'normal', target: '⟨ P ꟼ ⦰ ⟩', text: 'Advanced integration sequence using elphen and helpha.' },
+            { type: 'normal', target: '⟨ ⟨ ⟩ ⟩', text: 'Double elphen and helpha containment drill.' },
+            { type: 'clicker', target: '⟩', options: ['⟨', '⟩', 'P', 'ꟼ'], text: 'Lexia Focus: Click the helpha key (⟩).' },
+            { type: 'dragger', target: '⟨a⟩', matrix: 'P ⟨ a ⟩ ⦰', text: 'Box Dragger: Locate and drag over "⟨a⟩".' },
+            { type: 'normal', target: 'a ⟨ ⦰ ⟩ P', text: 'Mixed character sequence incorporating Oppo (⦰).' },
+            { type: 'clicker', target: '⟨', options: ['⟨', '}', '{', '⟩'], text: 'Lexia Focus: Differentiate elphen from Lulta keys.' },
+            { type: 'dragger', target: '⟨Pꟼ⟩', matrix: 'a ⟨ P ꟼ ⟩ ⦰', text: 'Box Dragger: Locate and drag over "⟨Pꟼ⟩".' },
+            { type: 'normal', target: '⟨ ⟩ ⟨ ⟩', text: 'Repeated bracket alternation sequence.' },
+            { type: 'clicker', target: '⟩', options: ['⟨', '⟩', 'a', '⦰'], text: 'Lexia Focus: Target right helpha symbol.' },
+            { type: 'normal', target: 'P ⟨ ⦰ ⟩ ꟼ', text: 'Advanced multi-key proficiency drill.' },
+            { type: 'dragger', target: '⟨aP⦰⟩', matrix: '⟨ a P ⦰ ⟩', text: 'Box Dragger: Full block matrix selection test.' },
+            { type: 'normal', target: '⟨ ⟨ P ꟼ ⦰ ⟩ ⟩ ', text: 'Unit 5 Comprehensive Final Master Test!' }
         ];
-        const reviewMatrices = ['a P ꟼ ⦰ {', '{ P ⦰ } a', 'x a P ꟼ m', 'p a ⦰ q m', 'a { } P ⦰'];
+
+        // Unit 6: Beginner Master Review Curriculum (50 Comprehensive Lessons covering Units 1-5)
+        const unit6Lessons = [];
+        const reviewTargets = ['a', 'P', 'ꟼ', '⦰', '⟨', '⟩', 'a a', 'P ꟼ', '⟨⟩', 'a P ⟨ ⟩'];
+        const reviewClickerPools = [
+            { target: 'a', options: ['a', '⟨', '⦰'] },
+            { target: 'P', options: ['P', 'ꟼ', '⟩'] },
+            { target: '⟨', options: ['⟨', '⟩', '⦰'] },
+            { target: '⟩', options: ['⟩', '⟨', 'a'] },
+            { target: '⦰', options: ['⦰', '⟨', 'P'] }
+        ];
+        const reviewMatrices = ['a P ꟼ ⦰ ⟨ ⟩', '⟨ P ⦰ ⟩ a', 'x a P ꟼ m', 'p a ⦰ q m', 'a ⟨ ⟩ P ⦰'];
 
         for (let i = 1; i <= 50; i++) {
             let typeMod = i % 5;
             if (typeMod === 1 || typeMod === 3) {
                 let targetStr = reviewTargets[(i * 3) % reviewTargets.length];
-                unit5Lessons.push({
+                unit6Lessons.push({
                     type: 'normal',
                     target: targetStr,
-                    text: `Unit 5: Beginner Review 1 [Lesson ${i}/50]: Practice typing sequence "${targetStr}".`
+                    text: `Unit 6: Beginner Master Review [Lesson ${i}/50]: Practice typing sequence "${targetStr}".`
                 });
             } else if (typeMod === 2) {
                 let pool = reviewClickerPools[i % reviewClickerPools.length];
-                unit5Lessons.push({
+                unit6Lessons.push({
                     type: 'clicker',
                     target: pool.target,
                     options: pool.options,
-                    text: `Unit 5: Beginner Review 1 [Lesson ${i}/50]: Lexia Clicker - Find character "${pool.target}".`
+                    text: `Unit 6: Beginner Master Review [Lesson ${i}/50]: Lexia Clicker - Find character "${pool.target}".`
                 });
             } else if (typeMod === 4) {
                 let matrixStr = reviewMatrices[i % reviewMatrices.length];
                 let targetStr = reviewTargets[i % reviewTargets.length];
-                unit5Lessons.push({
+                unit6Lessons.push({
                     type: 'dragger',
                     target: targetStr,
                     matrix: matrixStr,
-                    text: `Unit 5: Beginner Review 1 [Lesson ${i}/50]: Box Dragger - Drag box over target and Submit.`
+                    text: `Unit 6: Beginner Master Review [Lesson ${i}/50]: Box Dragger - Drag box over target and Submit.`
                 });
             } else {
-                unit5Lessons.push({
+                unit6Lessons.push({
                     type: 'normal',
-                    target: 'a P ꟼ ⦰ {}',
-                    text: `Unit 5: Beginner Review 1 [Lesson ${i}/50]: Master integration drill of all characters.`
+                    target: 'a P ꟼ ⦰ ⟨ ⟩',
+                    text: `Unit 6: Beginner Master Review [Lesson ${i}/50]: Master integration drill of all characters.`
                 });
             }
         }
@@ -929,7 +1049,8 @@
             if (activeUnit === 2) return unit2Lessons;
             if (activeUnit === 3) return unit3Lessons;
             if (activeUnit === 4) return unit4Lessons;
-            return unit5Lessons;
+            if (activeUnit === 5) return unit5Lessons;
+            return unit6Lessons;
         }
 
         function changeTheme(themeName) { document.body.setAttribute('data-theme', themeName); }
@@ -958,6 +1079,80 @@
                 document.getElementById('tab-btn-shop').classList.add('active');
                 document.getElementById('panel-shop').classList.add('active');
             }
+        }
+
+        // Arcade Timer & Minigame Functions
+        function initArcadeTimer() {
+            if (arcadeTimerInterval) clearInterval(arcadeTimerInterval);
+            arcadeSecondsLeft = 300;
+            updateArcadeTimerDisplay();
+            arcadeTimerInterval = setInterval(() => {
+                arcadeSecondsLeft--;
+                if (arcadeSecondsLeft <= 0) {
+                    arcadeSecondsLeft = 0;
+                    clearInterval(arcadeTimerInterval);
+                    document.getElementById('arcade-expired-notice').style.display = 'block';
+                }
+                updateArcadeTimerDisplay();
+            }, 1000);
+        }
+
+        function updateArcadeTimerDisplay() {
+            const mins = Math.floor(arcadeSecondsLeft / 60);
+            const secs = arcadeSecondsLeft % 60;
+            document.getElementById('arcade-time-left').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function resetArcadeTimer() {
+            document.getElementById('arcade-expired-notice').style.display = 'none';
+            initArcadeTimer();
+            alert("Arcade 5-minute exploration timer has been reset!");
+        }
+
+        function startArcadeGame(gameId) {
+            if (arcadeSecondsLeft <= 0) {
+                alert("Your 5-minute arcade time has expired! Reset the timer in the lobby to continue playing.");
+                return;
+            }
+            arcadeActiveGameId = gameId;
+            document.getElementById('arcade-lobby').style.display = 'none';
+            document.getElementById('arcade-game-workspace').style.display = 'block';
+
+            const titles = {
+                1: "🎈 Balloon Pop Typer",
+                2: "🦖 Dino Dash Sprint",
+                3: "🧩 Emoji Match Puzzle",
+                4: "🎯 Target Reflex Clicker",
+                5: "🪐 Space Word Invaders"
+            };
+            const descs = {
+                1: "Type the target floating balloon letters before they drift off screen!",
+                2: "Press spacebar rapidly to jump over obstacles and set a high score!",
+                3: "Click matching plush and symbol tiles to clear the board.",
+                4: "Click the flashing plush targets as fast as you can!",
+                5: "Type incoming alien words to blast them out of orbit!"
+            };
+
+            document.getElementById('active-game-title').innerText = titles[gameId];
+            document.getElementById('active-game-desc').innerText = descs[gameId];
+
+            const contentEl = document.getElementById('arcade-game-content');
+            if (gameId === 1) {
+                contentEl.innerHTML = `<div style="font-size: 3rem; animation: bounce 1s infinite;">🎈 [ a ] 🎈</div><p style="font-size: 1rem; color: var(--text-muted);">Press 'a' to pop the balloon!</p>`;
+            } else if (gameId === 2) {
+                contentEl.innerHTML = `<div style="font-size: 2.5rem;">🦖 🌵 🌵</div><p style="font-size: 1rem; color: var(--text-muted);">Press [SPACEBAR] to jump over obstacles!</p>`;
+            } else if (gameId === 3) {
+                contentEl.innerHTML = `<div style="font-size: 2rem; display: flex; gap: 14px;"><span style="background:var(--border); padding:10px 20px; border-radius:8px;">🧸</span><span style="background:var(--border); padding:10px 20px; border-radius:8px;">⭐</span><span style="background:var(--border); padding:10px 20px; border-radius:8px;">🧸</span></div><p style="font-size: 1rem; color: var(--text-muted);">Click matching pairs!</p>`;
+            } else if (gameId === 4) {
+                contentEl.innerHTML = `<div style="background: var(--primary); color: white; padding: 16px 32px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 6px 20px rgba(0,0,0,0.15);" onclick="alert('Target clicked! +10 pts')">🎯 CLICK ME!</div>`;
+            } else if (gameId === 5) {
+                contentEl.innerHTML = `<div style="font-family: monospace; font-size: 1.8rem; color: #38bdf8;">👾 [ ⟨elphen⟩ ] 👾</div><p style="font-size: 1rem; color: var(--text-muted);">Type word to destroy invader!</p>`;
+            }
+        }
+
+        function closeArcadeGame() {
+            document.getElementById('arcade-game-workspace').style.display = 'none';
+            document.getElementById('arcade-lobby').style.display = 'block';
         }
 
         function buyShopItem(themeKey, price) {
@@ -1036,11 +1231,40 @@
         }
 
         function triggerLoadingAndSwitch(screenName) {
-            showLoadingScreen("Preparing Module...", () => { switchNav(screenName); });
+            showLoadingScreen("Preparing Module...", () => { 
+                switchNav(screenName); 
+                if(screenName === 'games') {
+                    initArcadeTimer();
+                }
+            });
         }
 
         function triggerLoadingAndStartUnit(unitNum) {
             showLoadingScreen(`Loading Unit ${unitNum} Curriculum...`, () => { startUnitSession(unitNum); });
+        }
+
+        // Updated startup sequence with class code prompt as requested
+        function initializePlushTyperStartup() {
+            let playerName = prompt("Welcome to PlushTyper! Please enter your name:");
+            if (!playerName || playerName.trim() === "") {
+                playerName = "PlushieGuest";
+            }
+            alert(`Hello, ${playerName}!`);
+
+            let classCode = prompt("Please type your class code (if you do not have a code, use 'plushie17'):");
+            if (!classCode || classCode.trim() === "") {
+                classCode = "plushie17";
+            }
+
+            if (classCode.trim() === "plushie17") {
+                alert("Default code 'plushie17' accepted. Loading game session...");
+            } else {
+                alert(`Class code '${classCode}' accepted. Loading game session...`);
+            }
+
+            currentStudent = playerName;
+            document.getElementById('input-username').value = currentStudent;
+            handleSignUp();
         }
 
         function handleSignUp() {
@@ -1060,6 +1284,10 @@
             });
         }
 
+        window.addEventListener("DOMContentLoaded", () => {
+            initializePlushTyperStartup();
+        });
+
         function switchNav(screenName) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.sidebar-nav li').forEach(li => li.classList.remove('active'));
@@ -1072,6 +1300,9 @@
                 document.querySelector('.sidebar-nav li:nth-child(2)').classList.add('active');
                 document.getElementById('header-score').innerText = Math.round(totalScore);
                 document.getElementById('shop-score-badge').innerText = Math.round(totalScore);
+            } else if(screenName === 'games') {
+                document.getElementById('screen-games').classList.add('active');
+                document.querySelector('.sidebar-nav li:nth-child(3)').classList.add('active');
             }
         }
 
@@ -1111,6 +1342,13 @@
                 unit5Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
             } else { unit5Badge.innerHTML = ''; }
 
+            const unit6Card = document.getElementById('unit-6-element');
+            const unit6Badge = document.getElementById('unit-6-badge');
+            if(unit6Finished) {
+                unit6Card.classList.add('completed');
+                unit6Badge.innerHTML = '<span class="badge-completed">COMPLETED</span>';
+            } else { unit6Badge.innerHTML = ''; }
+
             document.getElementById('header-score').innerText = Math.round(totalScore);
         }
 
@@ -1122,6 +1360,11 @@
         function promptUnit3Intro() {
             alert("Note: When typing the Oppo key (⦰), typing shorthand 'o-' also counts as correct!");
             triggerLoadingAndStartUnit(3);
+        }
+
+        function promptUnit5Intro() {
+            alert("Note: When typing the elphen (⟨) or helpha (⟩) keys, shorthand '<' and '>' also count as correct!");
+            triggerLoadingAndStartUnit(5);
         }
 
         function startUnitSession(unitNum) {
@@ -1152,10 +1395,10 @@
                     document.getElementById('kb-key-Q').classList.add('highlighted');
                 } else if (currentChar === '⦰') {
                     document.getElementById('kb-key-O').classList.add('highlighted');
-                } else if (currentChar === '{') {
-                    document.getElementById('kb-key-LBRACE').classList.add('highlighted');
-                } else if (currentChar === '}') {
-                    document.getElementById('kb-key-RBRACE').classList.add('highlighted');
+                } else if (currentChar === '⟨' || currentChar === '<') {
+                    document.getElementById('kb-key-ELPHEN').classList.add('highlighted');
+                } else if (currentChar === '⟩' || currentChar === '>') {
+                    document.getElementById('kb-key-HELPHA').classList.add('highlighted');
                 } else if (currentChar === ' ') {
                     document.getElementById('kb-key-SPACE').classList.add('highlighted');
                 }
@@ -1179,6 +1422,7 @@
                 else if (activeUnit === 3) unit3Finished = true;
                 else if (activeUnit === 4) unit4Finished = true;
                 else if (activeUnit === 5) unit5Finished = true;
+                else if (activeUnit === 6) unit6Finished = true;
                 updateDashboardState();
 
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1191,13 +1435,15 @@
                     ? 'Unit 3: The Oppo (⦰) Key (Lexia Core5)'
                     : activeUnit === 4
                     ? 'Unit 4: The Lulta Keys (Lexia Core5)'
-                    : 'Unit 5: Beginner Review 1 (Lexia Core5 50-Lesson Master Suite)';
+                    : activeUnit === 5
+                    ? 'Unit 5: The Elphen & Helpha Keys (Lexia Core5)'
+                    : 'Unit 6: Beginner Master Review (Lexia Core5 50-Lesson Master Suite)';
                 return;
             }
 
             const item = lessons[activeLessonIndex];
             const total = lessons.length;
-            document.getElementById('lesson-header-title').innerText = activeUnit === 5 ? `Unit 5: Beginner Review 1 - Lesson ${activeLessonIndex + 1}` : `Unit ${activeUnit} - Lesson ${activeLessonIndex + 1}`;
+            document.getElementById('lesson-header-title').innerText = activeUnit === 6 ? `Unit 6: Beginner Master Review - Lesson ${activeLessonIndex + 1}` : `Unit ${activeUnit} - Lesson ${activeLessonIndex + 1}`;
             document.getElementById('lesson-progress-count').innerText = `${activeLessonIndex + 1} / ${total}`;
             document.getElementById('lesson-instruction-text').innerText = item.text;
             
@@ -1401,8 +1647,12 @@
                 const item = lessons[activeLessonIndex];
                 if (item && item.type === 'normal') {
                     let val = document.getElementById('typing-input-field').value;
-                    if (activeUnit === 2 || activeUnit === 5) { val = val.replace(/PQ/g, 'ꟼ'); } 
-                    if (activeUnit === 3 || activeUnit === 5) { val = val.replace(/o-/g, '⦰'); }
+                    if (activeUnit === 2 || activeUnit === 6) { val = val.replace(/PQ/g, 'ꟼ'); } 
+                    if (activeUnit === 3 || activeUnit === 6) { val = val.replace(/o-/g, '⦰'); }
+                    if (activeUnit === 5 || activeUnit === 6) { 
+                        val = val.replace(/</g, '⟨'); 
+                        val = val.replace(/>/g, '⟩'); 
+                    }
                     updatePlushKeyboardHighlights(item.target, val.length);
                 }
             }, 10);
@@ -1414,8 +1664,12 @@
             let val = document.getElementById('typing-input-field').value;
 
             let targetToMatch = item.target;
-            if (activeUnit === 2 || activeUnit === 5) { val = val.replace(/PQ/g, 'ꟼ'); } 
-            if (activeUnit === 3 || activeUnit === 5) { val = val.replace(/o-/g, '⦰'); }
+            if (activeUnit === 2 || activeUnit === 6) { val = val.replace(/PQ/g, 'ꟼ'); } 
+            if (activeUnit === 3 || activeUnit === 6) { val = val.replace(/o-/g, '⦰'); }
+            if (activeUnit === 5 || activeUnit === 6) { 
+                val = val.replace(/</g, '⟨'); 
+                val = val.replace(/>/g, '⟩'); 
+            }
 
             updatePlushKeyboardHighlights(item.target, val.length);
 
