@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IXL | Math, Language Arts, Science, and Social Studies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ixl-brand-dark: #022b42;
+            --ixl-brand-blue: #0056b3;
+            --ixl-brand-hover: #004494;
+            --ixl-light-blue: #e3f2fd;
+            --ixl-accent-orange: #ff7f00;
+            --ixl-accent-green: #2e7d32;
+            --ixl-bg-gray: #f4f7f9;
+            --ixl-card-border: #bce0fd;
+            --ixl-text-main: #222222;
+            --ixl-text-muted: #555555;
+            --shadow-ixl: 0 4px 12px rgba(0, 86, 179, 0.12);
+        }
+
+        body {
+            font-family: 'Open Sans', 'Nunito', Arial, sans-serif;
+            background-color: var(--ixl-bg-gray);
+            color: var(--ixl-text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Authentic IXL Global Header */
+        header {
+            background: linear-gradient(180deg, #023658 0%, #022b42 100%);
+            color: white;
+            padding: 0.6rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--ixl-accent-orange);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .header-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ixl-logo-badge {
+            background-color: var(--ixl-accent-orange);
+            color: white;
+            font-weight: 800;
+            font-size: 1.6rem;
+            padding: 4px 12px;
+            border-radius: 6px;
+            letter-spacing: -1px;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #b0c4de;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-nav-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .user-pill {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.4rem 0.9rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #dbeafe;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem 1rem;
+        }
+
+        /* IXL Diagnostic & Card Container */
+        .ixl-card {
+            width: 100%;
+            max-width: 760px;
+            background: #ffffff;
+            border: 1px solid #cce4fc;
+            border-radius: 12px;
+            box-shadow: var(--shadow-ixl);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            padding: 3rem;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-title {
+            color: var(--ixl-brand-dark);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .code-subtitle {
+            color: var(--ixl-text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"], input[type="number"], select {
+            flex: 1;
+            padding: 0.85rem 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid #bce0fd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s;
+            color: var(--ixl-text-main);
+            background: #fafcfe;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--ixl-brand-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.15);
+        }
+
+        .ixl-btn {
+            background-color: var(--ixl-brand-blue);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 3px 6px rgba(0, 86, 179, 0.2);
+        }
+
+        .ixl-btn:hover {
+            background-color: var(--ixl-brand-hover);
+            transform: translateY(-1px);
+        }
+
+        .ixl-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Authentic IXL Question Analytics Tracker Bar */
+        .ixl-stats-bar {
+            background-color: #f0f7ff;
+            border-bottom: 2px solid #cce4fc;
+            padding: 0.9rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #023658;
+        }
+
+        .stat-pill-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            color: var(--ixl-brand-blue);
+        }
+
+        .lesson-content-area {
+            padding: 2.5rem;
+        }
+
+        .question-box {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin: 1.5rem 0 2rem 0;
+            color: #111827;
+        }
+
+        .answer-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 450px;
+        }
+
+        /* Number Bond Styles */
+        .number-bond-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .bond-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .bond-top-circle {
+            width: 80px;
+            height: 80px;
+            background: #e3f2fd;
+            border: 4px solid var(--ixl-brand-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--ixl-brand-blue);
+            box-shadow: 0 4px 8px rgba(0,86,179,0.15);
+        }
+
+        .bond-branches {
+            font-size: 1.8rem;
+            color: #64748b;
+            font-weight: 800;
+            letter-spacing: 24px;
+        }
+
+        .bond-bottom-row {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .bond-circle {
+            width: 70px;
+            height: 70px;
+            background: #f8fafc;
+            border: 3px solid #94a3b8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 1.5rem;
+        }
+
+        .choice-box {
+            background-color: #ffffff;
+            border: 3px solid #bce0fd;
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--ixl-text-main);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        }
+
+        .choice-box:hover {
+            background-color: #f0f7ff;
+            border-color: var(--ixl-brand-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,86,179,0.12);
+        }
+
+        /* Place Value Drag-and-Drop Styles */
+        .drag-drop-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin: 1.5rem 0;
+            align-items: center;
+        }
+
+        .place-value-board {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+        }
+
+        .place-column {
+            background: #f8fafc;
+            border: 3px solid #cbd5e1;
+            border-radius: 12px;
+            width: 140px;
+            padding: 1.2rem 0.5rem;
+            text-align: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .place-header {
+            font-weight: 800;
+            color: var(--ixl-brand-blue);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drop-zone {
+            width: 110px;
+            height: 60px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 3px dashed #94a3b8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #475569;
+            transition: background 0.2s;
+        }
+
+        .drag-items-pool {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            min-height: 70px;
+            padding: 0.8rem;
+            background: #e2e8f0;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .draggable-item {
+            background: #ffffff;
+            border: 3px solid var(--ixl-brand-blue);
+            color: var(--ixl-brand-blue);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            transition: transform 0.15s;
+        }
+
+        .draggable-item:hover { transform: scale(1.05); }
+        .draggable-item:active { cursor: grabbing; }
+
+        /* A7D Decimals Chart Styles */
+        .decimal-chart-table {
+            display: flex;
+            border: 3px solid var(--ixl-brand-blue);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            margin: 1.5rem auto;
+            max-width: 540px;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.1);
+        }
+
+        .decimal-col {
+            flex: 1;
+            border-right: 2px solid #cbd5e1;
+            text-align: center;
+        }
+        .decimal-col:last-child { border-right: none; }
+
+        .decimal-header-cell {
+            background: #e3f2fd;
+            color: var(--ixl-brand-blue);
+            font-weight: 800;
+            font-size: 0.95rem;
+            padding: 0.9rem 0.25rem;
+            border-bottom: 3px solid var(--ixl-brand-blue);
+            text-transform: uppercase;
+        }
+
+        .decimal-value-cell {
+            font-size: 2.2rem;
+            font-weight: 800;
+            padding: 1.5rem 0;
+            color: #0f172a;
+        }
+
+        .decimal-drop-box {
+            width: 160px;
+            height: 70px;
+            margin: 1.2rem auto;
+            background: #ffffff;
+            border: 3px dashed var(--ixl-brand-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .decimal-pool {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            min-height: 70px;
+        }
+
+        /* Color Block Styles */
+        .blocks-visual-container {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin: 1rem 0 1.5rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .block-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .block-icon { font-size: 1.6rem; }
+        .block-count-label {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #334155;
+            margin-left: 4px;
+        }
+
+        /* Half of Numbers Styles */
+        .half-lesson-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.8rem;
+            margin: 1rem 0;
+        }
+
+        .big-number-display {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--ixl-brand-blue);
+            background: #e3f2fd;
+            border: 4px solid var(--ixl-brand-blue);
+            border-radius: 16px;
+            padding: 0.6rem 2.5rem;
+            min-width: 140px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0,86,179,0.15);
+        }
+
+        .split-container {
+            display: flex;
+            justify-content: center;
+            gap: 3.5rem;
+            opacity: 0;
+            transform: translateY(-15px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .split-container.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .half-bubble {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #047857;
+            background: #ecfdf5;
+            border: 3px solid #10b981;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* ANC8 Alligator & Apple Counting Styles */
+        .alligator-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .comparison-board {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            background: #f8fafc;
+            border: 3px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .comp-card {
+            background: #ffffff;
+            border: 3px solid var(--ixl-brand-blue);
+            border-radius: 12px;
+            width: 150px;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0,86,179,0.1);
+        }
+
+        .comp-number-label {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--ixl-brand-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .apple-drop-target {
+            flex: 1;
+            width: 100%;
+            min-height: 80px;
+            background: #f1f5f9;
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 6px;
+            align-content: flex-start;
+            justify-content: center;
+        }
+
+        .alligator-graphic {
+            font-size: 4rem;
+            animation: bounceAlligator 1.5s infinite ease-in-out;
+            user-select: none;
+        }
+
+        @keyframes bounceAlligator {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .basket-container {
+            background: #fffbeb;
+            border: 3px solid #f59e0b;
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);
+        }
+
+        .apple-source-pool {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            min-height: 50px;
+            margin-top: 0.6rem;
+            padding: 6px;
+            background: #fef3c7;
+            border-radius: 8px;
+        }
+
+        .draggable-apple {
+            font-size: 2rem;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+
+        .draggable-apple:hover { transform: scale(1.15); }
+        .draggable-apple:active { cursor: grabbing; }
+
+        /* 9AB Five-Frame Styles */
+        .five-frame-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .five-frame-board {
+            display: flex;
+            gap: 10px;
+            background: #e2e8f0;
+            border: 3px solid #94a3b8;
+            border-radius: 12px;
+            padding: 15px;
+            justify-content: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .five-frame-square {
+            width: 65px;
+            height: 65px;
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .five-frame-square:hover { background: #f8fafc; }
+
+        .dot-item {
+            width: 45px;
+            height: 45px;
+            background: var(--ixl-brand-blue);
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .dot-source-pool {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            min-height: 70px;
+            background: #f0f7ff;
+            border: 2px solid #bce0fd;
+            border-radius: 12px;
+            padding: 10px 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .draggable-dot {
+            width: 45px;
+            height: 45px;
+            background: var(--ixl-brand-blue);
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 3px 6px rgba(0,86,179,0.25);
+            transition: transform 0.1s;
+        }
+
+        .draggable-dot:hover { transform: scale(1.1); }
+        .draggable-dot:active { cursor: grabbing; }
+
+        /* Assessment 1 Styles */
+        .assessment-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .assessment-question-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .assessment-q-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--ixl-brand-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .assessment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .assessment-option-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .assessment-option-label:hover {
+            background: #edf2f7;
+        }
+
+        /* 5x5 Grid Styles */
+        .grid-5x5 {
+            display: grid;
+            grid-template-columns: repeat(5, 56px);
+            grid-template-rows: repeat(5, 56px);
+            gap: 6px;
+            background: #94a3b8;
+            padding: 6px;
+            border-radius: 10px;
+            margin: 1.2rem auto;
+            width: max-content;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .grid-cell {
+            background: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .grid-cell:hover { background: #f1f5f9; transform: scale(1.03); }
+        .grid-cell.dot { background: var(--ixl-brand-blue); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+
+        .feedback {
+            margin-top: 1.5rem;
+            font-weight: 800;
+            font-size: 1.15rem;
+            min-height: 1.8rem;
+        }
+
+        .feedback.success { color: var(--ixl-accent-green); }
+        .feedback.error { color: #dc2626; }
+        .feedback.warning { color: #d97706; }
+
+        .code-hint {
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 1.2rem;
+            border-radius: 10px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .code-hint code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            color: var(--ixl-brand-dark);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 43, 66, 0.6);
+            backdrop-filter: blur(2px);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 85%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            border: 2px solid #cce4fc;
+        }
+
+        .modal-card h3 {
+            margin-top: 0;
+            color: #d97706;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.8rem;
+            justify-content: center;
+        }
+
+        .btn-retry { background-color: #64748b; }
+        .btn-submit-blank { background-color: #dc2626; }
+
+        /* --- Updated Award Board Grid Styling (Interactive Arcade Theme) --- */
+        .award-grid-container {
+            background: linear-gradient(135deg, #0f172a 1e45af, #1e293b 100%);
+            border: 4px solid #38bdf8;
+            border-radius: 20px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            max-width: 620px;
+            margin: 1.5rem auto;
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25), inset 0 2px 6px rgba(255, 255, 255, 0.1);
+        }
+
+        .award-tile {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 3px solid #475569;
+            border-radius: 14px;
+            padding: 14px 10px;
+            min-height: 95px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .award-tile.unlocked {
+            background: linear-gradient(145deg, #fef9c3, #fde047);
+            border: 3px solid #eab308;
+            box-shadow: 0 6px 16px rgba(234, 179, 8, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            animation: pulseUnlock 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseUnlock {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .award-tile:hover {
+            transform: translateY(-4px) scale(1.04);
+            border-color: #38bdf8;
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+            z-index: 2;
+        }
+
+        .award-tile.unlocked:hover {
+            border-color: #ca8a04;
+            box-shadow: 0 10px 24px rgba(234, 179, 8, 0.6);
+        }
+
+        .award-icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+
+        .award-code-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .award-tile.unlocked .award-code-label {
+            color: #713f12;
+        }
+
+        .award-info-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 1.2rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            min-height: 65px;
+            font-size: 1.05rem;
+            color: #334155;
+            font-weight: 600;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .completion-container {
+            text-align: center;
+            padding: 3.5rem 2rem;
+        }
+
+        .completion-container h1 {
+            color: var(--ixl-accent-green);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-top: 0;
+        }
+
+        /* Printable & Editable Worksheet Customizer Styles */
+        .editor-container {
+            text-align: left;
+        }
+        .editor-panel {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .editor-panel h3 {
+            margin-top: 0;
+            color: var(--ixl-brand-dark);
+            font-size: 1.2rem;
+        }
+        .editor-field {
+            margin-bottom: 1rem;
+        }
+        .editor-field label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 0.4rem;
+        }
+        .editor-field input {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            font-size: 1rem;
+        }
+
+        @media print {
+            header, .header-controls, .code-hint, .ixl-btn, .editor-panel {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+            .ixl-card {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+            }
+            .screen {
+                display: block !important;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo-area">
+            <div class="ixl-logo-badge">IXL</div>
+            <div class="header-subtitle">Learning & Skill Code Hub</div>
+        </div>
+        <div class="header-controls">
+            <button class="header-nav-btn" onclick="openEditorModal()">✏️ Edit & Print</button>
+            <button class="header-nav-btn" onclick="openAwardBoard()">🏆 Award Board</button>
+            <div class="user-pill" id="header-user-status">Skill Practice Hub</div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="ixl-card">
+            
+            <div id="code-screen" class="screen active">
+                <h1 class="code-title">Explore by lesson code</h1>
+                <p class="code-subtitle">Type your IXL skill code below to start practicing with interactive guided feedback or customize & print worksheets.</p>
+                
+                <div class="input-group">
+                    <input type="text" id="lesson-code" placeholder="Enter code (e.g., B21N, 9AB, ANC8...)" autocomplete="off">
+                    <button class="ixl-btn" onclick="startLesson()">Submit</button>
+                </div>
+                <div id="code-error" class="feedback"></div>
+                
+                <div class="code-hint">
+                    📌 <strong>Recommended lesson codes to try:</strong><br>
+                    • Type <code>B21N</code> for Nouns Picture Identification<br>
+                    • Type <code>9AB</code> for Numbers up to 5 & Five-Frame Dot Challenge<br>
+                    • Type <code>ANC8</code> for Alligator Apple Counting & Comparing<br>
+                    • Type <code>A1D</code> for Basic Addition<br>
+                    • Type <code>ASSESS1</code> for Comprehensive Diagnostic Assessment 1 (Updated 10-Question Edition)<br>
+                    • Type <code>A6V</code> for Subtraction & 5x5 Grid Sign Challenge<br>
+                    • Type <code>A7D</code> for Decimals Chart Analysis & Drag Challenge<br>
+                    • Type <code>AN12</code> for Number Bonds<br>
+                    • Type <code>1A3</code> for Place Value Drag-and-Drop<br>
+                    • Type <code>APC4</code> for Color Block Identification<br>
+                    • Type <code>A:5</code> for Half of Numbers (Animate Me)
+                </div>
+            </div>
+
+            <div id="lesson-screen-b21n" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-b21n">B.21N Identify Nouns</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-b21n">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 1rem;">Look at the picture below and select the correct noun from the dropdown menu</div>
+
+                    <div style="margin: 1.5rem 0;">
+                        <div id="b21n-image-container" style="font-size: 6rem; background: #f8fafc; border: 3px solid #bce0fd; border-radius: 16px; padding: 2rem; display: inline-block; box-shadow: 0 4px 12px rgba(0,86,179,0.1);">🍎</div>
+                    </div>
+
+                    <div style="margin: 1.5rem auto; max-width: 400px;">
+                        <select id="b21n-dropdown">
+                            <option value="">Choose a noun...</option>
+                        </select>
+                    </div>
+
+                    <button class="ixl-btn" style="margin-top: 1rem;" onclick="submitB21NAnswer()">Submit</button>
+                    <div id="lesson-feedback-b21n" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-9ab" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-9ab">9.AB Numbers up to 5</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-9ab">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div class="question-box" id="9ab-instruction-text" style="font-size: 1.8rem; margin-bottom: 1.5rem;">Place 3 dots in the 5-frame</div>
+
+                    <div class="five-frame-stage">
+                        <div class="five-frame-board" id="five-frame-container">
+                            <div class="five-frame-square" ondragover="allowDrop(event)" ondrop="dropDotToFrame(event, 0)" id="ff-sq-0"></div>
+                            <div class="five-frame-square" ondragover="allowDrop(event)" ondrop="dropDotToFrame(event, 1)" id="ff-sq-1"></div>
+                            <div class="five-frame-square" ondragover="allowDrop(event)" ondrop="dropDotToFrame(event, 2)" id="ff-sq-2"></div>
+                            <div class="five-frame-square" ondragover="allowDrop(event)" ondrop="dropDotToFrame(event, 3)" id="ff-sq-3"></div>
+                            <div class="five-frame-square" ondragover="allowDrop(event)" ondrop="dropDotToFrame(event, 4)" id="ff-sq-4"></div>
+                        </div>
+
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Available Dots:</div>
+                        <div class="dot-source-pool" id="dot-source-pool" ondragover="allowDrop(event)" ondrop="dropDotToPool(event)">
+                            <div class="draggable-dot" draggable="true" id="dot-0" ondragstart="dragDot(event)"></div>
+                            <div class="draggable-dot" draggable="true" id="dot-1" ondragstart="dragDot(event)"></div>
+                            <div class="draggable-dot" draggable="true" id="dot-2" ondragstart="dragDot(event)"></div>
+                            <div class="draggable-dot" draggable="true" id="dot-3" ondragstart="dragDot(event)"></div>
+                            <div class="draggable-dot" draggable="true" id="dot-4" ondragstart="dragDot(event)"></div>
+                        </div>
+                    </div>
+
+                    <button class="ixl-btn" style="margin-top: 1.5rem;" onclick="submit9ABAnswer()">Submit</button>
+                    <div id="lesson-feedback-9ab" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-anc8" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-anc8">ANC.8 Comparing Numbers</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-anc8">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem;">Drag apples from the basket to match each number!</div>
+
+                    <div class="alligator-stage">
+                        <div class="comparison-board">
+                            <div class="comp-card">
+                                <div class="comp-number-label" id="anc8-left-num">3</div>
+                                <div class="apple-drop-target" id="drop-left-apples" ondragover="allowDrop(event)" ondrop="dropApple(event, 'left')"></div>
+                            </div>
+
+                            <div class="alligator-graphic" id="alligator-symbol">🐊</div>
+
+                            <div class="comp-card">
+                                <div class="comp-number-label" id="anc8-right-num">5</div>
+                                <div class="apple-drop-target" id="drop-right-apples" ondragover="allowDrop(event)" ondrop="dropApple(event, 'right')"></div>
+                            </div>
+                        </div>
+
+                        <div class="basket-container">
+                            <div style="font-size: 0.9rem; font-weight: 800; color: #b45309; text-transform: uppercase;">🍎 Apple Basket</div>
+                            <div class="apple-source-pool" id="apple-pool" ondragover="allowDrop(event)" ondrop="dropToApplePool(event)"></div>
+                        </div>
+                    </div>
+
+                    <button class="ixl-btn" style="margin-top: 1rem;" onclick="submitANC8Answer()">Submit</button>
+                    <div id="lesson-feedback-anc8" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-assess1" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-assess1">Assessment 1: Complete Diagnostic Check</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-assess1">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 1rem;">Complete all 10 updated diagnostic assessment questions</div>
+
+                    <div class="assessment-container">
+                        <!-- Question 1 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">1. Add:</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <div>A. 3 + 9 = <input type="number" id="ass-1a" style="width: 100px; display:inline-block; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                                <div>B. 5 + 1 = <input type="number" id="ass-1b" style="width: 100px; display:inline-block; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                                <div>C. 2 + 7 = <input type="number" id="ass-1c" style="width: 100px; display:inline-block; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">2. What is a counter?</div>
+                            <div style="font-weight: 600;">A counter is a circle that represents <input type="text" id="ass-2" placeholder="value" style="width: 110px; display:inline-block; padding: 0.3rem 0.5rem; font-size: 1rem;">.</div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">3. What number is in the hundredths place in 39.18?</div>
+                            <div><input type="number" id="ass-3" style="width: 120px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">4. What is the subtraction sign?</div>
+                            <div class="assessment-options">
+                                <label class="assessment-option-label"><input type="radio" name="ass-4" value="+"> d. +</label>
+                                <label class="assessment-option-label"><input type="radio" name="ass-4" value="-"> e. $-$</label>
+                                <label class="assessment-option-label"><input type="radio" name="ass-4" value="x"> f. x</label>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">5. Are these the same value, 39 and 30 + 9?</div>
+                            <div><input type="text" id="ass-5" placeholder="Yes / No" style="width: 140px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 6 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">6. What is half of $h - j$? (Given $h = 18$, $j = 5$)</div>
+                            <div><input type="number" step="any" id="ass-6" style="width: 120px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 7 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">7. What is the value of the blocks shown below (2 hundreds flats, 2 tens rods)?</div>
+                            <div><input type="number" id="ass-7" style="width: 120px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 8 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">8. What is the value of yellow blocks (2 hundreds flats)?</div>
+                            <div><input type="number" id="ass-8" style="width: 120px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 9 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">9. What is 474 + 173 = ?</div>
+                            <div><input type="number" id="ass-9" style="width: 140px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+
+                        <!-- Question 10 -->
+                        <div class="assessment-question-card">
+                            <div class="assessment-q-title">10. What is 91 - 73 = ?</div>
+                            <div><input type="number" id="ass-10" style="width: 140px; padding: 0.3rem 0.5rem; font-size: 1rem;"></div>
+                        </div>
+                    </div>
+
+                    <button class="ixl-btn" style="margin-top: 1rem;" onclick="submitAssessment1()">Submit Assessment 1</button>
+                    <div id="lesson-feedback-assess1" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-typing" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-a">Basic Addition</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-a">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;">Solve the problem</div>
+                    <div class="question-box" id="question-text">5 + 3 = ?</div>
+                    
+                    <div class="answer-form">
+                        <input type="number" id="user-answer" placeholder="Type your answer" autocomplete="off">
+                        <button class="ixl-btn" onclick="submitTypingAnswer()">Submit</button>
+                    </div>
+                    
+                    <div id="lesson-feedback-a" class="feedback"></div>
+                </div>
+
+                <div id="blank-modal-a" class="modal-overlay">
+                    <div class="modal-card">
+                        <h3>⚠️ Empty Field</h3>
+                        <p style="color: #475569; font-weight: 600; margin-bottom: 0;">You haven't entered an answer. Would you like to retry or submit blank?</p>
+                        <div class="modal-buttons">
+                            <button class="ixl-btn btn-retry" onclick="closeModalAndRetryA()">Retry</button>
+                            <button class="ixl-btn btn-submit-blank" onclick="confirmBlankSubmitA()">Submit (-20)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-subtraction" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-sub">A.6V Subtraction & Grid</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-sub">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" id="sub-math-phase">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px;">Solve the subtraction problem</div>
+                    <div class="question-box" id="sub-question-text">8 - 3 = ?</div>
+                    
+                    <div class="answer-form">
+                        <input type="number" id="sub-user-answer" placeholder="Type your answer" autocomplete="off">
+                        <button class="ixl-btn" onclick="submitSubAnswer()">Submit</button>
+                    </div>
+                    
+                    <div id="lesson-feedback-sub" class="feedback"></div>
+                </div>
+
+                <div class="lesson-content-area" id="sub-grid-phase" style="display: none; text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem;">Milestone Reached! Connect dots on the 5x5 grid to form a Subtraction Sign (-)</div>
+                    <p style="font-size: 0.95rem; color: var(--ixl-brand-blue); font-weight: 700; margin-bottom: 0.5rem;" id="grid-instruction">Click row 2, columns 1 through 5 to build the minus line!</p>
+
+                    <div class="grid-5x5" id="interactive-grid"></div>
+
+                    <div id="lesson-feedback-grid" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-decimals" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-dec">A.7D Decimals Place Chart</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-dec">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem;">Examine the decimal place chart below</div>
+
+                    <div class="decimal-chart-table">
+                        <div class="decimal-col">
+                            <div class="decimal-header-cell">Ones</div>
+                            <div class="decimal-value-cell" id="chart-ones">4</div>
+                        </div>
+                        <div class="decimal-col">
+                            <div class="decimal-header-cell">Decimal Point</div>
+                            <div class="decimal-value-cell">.</div>
+                        </div>
+                        <div class="decimal-col">
+                            <div class="decimal-header-cell">Tenths</div>
+                            <div class="decimal-value-cell" id="chart-tenths">7</div>
+                        </div>
+                        <div class="decimal-col">
+                            <div class="decimal-header-cell">Hundredths</div>
+                            <div class="decimal-value-cell" id="chart-hundredths">2</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 1.3rem; font-weight: 800; color: #1e293b; margin: 1.2rem 0;" id="dec-question-text">Which number in the chart is odd?</div>
+
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; margin-bottom: 0.5rem;">Drag a choice box into the answer box below:</div>
+                    <div class="decimal-pool" id="decimal-pool" ondragover="allowDrop(event)" ondrop="dropToDecimalPool(event)"></div>
+
+                    <div class="decimal-drop-box" id="decimal-drop-zone" ondragover="allowDrop(event)" ondrop="dropToDecimalAnswer(event)">Drop Answer Here</div>
+
+                    <button class="ixl-btn" style="margin-top: 1.2rem;" onclick="submitDecimalAnswer()">Submit</button>
+                    <div id="lesson-feedback-dec" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-clicking" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-b">Number Bonds</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-b">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.8rem;">Click the box with the correct missing part</div>
+                    
+                    <div class="number-bond-container">
+                        <div class="bond-diagram">
+                            <div class="bond-top-circle" id="bond-total">10</div>
+                            <div class="bond-branches">/ \</div>
+                            <div class="bond-bottom-row">
+                                <div class="bond-circle" id="bond-part1">?</div>
+                                <div class="bond-circle" id="bond-part2">6</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="choice-grid" id="choice-grid-container" style="margin: 0 auto;"></div>
+                    <div id="lesson-feedback-b" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-drag" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-c">Place Value</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-c">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem;">Drag numbers into correct place value blocks to make: <span id="target-number" style="color: var(--ixl-brand-blue); font-size: 1.4rem; font-weight: 800;">342</span></div>
+
+                    <div class="drag-drop-container">
+                        <div class="place-value-board">
+                            <div class="place-column">
+                                <div class="place-header">Hundreds</div>
+                                <div class="drop-zone" id="drop-hundreds" ondragover="allowDrop(event)" ondrop="dropItem(event, 'hundreds')">Drop here</div>
+                            </div>
+                            <div class="place-column">
+                                <div class="place-header">Tens</div>
+                                <div class="drop-zone" id="drop-tens" ondragover="allowDrop(event)" ondrop="dropItem(event, 'tens')">Drop here</div>
+                            </div>
+                            <div class="place-column">
+                                <div class="place-header">Ones</div>
+                                <div class="drop-zone" id="drop-ones" ondragover="allowDrop(event)" ondrop="dropItem(event, 'ones')">Drop here</div>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 800;">Available Blocks:</div>
+                        <div class="drag-items-pool" id="drag-pool" ondragover="allowDrop(event)" ondrop="dropToPool(event)"></div>
+                    </div>
+
+                    <button class="ixl-btn" style="margin-top: 1rem;" onclick="submitDragAnswer()">Check Answer</button>
+                    <div id="lesson-feedback-c" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-apc4" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-d">Color Block Identification</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-d">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.25rem;">Count the blocks shown below and type the total value</div>
+                    
+                    <div class="blocks-visual-container" id="apc4-visual-area"></div>
+
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--ixl-brand-blue); margin-bottom: 0.8rem;" id="apc4-prompt-text">What is the total value of the Yellow blocks?</div>
+
+                    <div class="answer-form" style="margin: 0 auto;">
+                        <input type="number" id="apc4-user-answer" placeholder="Type total value" autocomplete="off">
+                        <button class="ixl-btn" onclick="submitAPC4Answer()">Submit</button>
+                    </div>
+
+                    <div id="lesson-feedback-d" class="feedback"></div>
+                </div>
+            </div>
+
+            <div id="lesson-screen-half" class="screen" style="padding: 0;">
+                <div class="ixl-stats-bar">
+                    <span id="lesson-title-header-e">Lesson 1.5: Half of Numbers</span>
+                    <div class="stat-pill-group">
+                        <div class="stat-item">
+                            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">SmartScore</span>
+                            <span class="stat-value" id="current-score-e">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lesson-content-area" style="text-align: center;">
+                    <div style="font-size: 0.85rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 0.5rem;">Find half of the original number</div>
+
+                    <div class="half-lesson-container">
+                        <div class="big-number-display" id="big-target-num">6</div>
+                        <button class="ixl-btn" id="animate-btn" onclick="triggerAnimateMe()">✨ Animate Me</button>
+                        <div class="split-container" id="split-visual-box">
+                            <div class="half-bubble" id="half-left">3</div>
+                            <div class="half-bubble" id="half-right">3</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--ixl-text-main); margin: 1.2rem 0 0.8rem 0;" id="half-prompt-text">What is half of 6?</div>
+
+                    <div class="answer-form" style="margin: 0 auto;">
+                        <input type="number" step="any" id="half-user-answer" placeholder="Type your answer" autocomplete="off">
+                        <button class="ixl-btn" onclick="submitHalfAnswer()">Submit</button>
+                    </div>
+
+                    <div id="lesson-feedback-e" class="feedback"></div>
+                </div>
+            </div>
+
+            <!-- Editor / Worksheet Customizer Screen -->
+            <div id="editor-screen" class="screen">
+                <h1 class="code-title">✏️ Worksheet Customizer & Printer</h1>
+                <p class="code-subtitle">Modify active problem parameters or print custom worksheet versions directly.</p>
+                
+                <div class="editor-container">
+                    <div class="editor-panel">
+                        <h3>Custom Addition Parameters (Skill A1D)</h3>
+                        <div class="editor-field">
+                            <label>First Addend:</label>
+                            <input type="number" id="edit-num1" value="5">
+                        </div>
+                        <div class="editor-field">
+                            <label>Second Addend:</label>
+                            <input type="number" id="edit-num2" value="3">
+                        </div>
+                        <button class="ixl-btn" onclick="applyCustomAddition()">Apply to Addition Practice</button>
+                    </div>
+
+                    <div class="editor-panel">
+                        <h3>Printable Worksheet Actions</h3>
+                        <p style="font-size: 0.95rem; color: #475569; font-weight: 600;">Print out current practice session or formatted assessment sheets directly for classroom use.</p>
+                        <button class="ixl-btn" onclick="window.print()">🖨️ Print Current Worksheet</button>
+                    </div>
+                </div>
+
+                <button class="ixl-btn" style="margin-top: 1.5rem; background-color: #64748b;" onclick="resetToHome()">Back to Home</button>
+            </div>
+
+            <div id="completion-screen" class="screen completion-container">
+                <h1>🌟 Excellence Achieved!</h1>
+                <p style="font-size: 1.15rem; color: #475569; font-weight: 600; margin-bottom: 2rem;">
+                    You reached a SmartScore of <strong style="color: var(--ixl-accent-green);">100</strong> and unlocked an exclusive gold award tile on your Award Board!
+                </p>
+                <button class="ixl-btn" onclick="openAwardBoard()">View Award Board</button>
+            </div>
+
+            <div id="award-screen" class="screen" style="text-align: center;">
+                <h1 class="code-title">🏆 Award Board Hall of Fame</h1>
+                <p class="code-subtitle">Master your IXL skills to 100 SmartScore to reveal secret gold badges!</p>
+                
+                <div class="award-grid-container" id="ixl-grid"></div>
+
+                <div class="award-info-box" id="award-info-display">
+                    <em>Click on any badge above to inspect skill mastery status!</em>
+                </div>
+
+                <button class="ixl-btn" style="margin-top: 1.5rem;" onclick="resetToHome()">Back to Code Entry</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentLesson = null;
+        let score = 0;
+        
+        let currentNum1 = 5;
+        let currentNum2 = 3;
+
+        let subMinuend = 0;
+        let subSubtrahend = 0;
+        let clickedGridDots = new Set();
+
+        let decOnes = 0;
+        let decTenths = 0;
+        let decHundredths = 0;
+        let decQuestionType = 'odd'; 
+        let decCorrectAnswer = 0;
+        let placedDecAnswerVal = null;
+
+        let bondTotal = 0;
+        let bondKnown = 0;
+        let bondMissing = 0;
+        let missingPosition = 1;
+
+        let targetHundreds = 0;
+        let targetTens = 0;
+        let targetOnes = 0;
+        let placedValues = { hundreds: null, tens: null, ones: null };
+
+        let apc4TargetColor = 'Yellow';
+        let apc4CorrectVal = 0;
+
+        /* --- B21N Nouns Lesson Data --- */
+        const b21nNounsList = [
+            { emoji: '🍎', noun: 'apple', options: ['apple', 'dog', 'car', 'book'] },
+            { emoji: '🐶', noun: 'dog', options: ['cat', 'dog', 'ball', 'tree'] },
+            { emoji: '🚗', noun: 'car', options: ['bus', 'car', 'shoe', 'fish'] },
+            { emoji: '📚', noun: 'book', options: ['pen', 'desk', 'book', 'hat'] },
+            { emoji: '⚽', noun: 'ball', options: ['ball', 'box', 'star', 'door'] },
+            { emoji: '🌳', noun: 'tree', options: ['flower', 'tree', 'bird', 'leaf'] }
+        ];
+        let currentB21NIndex = 0;
+
+        const worksheetProblems = [
+            { original: 6, half: 3 },
+            { original: 88, half: 44 },
+            { original: 1, half: 0.5 },
+            { original: 34, half: 17 },
+            { original: 22, half: 11 },
+            { original: 100, half: 50 },
+            { original: 4, half: 2 },
+            { original: 2, half: 1 },
+            { original: 5, half: 2.5 },
+            { original: 72, half: 36 },
+            { original: 0.6, half: 0.3 }
+        ];
+        let currentProblemIndex = 0;
+        let currentOriginal = 6;
+        let currentHalf = 3;
+
+        let anc8LeftVal = 0;
+        let anc8RightVal = 0;
+
+        let target9ABTarget = 3;
+        let current9ABFrameState = [null, null, null, null, null];
+
+        let unlockedAwards = {
+            'B21N': false,
+            '9AB': false,
+            'ANC8': false,
+            'ASSESS1': false,
+            'A1D': false,
+            'A6V': false,
+            'A7D': false,
+            'AN12': false,
+            '1A3': false,
+            'APC4': false,
+            'A:5': false
+        };
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function updateStats() {
+            if (currentLesson === 'B21N') document.getElementById('current-score-b21n').textContent = score;
+            if (currentLesson === '9AB') document.getElementById('current-score-9ab').textContent = score;
+            if (currentLesson === 'ANC8') document.getElementById('current-score-anc8').textContent = score;
+            if (currentLesson === 'ASSESS1') document.getElementById('current-score-assess1').textContent = score;
+            if (currentLesson === 'A1D') document.getElementById('current-score-a').textContent = score;
+            if (currentLesson === 'A6V') document.getElementById('current-score-sub').textContent = score;
+            if (currentLesson === 'A7D') document.getElementById('current-score-dec').textContent = score;
+            if (currentLesson === 'AN12') document.getElementById('current-score-b').textContent = score;
+            if (currentLesson === '1A3') document.getElementById('current-score-c').textContent = score;
+            if (currentLesson === 'APC4') document.getElementById('current-score-d').textContent = score;
+            if (currentLesson === 'A:5') document.getElementById('current-score-e').textContent = score;
+        }
+
+        function resetToHome() {
+            switchScreen('code-screen');
+            document.getElementById('header-user-status').textContent = 'Skill Practice Hub';
+        }
+
+        function openEditorModal() {
+            switchScreen('editor-screen');
+            document.getElementById('header-user-status').textContent = 'Worksheet Customizer';
+        }
+
+        function applyCustomAddition() {
+            const n1 = parseInt(document.getElementById('edit-num1').value, 10);
+            const n2 = parseInt(document.getElementById('edit-num2').value, 10);
+            if (!isNaN(n1) && !isNaN(n2)) {
+                currentNum1 = n1;
+                currentNum2 = n2;
+                currentLesson = 'A1D';
+                score = 0;
+                switchScreen('lesson-screen-typing');
+                document.getElementById('lesson-title-header-a').textContent = 'A.1 Custom Addition';
+                document.getElementById('question-text').textContent = `${currentNum1} + ${currentNum2} = ?`;
+                document.getElementById('user-answer').value = '';
+                updateStats();
+            }
+        }
+
+        /* --- Updated Interactive Award Board Rendering --- */
+        const awardMetaData = {
+            'B21N': { name: 'Identify Nouns', icon: '🍎' },
+            '9AB': { name: 'Numbers up to 5', icon: '🖐️' },
+            'ANC8': { name: 'Comparing Numbers', icon: '🐊' },
+            'ASSESS1': { name: 'Diagnostic Assessment 1', icon: '📝' },
+            'A1D': { name: 'Basic Addition', icon: '➕' },
+            'A6V': { name: 'Subtraction & Grid', icon: '➖' },
+            'A7D': { name: 'Decimals Place Chart', icon: '🔢' },
+            'AN12': { name: 'Number Bonds', icon: '🔗' },
+            '1A3': { name: 'Place Value Blocks', icon: '📦' },
+            'APC4': { name: 'Color Block ID', icon: '🎨' },
+            'A:5': { name: 'Half of Numbers', icon: '✨' }
+        };
+
+        function openAwardBoard() {
+            switchScreen('award-screen');
+            document.getElementById('header-user-status').textContent = 'Award Board Hub';
+            const gridContainer = document.getElementById('ixl-grid');
+            gridContainer.innerHTML = '';
+
+            const skillCodes = Object.keys(unlockedAwards);
+            skillCodes.forEach(code => {
+                const isUnlocked = unlockedAwards[code];
+                const meta = awardMetaData[code] || { name: 'Skill Mastery', icon: '🏅' };
+
+                const tile = document.createElement('div');
+                tile.className = `award-tile ${isUnlocked ? 'unlocked' : ''}`;
+                
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'award-icon';
+                iconDiv.textContent = isUnlocked ? meta.icon : '🔒';
+
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'award-code-label';
+                labelDiv.textContent = code;
+
+                tile.appendChild(iconDiv);
+                tile.appendChild(labelDiv);
+
+                tile.onclick = () => {
+                    const infoBox = document.getElementById('award-info-display');
+                    if (isUnlocked) {
+                        infoBox.innerHTML = `🌟 <strong>Gold Badge Unlocked (${code} - ${meta.name}):</strong> Mastered to 100 SmartScore! Excellent proficiency demonstrated.`;
+                    } else {
+                        infoBox.innerHTML = `🔒 <strong>Skill Locked (${code} - ${meta.name}):</strong> Complete and master this lesson code to 100 SmartScore to unlock this gold award tile!`;
+                    }
+                };
+                gridContainer.appendChild(tile);
+            });
+        }
+
+        function startLesson() {
+            const codeInput = document.getElementById('lesson-code').value.trim().toUpperCase();
+            const errorDiv = document.getElementById('code-error');
+
+            if (codeInput === 'B21N') {
+                currentLesson = 'B21N';
+                score = 0;
+                currentB21NIndex = 0;
+                errorDiv.textContent = '';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill B21N';
+                switchScreen('lesson-screen-b21n');
+                updateStats();
+                generateB21NQuestion();
+            } else if (codeInput === '9AB') {
+                currentLesson = '9AB';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill 9AB';
+                switchScreen('lesson-screen-9ab');
+                updateStats();
+                generate9ABQuestion();
+            } else if (codeInput === 'ANC8') {
+                currentLesson = 'ANC8';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill ANC8';
+                switchScreen('lesson-screen-anc8');
+                updateStats();
+                generateANC8Question();
+            } else if (codeInput === 'ASSESS1') {
+                currentLesson = 'ASSESS1';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('header-user-status').textContent = 'Practicing Assessment 1';
+                switchScreen('lesson-screen-assess1');
+                updateStats();
+                document.getElementById('lesson-feedback-assess1').textContent = '';
+            } else if (codeInput === 'A1D') {
+                currentLesson = 'A1D';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-a').textContent = 'A.1 Basic Addition';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill A1D';
+                switchScreen('lesson-screen-typing');
+                updateStats();
+                generateTypingQuestion();
+            } else if (codeInput === 'A6V') {
+                currentLesson = 'A6V';
+                score = 0;
+                clickedGridDots.clear();
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-sub').textContent = 'A.6V Subtraction & Grid';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill A6V';
+                switchScreen('lesson-screen-subtraction');
+                document.getElementById('sub-math-phase').style.display = 'block';
+                document.getElementById('sub-grid-phase').style.display = 'none';
+                updateStats();
+                generateSubQuestion();
+            } else if (codeInput === 'A7D') {
+                currentLesson = 'A7D';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-dec').textContent = 'A.7D Decimals Place Chart';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill A7D';
+                switchScreen('lesson-screen-decimals');
+                updateStats();
+                generateDecimalQuestion();
+            } else if (codeInput === 'AN12') {
+                currentLesson = 'AN12';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-b').textContent = 'AN.12 Number Bonds';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill AN12';
+                switchScreen('lesson-screen-clicking');
+                updateStats();
+                generateBondQuestion();
+            } else if (codeInput === '1A3') {
+                currentLesson = '1A3';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-c').textContent = '1.A.3 Place Value';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill 1A3';
+                switchScreen('lesson-screen-drag');
+                updateStats();
+                generateDragQuestion();
+            } else if (codeInput === 'APC4') {
+                currentLesson = 'APC4';
+                score = 0;
+                errorDiv.textContent = '';
+                document.getElementById('lesson-title-header-d').textContent = 'Lesson 1.4: Color Block Identification';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill APC4';
+                switchScreen('lesson-screen-apc4');
+                updateStats();
+                generateAPC4Question();
+            } else if (codeInput === 'A:5') {
+                currentLesson = 'A:5';
+                score = 0;
+                currentProblemIndex = 0;
+                errorDiv.textContent = '';
+                document.getElementById('header-user-status').textContent = 'Practicing Skill A:5';
+                switchScreen('lesson-screen-half');
+                updateStats();
+                loadHalfProblem();
+            } else {
+                errorDiv.textContent = 'Invalid code. Try B21N, 9AB, ANC8, ASSESS1, A1D, A6V, A7D, AN12, 1A3, APC4, or A:5.';
+                errorDiv.className = 'feedback error';
+            }
+        }
+
+        /* --- B21N Nouns Logic --- */
+        function generateB21NQuestion() {
+            const item = b21nNounsList[currentB21NIndex];
+            document.getElementById('b21n-image-container').textContent = item.emoji;
+            
+            const dropdown = document.getElementById('b21n-dropdown');
+            dropdown.innerHTML = '<option value="">Choose a noun...</option>';
+            
+            let shuffledOptions = [...item.options];
+            if (!shuffledOptions.includes(item.noun)) {
+                shuffledOptions[0] = item.noun;
+            }
+            shuffledOptions.sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt => {
+                const optEl = document.createElement('option');
+                optEl.value = opt;
+                optEl.textContent = opt;
+                dropdown.appendChild(optEl);
+            });
+
+            document.getElementById('lesson-feedback-b21n').textContent = '';
+        }
+
+        function submitB21NAnswer() {
+            const dropdown = document.getElementById('b21n-dropdown');
+            const feedbackDiv = document.getElementById('lesson-feedback-b21n');
+            const selectedVal = dropdown.value;
+            const currentItem = b21nNounsList[currentB21NIndex];
+
+            if (!selectedVal) {
+                feedbackDiv.textContent = 'Please select a noun from the dropdown.';
+                feedbackDiv.className = 'feedback warning';
+                return;
+            }
+
+            if (selectedVal === currentItem.noun) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct! That is the right noun.';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100 || currentB21NIndex >= b21nNounsList.length - 1) {
+                        unlockedAwards['B21N'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        currentB21NIndex++;
+                        generateB21NQuestion();
+                    }
+                }, 900);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! The correct noun was "${currentItem.noun}".`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (currentB21NIndex < b21nNounsList.length - 1) {
+                        currentB21NIndex++;
+                    } else {
+                        currentB21NIndex = 0;
+                    }
+                    generateB21NQuestion();
+                }, 1800);
+            }
+        }
+
+        /* --- Updated Assessment 1 Logic --- */
+        function submitAssessment1() {
+            const feedbackDiv = document.getElementById('lesson-feedback-assess1');
+            
+            const v1a = parseInt(document.getElementById('ass-1a').value, 10);
+            const v1b = parseInt(document.getElementById('ass-1b').value, 10);
+            const v1c = parseInt(document.getElementById('ass-1c').value, 10);
+            const v2 = document.getElementById('ass-2').value.trim().toLowerCase();
+            const v3 = parseInt(document.getElementById('ass-3').value, 10);
+            const v4 = document.querySelector('input[name="ass-4"]:checked');
+            const v5 = document.getElementById('ass-5').value.trim().toLowerCase();
+            const v6 = parseFloat(document.getElementById('ass-6').value);
+            const v7 = parseInt(document.getElementById('ass-7').value, 10);
+            const v8 = parseInt(document.getElementById('ass-8').value, 10);
+            const v9 = parseInt(document.getElementById('ass-9').value, 10);
+            const v10 = parseInt(document.getElementById('ass-10').value, 10);
+
+            let correctCount = 0;
+            if (v1a === 12) correctCount++;
+            if (v1b === 6) correctCount++;
+            if (v1c === 9) correctCount++;
+            if (v2 === '1' || v2 === 'one') correctCount++;
+            if (v3 === 8) correctCount++;
+            if (v4 && v4.value === '-') correctCount++;
+            if (v5 === 'yes') correctCount++;
+            if (v6 === 6.5) correctCount++;
+            if (v7 === 220) correctCount++;
+            if (v8 === 200) correctCount++;
+            if (v9 === 647) correctCount++;
+            if (v10 === 18) correctCount++;
+
+            if (correctCount === 12) {
+                score = 100;
+                updateStats();
+                feedbackDiv.textContent = 'Awesome! All 10 assessment questions are correct!';
+                feedbackDiv.className = 'feedback success';
+                setTimeout(() => {
+                    unlockedAwards['ASSESS1'] = true;
+                    switchScreen('completion-screen');
+                    document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                }, 1000);
+            } else {
+                score = Math.min(90, Math.round((correctCount / 12) * 100));
+                updateStats();
+                feedbackDiv.textContent = `You got ${correctCount} out of 12 sub-checks correct. Check your answers and try again!`;
+                feedbackDiv.className = 'feedback error';
+            }
+        }
+
+        /* --- 9AB Five-Frame Numbers up to 5 Logic --- */
+        function generate9ABQuestion() {
+            target9ABTarget = Math.floor(Math.random() * 5) + 1;
+            current9ABFrameState = [null, null, null, null, null];
+
+            document.getElementById('9ab-instruction-text').textContent = `Place ${target9ABTarget} dots in the 5-frame`;
+
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`ff-sq-${i}`).innerHTML = '';
+            }
+
+            const pool = document.getElementById('dot-source-pool');
+            pool.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'draggable-dot';
+                dot.draggable = true;
+                dot.id = 'dot-' + i;
+                dot.ondragstart = dragDot;
+                pool.appendChild(dot);
+            }
+
+            document.getElementById('lesson-feedback-9ab').textContent = '';
+        }
+
+        function dragDot(ev) {
+            ev.dataTransfer.setData('text/plain', ev.target.id);
+        }
+
+        function dropDotToFrame(ev, squareIndex) {
+            ev.preventDefault();
+            const dotId = ev.dataTransfer.getData('text/plain');
+            const dotEl = document.getElementById(dotId);
+            if (!dotEl) return;
+
+            const targetSq = document.getElementById(`ff-sq-${squareIndex}`);
+            if (targetSq.children.length === 0) {
+                targetSq.appendChild(dotEl);
+                current9ABFrameState[squareIndex] = dotId;
+            }
+        }
+
+        function dropDotToPool(ev) {
+            ev.preventDefault();
+            const dotId = ev.dataTransfer.getData('text/plain');
+            const dotEl = document.getElementById(dotId);
+            if (!dotEl) return;
+
+            for (let i = 0; i < 5; i++) {
+                if (current9ABFrameState[i] === dotId) {
+                    current9ABFrameState[i] = null;
+                }
+            }
+            document.getElementById('dot-source-pool').appendChild(dotEl);
+        }
+
+        function submit9ABAnswer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-9ab');
+            const placedCount = current9ABFrameState.filter(item => item !== null).length;
+
+            if (placedCount === target9ABTarget) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct! You placed the exact right amount of dots!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['9AB'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generate9ABQuestion();
+                    }
+                }, 1000);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Not quite! You placed ${placedCount} dots, but the instruction asked for ${target9ABTarget}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generate9ABQuestion();
+                }, 1800);
+            }
+        }
+
+        /* --- ANC8 Alligator Apple Counting & Comparing Logic --- */
+        function generateANC8Question() {
+            anc8LeftVal = Math.floor(Math.random() * 6) + 1;
+            do {
+                anc8RightVal = Math.floor(Math.random() * 6) + 1;
+            } while (anc8RightVal === anc8LeftVal);
+
+            document.getElementById('anc8-left-num').textContent = anc8LeftVal;
+            document.getElementById('anc8-right-num').textContent = anc8RightVal;
+
+            const alligatorEl = document.getElementById('alligator-symbol');
+            if (anc8LeftVal > anc8RightVal) {
+                alligatorEl.textContent = '🐊 ⬅️'; 
+            } else {
+                alligatorEl.textContent = '➡️ 🐊'; 
+            }
+
+            document.getElementById('drop-left-apples').innerHTML = '';
+            document.getElementById('drop-right-apples').innerHTML = '';
+
+            const pool = document.getElementById('apple-pool');
+            pool.innerHTML = '';
+            const totalApples = anc8LeftVal + anc8RightVal;
+            for (let i = 0; i < totalApples; i++) {
+                const apple = document.createElement('div');
+                apple.className = 'draggable-apple';
+                apple.textContent = '🍎';
+                apple.draggable = true;
+                apple.id = 'apple-' + i;
+                apple.ondragstart = (e) => e.dataTransfer.setData('text/plain', e.target.id);
+                pool.appendChild(apple);
+            }
+
+            document.getElementById('lesson-feedback-anc8').textContent = '';
+        }
+
+        function dropApple(ev, side) {
+            ev.preventDefault();
+            const appleId = ev.dataTransfer.getData('text/plain');
+            const appleEl = document.getElementById(appleId);
+            if (!appleEl) return;
+
+            const targetBox = document.getElementById('drop-' + side + '-apples');
+            targetBox.appendChild(appleEl);
+        }
+
+        function dropToApplePool(ev) {
+            ev.preventDefault();
+            const appleId = ev.dataTransfer.getData('text/plain');
+            const appleEl = document.getElementById(appleId);
+            if (!appleEl) return;
+            document.getElementById('apple-pool').appendChild(appleEl);
+        }
+
+        function submitANC8Answer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-anc8');
+            const leftCount = document.getElementById('drop-left-apples').children.length;
+            const rightCount = document.getElementById('drop-right-apples').children.length;
+
+            if (leftCount === anc8LeftVal && rightCount === anc8RightVal) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct! You matched the exact number of apples to both sides!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['ANC8'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateANC8Question();
+                    }
+                }, 1000);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Not quite! Left needs ${anc8LeftVal} apples and right needs ${anc8RightVal} apples.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateANC8Question();
+                }, 1800);
+            }
+        }
+
+        /* --- A1D Typing Lesson Logic --- */
+        function generateTypingQuestion() {
+            document.getElementById('question-text').textContent = `${currentNum1} + ${currentNum2} = ?`;
+            document.getElementById('user-answer').value = '';
+            document.getElementById('user-answer').focus();
+        }
+
+        function submitTypingAnswer() {
+            const userAnswerVal = document.getElementById('user-answer').value;
+            if (userAnswerVal === '') {
+                document.getElementById('blank-modal-a').style.display = 'flex';
+                return;
+            }
+            processTypingGrading(parseInt(userAnswerVal, 10));
+        }
+
+        function processTypingGrading(userAnswer) {
+            const feedbackDiv = document.getElementById('lesson-feedback-a');
+            let correctAnswer = currentNum1 + currentNum2;
+
+            if (userAnswer === correctAnswer) {
+                score = Math.min(100, score + 10);
+                feedbackDiv.textContent = 'Correct! Fantastic job.';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['A1D'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateTypingQuestion();
+                    }
+                }, 800);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Sorry, incorrect. The correct answer was ${correctAnswer}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateTypingQuestion();
+                }, 1600);
+            }
+        }
+
+        function closeModalAndRetryA() {
+            document.getElementById('blank-modal-a').style.display = 'none';
+            document.getElementById('user-answer').focus();
+        }
+
+        function confirmBlankSubmitA() {
+            document.getElementById('blank-modal-a').style.display = 'none';
+            score = Math.max(0, score - 20);
+            const feedbackDiv = document.getElementById('lesson-feedback-a');
+            let correctAnswer = currentNum1 + currentNum2;
+
+            feedbackDiv.textContent = `Submitted blank. The correct answer was ${correctAnswer}. (-20 SmartScore)`;
+            feedbackDiv.className = 'feedback warning';
+            updateStats();
+
+            setTimeout(() => {
+                feedbackDiv.textContent = '';
+                generateTypingQuestion();
+            }, 1800);
+        }
+
+        /* --- A6V Subtraction & Grid Challenge Logic --- */
+        function generateSubQuestion() {
+            subMinuend = Math.floor(Math.random() * 8) + 3;
+            subSubtrahend = Math.floor(Math.random() * subMinuend);
+            document.getElementById('sub-question-text').textContent = `${subMinuend} - ${subSubtrahend} = ?`;
+            document.getElementById('sub-user-answer').value = '';
+            document.getElementById('sub-user-answer').focus();
+        }
+
+        function submitSubAnswer() {
+            const valStr = document.getElementById('sub-user-answer').value;
+            const feedbackDiv = document.getElementById('lesson-feedback-sub');
+            if (valStr === '') {
+                feedbackDiv.textContent = 'Please type a number.';
+                feedbackDiv.className = 'feedback warning';
+                return;
+            }
+
+            const userVal = parseInt(valStr, 10);
+            const correctVal = subMinuend - subSubtrahend;
+
+            if (userVal === correctVal) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct subtraction!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 60) {
+                        document.getElementById('sub-math-phase').style.display = 'none';
+                        document.getElementById('sub-grid-phase').style.display = 'block';
+                        build5x5Grid();
+                    } else {
+                        generateSubQuestion();
+                    }
+                }, 800);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! ${subMinuend} - ${subSubtrahend} = ${correctVal}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateSubQuestion();
+                }, 1600);
+            }
+        }
+
+        function build5x5Grid() {
+            const gridContainer = document.getElementById('interactive-grid');
+            gridContainer.innerHTML = '';
+            clickedGridDots.clear();
+
+            for (let r = 0; r < 5; r++) {
+                for (let c = 0; c < 5; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.onclick = () => handleGridCellClick(r, c, cell);
+                    gridContainer.appendChild(cell);
+                }
+            }
+            document.getElementById('lesson-feedback-grid').textContent = '';
+        }
+
+        function handleGridCellClick(r, c, cellElement) {
+            const feedbackDiv = document.getElementById('lesson-feedback-grid');
+            const key = `${r}-${c}`;
+
+            if (r === 2) {
+                if (!clickedGridDots.has(key)) {
+                    clickedGridDots.add(key);
+                    cellElement.classList.add('dot');
+                    feedbackDiv.textContent = 'Good dot placed on the minus line!';
+                    feedbackDiv.className = 'feedback success';
+
+                    let row2Count = 0;
+                    for (let col = 0; col < 5; col++) {
+                        if (clickedGridDots.has(`2-${col}`)) row2Count++;
+                    }
+
+                    if (row2Count === 5) {
+                        score = 100;
+                        updateStats();
+                        feedbackDiv.textContent = 'Wonderful! Subtraction sign completed!';
+                        setTimeout(() => {
+                            unlockedAwards['A6V'] = true;
+                            switchScreen('completion-screen');
+                            document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                        }, 1200);
+                    }
+                }
+            } else {
+                feedbackDiv.textContent = 'Keep your minus line straight on the middle row (Row 2)!';
+                feedbackDiv.className = 'feedback warning';
+            }
+        }
+
+        /* --- A7D Decimals Chart Challenge Logic --- */
+        function generateDecimalQuestion() {
+            decOnes = Math.floor(Math.random() * 9) + 1;
+            decTenths = Math.floor(Math.random() * 9) + 1;
+            decHundredths = Math.floor(Math.random() * 9) + 1;
+
+            document.getElementById('chart-ones').textContent = decOnes;
+            document.getElementById('chart-tenths').textContent = decTenths;
+            document.getElementById('chart-hundredths').textContent = decHundredths;
+
+            const types = ['odd', 'even', 'greatest', 'least'];
+            decQuestionType = types[Math.floor(Math.random() * types.length)];
+
+            let chartVals = [decOnes, decTenths, decHundredths];
+
+            if (decQuestionType === 'odd') {
+                const oddVals = chartVals.filter(v => v % 2 !== 0);
+                decCorrectAnswer = oddVals.length > 0 ? oddVals[0] : chartVals[0];
+                document.getElementById('dec-question-text').textContent = 'Which number from the chart is an ODD number?';
+            } else if (decQuestionType === 'even') {
+                const evenVals = chartVals.filter(v => v % 2 === 0);
+                decCorrectAnswer = evenVals.length > 0 ? evenVals[0] : chartVals[0];
+                document.getElementById('dec-question-text').textContent = 'Which number from the chart is an EVEN number?';
+            } else if (decQuestionType === 'greatest') {
+                decCorrectAnswer = Math.max(...chartVals);
+                document.getElementById('dec-question-text').textContent = 'Which number in the chart has the GREATEST value?';
+            } else {
+                decCorrectAnswer = Math.min(...chartVals);
+                document.getElementById('dec-question-text').textContent = 'Which number in the chart has the LEAST value?';
+            }
+
+            placedDecAnswerVal = null;
+            document.getElementById('decimal-drop-zone').textContent = 'Drop Answer Here';
+
+            let options = [decCorrectAnswer];
+            while (options.length < 3) {
+                let rnd = Math.floor(Math.random() * 9) + 1;
+                if (!options.includes(rnd)) options.push(rnd);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const pool = document.getElementById('decimal-pool');
+            pool.innerHTML = '';
+            options.forEach((val, index) => {
+                const item = document.createElement('div');
+                item.className = 'draggable-item';
+                item.textContent = val;
+                item.draggable = true;
+                item.id = 'dec-item-' + index;
+                item.ondragstart = (e) => e.dataTransfer.setData('text/plain', e.target.id);
+                pool.appendChild(item);
+            });
+
+            document.getElementById('lesson-feedback-dec').textContent = '';
+        }
+
+        function dropToDecimalAnswer(ev) {
+            ev.preventDefault();
+            const itemId = ev.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(itemId);
+            if (!draggedElement) return;
+
+            placedDecAnswerVal = parseInt(draggedElement.textContent, 10);
+            const zone = document.getElementById('decimal-drop-zone');
+            zone.innerHTML = '';
+            zone.appendChild(draggedElement);
+        }
+
+        function dropToDecimalPool(ev) {
+            ev.preventDefault();
+            const itemId = ev.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(itemId);
+            if (!draggedElement) return;
+            document.getElementById('decimal-pool').appendChild(draggedElement);
+        }
+
+        function submitDecimalAnswer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-dec');
+            if (placedDecAnswerVal === null) {
+                feedbackDiv.textContent = 'Please drag a box into the answer drop zone first.';
+                feedbackDiv.className = 'feedback warning';
+                return;
+            }
+
+            if (placedDecAnswerVal === decCorrectAnswer) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct decimal chart analysis!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['A7D'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateDecimalQuestion();
+                    }
+                }, 900);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! The correct answer was ${decCorrectAnswer}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateDecimalQuestion();
+                }, 1800);
+            }
+        }
+
+        /* --- AN12 Number Bond Interactive Clicking Logic --- */
+        function generateBondQuestion() {
+            bondTotal = Math.floor(Math.random() * 11) + 5;
+            bondKnown = Math.floor(Math.random() * (bondTotal + 1));
+            bondMissing = bondTotal - bondKnown;
+            missingPosition = Math.random() < 0.5 ? 1 : 2;
+
+            document.getElementById('bond-total').textContent = bondTotal;
+            if (missingPosition === 1) {
+                document.getElementById('bond-part1').textContent = '?';
+                document.getElementById('bond-part2').textContent = bondKnown;
+            } else {
+                document.getElementById('bond-part1').textContent = bondKnown;
+                document.getElementById('bond-part2').textContent = '?';
+            }
+
+            let choices = [bondMissing];
+            while (choices.length < 4) {
+                let distractor = Math.floor(Math.random() * 16);
+                if (!choices.includes(distractor)) choices.push(distractor);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            const gridContainer = document.getElementById('choice-grid-container');
+            gridContainer.innerHTML = '';
+            choices.forEach(val => {
+                const box = document.createElement('div');
+                box.className = 'choice-box';
+                box.textContent = val;
+                box.onclick = () => handleBoxClick(val);
+                gridContainer.appendChild(box);
+            });
+
+            document.getElementById('lesson-feedback-b').textContent = '';
+        }
+
+        function handleBoxClick(selectedVal) {
+            const feedbackDiv = document.getElementById('lesson-feedback-b');
+            if (selectedVal === bondMissing) {
+                score = Math.min(100, score + 10);
+                feedbackDiv.textContent = 'Correct! Great selection.';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['AN12'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateBondQuestion();
+                    }
+                }, 800);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! The correct missing number was ${bondMissing}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateBondQuestion();
+                }, 1600);
+            }
+        }
+
+        /* --- 1A3 Place Value Drag and Drop Logic --- */
+        function generateDragQuestion() {
+            targetHundreds = Math.floor(Math.random() * 9) + 1;
+            targetTens = Math.floor(Math.random() * 10);
+            targetOnes = Math.floor(Math.random() * 10);
+
+            const fullNum = (targetHundreds * 100) + (targetTens * 10) + targetOnes;
+            document.getElementById('target-number').textContent = fullNum;
+
+            placedValues = { hundreds: null, tens: null, ones: null };
+            document.getElementById('drop-hundreds').textContent = 'Drop here';
+            document.getElementById('drop-tens').textContent = 'Drop here';
+            document.getElementById('drop-ones').textContent = 'Drop here';
+
+            let values = [
+                targetHundreds * 100, 
+                targetTens * 10, 
+                targetOnes,
+                (Math.floor(Math.random() * 9) + 1) * 100
+            ];
+            values.sort(() => Math.random() - 0.5);
+
+            const pool = document.getElementById('drag-pool');
+            pool.innerHTML = '';
+            values.forEach((val, index) => {
+                const item = document.createElement('div');
+                item.className = 'draggable-item';
+                item.textContent = val;
+                item.draggable = true;
+                item.id = 'drag-item-' + index;
+                item.ondragstart = (e) => e.dataTransfer.setData('text/plain', e.target.id);
+                pool.appendChild(item);
+            });
+
+            document.getElementById('lesson-feedback-c').textContent = '';
+        }
+
+        function allowDrop(ev) { ev.preventDefault(); }
+
+        function dropItem(ev, zoneName) {
+            ev.preventDefault();
+            const itemId = ev.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(itemId);
+            if (!draggedElement) return;
+
+            const val = parseInt(draggedElement.textContent, 10);
+            placedValues[zoneName] = val;
+
+            const zone = document.getElementById('drop-' + zoneName);
+            zone.innerHTML = '';
+            zone.appendChild(draggedElement);
+        }
+
+        function dropToPool(ev) {
+            ev.preventDefault();
+            const itemId = ev.dataTransfer.getData('text/plain');
+            const draggedElement = document.getElementById(itemId);
+            if (!draggedElement) return;
+            document.getElementById('drag-pool').appendChild(draggedElement);
+        }
+
+        function submitDragAnswer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-c');
+            const expectedHundreds = targetHundreds * 100;
+            const expectedTens = targetTens * 10;
+            const expectedOnes = targetOnes;
+
+            if (placedValues.hundreds === expectedHundreds && 
+                placedValues.tens === expectedTens && 
+                placedValues.ones === expectedOnes) {
+                
+                score = Math.min(100, score + 10);
+                feedbackDiv.textContent = 'Correct place value placement!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['1A3'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateDragQuestion();
+                    }
+                }, 900);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect placement! Correct was: ${expectedHundreds} + ${expectedTens} + ${expectedOnes}`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateDragQuestion();
+                }, 1800);
+            }
+        }
+
+        /* --- APC4 Color Block Identification Logic --- */
+        function generateAPC4Question() {
+            const colors = ['Yellow', 'Blue', 'Green'];
+            const chosenColor = colors[Math.floor(Math.random() * colors.length)];
+            const yellowCount = Math.floor(Math.random() * 3) + 1;
+            const blueCount = Math.floor(Math.random() * 4) + 1;
+            const greenCount = Math.floor(Math.random() * 5) + 1;
+
+            apc4TargetColor = chosenColor;
+            if (chosenColor === 'Yellow') apc4CorrectVal = yellowCount * 100;
+            else if (chosenColor === 'Blue') apc4CorrectVal = blueCount * 10;
+            else apc4CorrectVal = greenCount * 1;
+
+            const visualContainer = document.getElementById('apc4-visual-area');
+            visualContainer.innerHTML = `
+                <div class="block-group"><span class="block-icon">🟨</span><span class="block-count-label">x ${yellowCount} (Hundreds)</span></div>
+                <div class="block-group"><span class="block-icon">🟦</span><span class="block-count-label">x ${blueCount} (Tens)</span></div>
+                <div class="block-group"><span class="block-icon">🟩</span><span class="block-count-label">x ${greenCount} (Ones)</span></div>
+            `;
+
+            document.getElementById('apc4-prompt-text').textContent = `What is the total value of the ${apc4TargetColor} blocks?`;
+            document.getElementById('apc4-user-answer').value = '';
+            document.getElementById('lesson-feedback-d').textContent = '';
+        }
+
+        function submitAPC4Answer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-d');
+            const valStr = document.getElementById('apc4-user-answer').value;
+            if (valStr === '') {
+                feedbackDiv.textContent = 'Please type a value.';
+                feedbackDiv.className = 'feedback warning';
+                return;
+            }
+
+            const userVal = parseInt(valStr, 10);
+            if (userVal === apc4CorrectVal) {
+                score = Math.min(100, score + 20);
+                feedbackDiv.textContent = 'Correct block value calculation!';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100) {
+                        unlockedAwards['APC4'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        generateAPC4Question();
+                    }
+                }, 900);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! The correct total value was ${apc4CorrectVal}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    generateAPC4Question();
+                }, 1800);
+            }
+        }
+
+        /* --- A:5 Half of Numbers Logic --- */
+        function loadHalfProblem() {
+            const prob = worksheetProblems[currentProblemIndex];
+            currentOriginal = prob.original;
+            currentHalf = prob.half;
+
+            document.getElementById('big-target-num').textContent = currentOriginal;
+            document.getElementById('half-prompt-text').textContent = `What is half of ${currentOriginal}?`;
+            document.getElementById('half-user-answer').value = '';
+            document.getElementById('split-visual-box').classList.remove('revealed');
+            document.getElementById('animate-btn').style.display = 'inline-block';
+            document.getElementById('lesson-feedback-e').textContent = '';
+        }
+
+        function triggerAnimateMe() {
+            document.getElementById('half-left').textContent = currentHalf;
+            document.getElementById('half-right').textContent = currentHalf;
+            document.getElementById('split-visual-box').classList.add('revealed');
+            document.getElementById('animate-btn').style.display = 'none';
+        }
+
+        function submitHalfAnswer() {
+            const feedbackDiv = document.getElementById('lesson-feedback-e');
+            const valStr = document.getElementById('half-user-answer').value;
+            if (valStr === '') {
+                feedbackDiv.textContent = 'Please type your answer.';
+                feedbackDiv.className = 'feedback warning';
+                return;
+            }
+
+            const userVal = parseFloat(valStr);
+            if (userVal === currentHalf) {
+                score = Math.min(100, score + 10);
+                feedbackDiv.textContent = 'Correct! Great division.';
+                feedbackDiv.className = 'feedback success';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (score >= 100 || currentProblemIndex >= worksheetProblems.length - 1) {
+                        unlockedAwards['A:5'] = true;
+                        switchScreen('completion-screen');
+                        document.getElementById('header-user-status').textContent = 'Skill Hub Completed';
+                    } else {
+                        currentProblemIndex++;
+                        loadHalfProblem();
+                    }
+                }, 900);
+            } else {
+                score = Math.max(0, score - 10);
+                feedbackDiv.textContent = `Incorrect! Half of ${currentOriginal} is ${currentHalf}.`;
+                feedbackDiv.className = 'feedback error';
+                updateStats();
+
+                setTimeout(() => {
+                    feedbackDiv.textContent = '';
+                    if (currentProblemIndex < worksheetProblems.length - 1) {
+                        currentProblemIndex++;
+                    } else {
+                        currentProblemIndex = 0;
+                    }
+                    loadHalfProblem();
+                }, 1800);
+            }
+        }
+    </script>
+</body>
+</html>
